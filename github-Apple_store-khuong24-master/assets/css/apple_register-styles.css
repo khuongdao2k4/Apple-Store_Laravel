@@ -1,0 +1,193 @@
+body {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    background-color: #f9f9f9;
+}
+
+.register-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 0px;
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    padding-right: 300px;
+    padding-left: 300px;
+    margin-top: 70px;
+    margin-bottom: 10px;
+    /* Đẩy phần tiêu đề xuống để không bị sát navbar */
+}
+
+.form-control {
+    border-radius: 8px;
+}
+.info-bar {
+    background-color: rgb(239, 239, 246);
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+.navbar {
+    background: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar-nav {
+    flex-grow: 1;
+    justify-content: right;
+    align-items: center;
+}
+
+.nav-item a {
+    color: black;
+    font-size: 12px;
+    padding-right: 10px;
+}
+
+.nav-item a:hover {
+    color: #404040;
+}
+
+.nav-item img {
+    height: 18px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-item:hover .submenu-container {
+    visibility: visible;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.nav-item:hover .submenu {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.right-icon a i {
+    color: black;
+    margin: 0 15px;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-nav.ms-auto {
+    margin-left: auto;
+    padding-right: 20px;
+}
+
+.nav-menu a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #0071e3;
+}
+
+/* Submenu */
+.submenu-container {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    /* Ban đầu trong suốt */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.submenu {
+    width: 100vw;
+    max-height: 60vh;
+    background: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 320px 200px 200px;
+    align-items: start;
+    justify-items: center;
+    transform: translateY(-10%);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    padding: 30px;
+    padding-left: 350px;
+    padding-right: 150px;
+
+}
+
+.submenu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    padding-left: 30px;
+}
+
+.submenu ul li {
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+
+}
+
+.submenu ul li:hover {
+    background: white;
+}
+
+.header-li {
+    font-size: 12px;
+    color: #6E6E73;
+}
+
+.li-rowh {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.li-row {
+    font-size: 12px;
+}
+
+footer {
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 12px;
+    text-align: center;
+}
+
+footer a {
+    color: black;
+    text-decoration: none;
+}

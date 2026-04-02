@@ -1,0 +1,212 @@
+body {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Navbar styles preserved */
+.navbar {
+    background: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* ... existing navbar styles ... */
+
+.deals-container {
+    background-color: rgb(234, 236, 238);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 20px auto;
+    font-size: 12px;
+    margin-top: 70px;
+}
+
+.deals-container img {
+    height: 20px;
+    margin-right: 8px;
+}
+
+.deal-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.see-all {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.deal-info {
+    min-width: 180px;
+    flex-shrink: 0;
+}
+
+.purchase-container {
+    max-width: 1550px;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 100px;
+    margin-right: 80px;
+}
+
+.offer-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.offer-button {
+    background-color: rgb(232, 233, 234);
+    border-radius: 20px;
+    padding: 10px 20px;
+    display: inline-flex;
+    text-align: center;
+    justify-content: center;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.apple-intelligence {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.apple-intelligence img {
+    height: 20px;
+}
+
+.rf-bfe-main {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1500px;
+    margin: 20px 80px 20px 100px;
+}
+
+.rf-bfe-column-left {
+    width: 65%;
+    max-height: 800px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.rf-bfe-column-right {
+    width: 35%;
+    padding-left: 20px;
+    max-height: 800px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.rf-bfe-column-left::-webkit-scrollbar,
+.rf-bfe-column-right::-webkit-scrollbar {
+    display: none;
+}
+
+.model-card,
+.storage-card {
+    border: 1px solid #ccc;
+    padding: 13px 13px 7px 13px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.model-card p, .storage-card p {
+    font-size: 12px;
+}
+
+.model-card strong, .storage-card strong {
+    font-size: 24px;
+}
+
+.help-box {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.color-options {
+    display: flex;
+    gap: 10px;
+}
+
+.color-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.trade-options, .payment-options {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    padding-bottom: 50px;
+    padding-top: 10px;
+}
+
+.trade-card, .payment-card {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.payment-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 150px;
+}
+
+.payment-card strong { align-self: flex-start; font-size: 15px; }
+.payment-card p { align-self: flex-end; font-size: 12px; margin-bottom: 0px !important; }
+
+.model-card.selected, .storage-card.selected, .trade-card.selected, .payment-card.selected {
+    border: 2px solid blue !important;
+}
+
+.color-circle.selected {
+    border: 4px solid #28a745 !important;
+}
+
+.buy-button {
+    background-color: #86868b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+}
+
+.buy-button:hover { background-color: #0071e3; transform: scale(1.02); }

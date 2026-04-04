@@ -1,13 +1,8 @@
 <?php
-$pageTitle = "process-order.php";
-require_once '../app/views/layouts/header.php';
-require_once '../app/views/layouts/navbar.php';
-?>
+// --- 1. XỬ LÝ LOGIC TRƯỚC KHI CÓ BẤT KỲ OUTPUT NÀO (DÀNH CHO HEADER REDIRECT) ---
+include_once '../app/config/database.php';
 
-<?php
-session_start();
-include_once '../app/config/database.php'; // Đảm bảo kết nối CSDL
-
+// Kiểm tra quyền truy cập (Session đã được mở tại index.php)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Lấy dữ liệu từ form
@@ -19,21 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $price = $_POST['price'] ?? '';
     $image_url = $_POST['image_url'] ?? '';
 
-    //Kiểm tra dữ liệu
-    echo "Dữ liệu nhận được:\n";
-    var_dump($_POST);
-    
     // Kiểm tra dữ liệu hợp lệ
-    if ( empty($product) || empty($storage) || empty($color) || empty($price) || empty($image_url)) {
+    if (empty($product) || empty($storage) || empty($color) || empty($price) || empty($image_url)) {
         die("Thiếu dữ liệu, vui lòng kiểm tra lại.");
     }
     
-    // Bắt đầu giao dịch để đảm bảo dữ liệu đồng nhất
+    // Bắt đầu giao dịch (Transaction)
     $conn->begin_transaction();
     
     try {
-
-        // Giảm số lượng sản phẩm đi 1
+        // Cập nhật số lượng tồn kho (Giảm 1)
         $stmt_update = $conn->prepare("UPDATE products SET quantity = quantity - 1 WHERE name = ?");
         if ($stmt_update === false) {
             throw new Exception("Lỗi prepare (update): " . $conn->error);
@@ -56,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Hoàn tất giao dịch
         $conn->commit();
 
-        // Chuyển hướng sau khi đặt hàng thành công
+        // CHUYỂN HƯỚNG NGAY LẬP TỨC (KHÔNG CÓ HTML TRÊN ĐÂY)
         header("Location: order-detail?name=" . urlencode($product) .
         "&price=" . urlencode($price) .
         "&storage=" . urlencode($storage) .
@@ -65,21 +55,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
 
     } catch (Exception $e) {
-        $conn->rollback(); // Hoàn tác nếu có lỗi xảy ra
-        die("Lỗi: " . $e->getMessage());
+        $conn->rollback(); 
+        // Nếu lỗi, chúng ta mới nạp layout để hiển thị thông báo lỗi đẹp hơn
+        $pageTitle = "Lỗi xử lý đơn hàng";
+        require_once '../app/views/layouts/header.php';
+        require_once '../app/views/layouts/navbar.php';
+        echo "<div class='container mt-5 alert alert-danger'>Lỗi: " . $e->getMessage() . "</div>";
+        require_once '../app/views/layouts/footer.php';
+        exit();
     } finally {
-        // Đảm bảo đóng các statement và connection
-        if (isset($stmt_check) && $stmt_check !== false) $stmt_check->close();
-        if (isset($stmt_update) && $stmt_update !== false) $stmt_update->close();
-        if (isset($stmt_insert) && $stmt_insert !== false) $stmt_insert->close();
+        if (isset($stmt_update)) $stmt_update->close();
+        if (isset($stmt_insert)) $stmt_insert->close();
         $conn->close();
     }
 
 } else {
-    die("Yêu cầu không hợp lệ.");
+    // Nếu truy cập trực tiếp bằng GET (không qua Submit)
+    header("Location: mua-iphone");
+    exit();
 }
-?>
-
-<?php
-require_once '../app/views/layouts/footer.php';
 ?>

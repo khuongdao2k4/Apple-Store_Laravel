@@ -31,58 +31,6 @@
         <img src="https://www.apple.com/vn/home/globalfooter/logo-local-compliance.png"
             style="width: 125px; height: 40px;" alt="">
     </footer>
-    <script>
-        document.querySelector(".search-icon").addEventListener("click", function (e) {
-            e.preventDefault();
-            document.querySelector(".search-box").classList.toggle("active");
-        });
-
-        document.getElementById("search-input").addEventListener("input", function () {
-            let keyword = this.value.trim();
-            let resultsContainer = document.getElementById("search-results");
-
-            if (keyword.length > 1) {
-                fetch(`search?query=${encodeURIComponent(keyword)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            let resultHTML = data.map(p => `
-                        <li class="search-item" data-id="${p.id}" style="">
-                            <img src="${p.image_url}" alt="${p.name}" class="search-image" style="">
-                            <div class="search-info">
-                                <span class="search-name">${p.name}</span>
-                                <span class="search-price">${p.price}đ</span>
-                            </div>
-                        </li>
-                    `).join("");
-
-                            resultsContainer.innerHTML = resultHTML;
-                            resultsContainer.style.display = "block";
-
-                            // Thêm sự kiện click vào mỗi item để điều hướng
-                            document.querySelectorAll(".search-item").forEach(item => {
-                                item.addEventListener("click", function () {
-                                    let productId = this.getAttribute("data-id");
-                                    window.location.href = `order-test?id=${productId}`;
-                                });
-                            });
-
-                        } else {
-                            resultsContainer.innerHTML = "<li>Không tìm thấy sản phẩm</li>";
-                            resultsContainer.style.display = "block";
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Lỗi:", error);
-                        resultsContainer.innerHTML = "<li>Có lỗi xảy ra!</li>";
-                        resultsContainer.style.display = "block";
-                    });
-            } else {
-                resultsContainer.innerHTML = "";
-                resultsContainer.style.display = "none";
-            }
-        });
-    </script>
+    <script src="<?= BASE_URL ?>public/assets/js/search-handler.js?v=<?= time() ?>"></script>
 </body>
-
 </html>

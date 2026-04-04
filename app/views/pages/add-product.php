@@ -1,11 +1,11 @@
 <?php
-
- // Kết nối database
-
 // Kiểm tra nếu user đã đăng nhập và có quyền admin
-if (!isset($_SESSION['role']) == 'admin') {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     echo "<script>alert('Bạn không có quyền truy cập!'); window.location.href = 'mua-iphone';</script>";
+    exit();
 }
+
+include_once '../app/config/database.php'; // Đảm bảo kết nối CSDL
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -34,52 +34,47 @@ require_once '../app/views/layouts/header.php';
 require_once '../app/views/layouts/navbar.php';
 ?>
 
-<h5 style="font-weight: bold; padding-left: 300px; padding-top: 10px;">Thêm Sản Phẩm </h5>
+<h5 class="page-title">Thêm Sản Phẩm</h5>
 
-    <div class="banner">
-        <div class="text-content">
-            <h1>Phối. Hợp. MagSafe.</h1>
-            <p>Gắn thêm ốp lưng, ví hoặc bộ sạc không dây.</p>
-            <a href="#">Mua MagSafe &gt;</a>
+<div class="banner">
+    <div class="text-content">
+        <h1>Phối. Hợp. MagSafe.</h1>
+        <p>Gắn thêm ốp lưng, ví hoặc bộ sạc không dây.</p>
+        <a href="#">Mua MagSafe &gt;</a>
+    </div>
+</div>
+
+<div class="add-product-container">
+    <h2>Thêm Sản Phẩm Mới</h2>
+    
+    <form action="add-product" method="POST">
+        <div class="mb-4">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Tên Sản Phẩm" required>
         </div>
-    </div>
 
-    <div class="add-product-container">
-        <h2>Thêm Sản Phẩm</h2>
-        <br>
-        <?php
-        if (isset($_GET['message'])) {
-            echo '<div class="alert alert-success">' . htmlspecialchars($_GET['message']) . '</div>';
-        }
-        ?>
-        <form action="add-product" method="POST">
-
-            <div class="row mb-3">
-                <input style="border-radius:20px" type="text" class="form-control" id="name" name="name"
-                    placeholder="Tên Sản Phẩm" required>
+        <div class="mb-4">
+            <input type="url" class="form-control" id="image_url" name="image_url" placeholder="URL Hình ảnh sản phẩm" required>
+            <div id="image-preview-container">
+                <img id="image-preview" src="" alt="Preview">
             </div>
+        </div>
 
-            <div class="row mb-3">
-                <input style="border-radius:20px" type="url" class="form-control" id="image_url" name="image_url"
-                    placeholder="URL Image" required>
-            </div>
+        <div class="mb-4">
+            <input type="text" class="form-control" id="colors" name="colors" placeholder="Màu sắc (VD: gray, silver, gold)" required>
+        </div>
 
-            <div class="row mb-3">
-                <input style="border-radius:20px" type="text" class="form-control" id="colors" name="colors"
-                    placeholder="Color" required>
-            </div>
+        <div class="mb-4">
+            <input type="number" class="form-control" id="price" name="price" placeholder="Giá sản phẩm" required>
+        </div>
 
-            <div class="row mb-3">
-                <input style="border-radius:20px" type="text" class="form-control" id="price" name="price"
-                    placeholder="Price" required>
-            </div>
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary">Lưu sản phẩm</button>
+        </div>
+    </form>
+</div>
 
-            <div class="d-grid">
-                <button style="border-radius:20px" type="submit" class="btn btn-primary ">Thêm sản phẩm</button>
-            </div>
-        </form>
-    </div>
 
 <?php
 require_once '../app/views/layouts/footer.php';
 ?>
+

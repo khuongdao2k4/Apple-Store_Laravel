@@ -159,12 +159,12 @@ require_once '../app/views/layouts/navbar.php';
         <h2 style="margin-top: 20px;">Information Order</h2>
         <p style="margin-bottom: 20px;">Display product information that user information.</p>
 
-        <form action="apple-quantity.php" method="POST">
+        <form action="process-order" method="POST">
             <input style="border-radius: 20px; text-align: center;" type="email" name="email"
                 value="<?= htmlspecialchars($email) ?>" required readonly>
             <input style="border-radius: 20px; text-align: center;" type="text" name="username"
                 value="<?= htmlspecialchars($user_name) ?>" required readonly>
-            <input style="border-radius: 20px; text-align: center;" type="text" name="product"
+            <input style="border-radius: 20px; text-align: center;" type="text" name="name"
                 value="<?= htmlspecialchars($productName) ?>" required readonly>
             <input style="border-radius: 20px; text-align: center;" type="text" name="storage"
                 value="<?= htmlspecialchars($productStorage) ?>" required readonly>

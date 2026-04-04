@@ -339,16 +339,9 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
-                    <ul style="list-style-type: none;">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link search-icon"><i
-                                    class="fa-solid fa-magnifying-glass fa-lg"></i></a>
-                        </li>
-                        <li class="nav-item search-box">
-                            <input type="text" id="search-input" class="form-control"
-                                placeholder="Tìm kiếm sản phẩm...">
-                        </li>
-                    </ul>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link search-icon"><i class="fa-solid fa-magnifying-glass fa-lg"></i></a>
+                    </li>
                     <li class="nav-item"><a href="bag" class="nav-link"><i
                                 class="fa-solid fa-bag-shopping fa-lg"></i></a>
                     </li>
@@ -368,11 +361,35 @@
                         </ul>
                     </li>
                 </ul>
-                <ul>
-
-                </ul>
+        
+        <!-- Giao diện tìm kiếm mở rộng (Apple Style) -->
+        <div class="search-container">
+            <div class="container h-100 d-flex flex-column pt-5">
+                <div class="search-inner-wrapper">
+                    <div class="search-input-wrapper d-flex align-items-center">
+                        <i class="fa-solid fa-magnifying-glass search-inner-icon"></i>
+                        <input type="text" id="search-input" placeholder="Tìm kiếm trên apple.com" autocomplete="off">
+                        <button class="search-close-btn"><i class="fa-solid fa-xmark fa-xl"></i></button>
+                    </div>
+                    
+                    <div class="search-content-wrapper mt-4">
+                        <div class="quick-links">
+                            <h6>Liên Kết Nhanh</h6>
+                            <ul class="list-unstyled">
+                                <li><a href="mac"><i class="fa-solid fa-arrow-right-long me-2"></i>Tìm kiếm Mac</a></li>
+                                <li><a href="store"><i class="fa-solid fa-arrow-right-long me-2"></i>Phụ kiện iPhone</a></li>
+                                <li><a href="bag"><i class="fa-solid fa-arrow-right-long me-2"></i>Giỏ hàng của bạn</a></li>
+                                <li><a href="mua-iphone"><i class="fa-solid fa-arrow-right-long me-2"></i>iPhone 16 Pro mới</a></li>
+                            </ul>
+                        </div>
+                        <div class="search-results-box">
+                            <h6 id="search-results-title" style="display:none;">Kết Quả Tìm Kiếm</h6>
+                            <ul id="search-results" class="list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="search-overlay"></div>
     </nav>
-    <ul id="search-results"></ul>
 

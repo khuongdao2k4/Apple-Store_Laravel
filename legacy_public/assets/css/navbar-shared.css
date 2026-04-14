@@ -1,0 +1,299 @@
+/* --- SHARED CSS FOR NAVBAR & SUBMENU --- */
+body {
+    padding-top: 44px !important; /* Adjusted to match real navbar height */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.navbar {
+    background: #f8f8f8 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    min-height: 44px;
+}
+
+.navbar-nav {
+    flex-grow: 1;
+    justify-content: right;
+    align-items: center;
+}
+
+.nav-item a {
+    color: black !important;
+    font-size: 12px;
+    padding-right: 10px;
+}
+
+.nav-item a:hover {
+    color: #404040 !important;
+}
+
+.nav-item img {
+    height: 18px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+/* Submenu Containers */
+.submenu-container {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.nav-item:hover .submenu-container {
+    visibility: visible;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.submenu {
+    width: 100vw;
+    max-height: 60vh;
+    background: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 320px 200px 200px;
+    align-items: start;
+    justify-items: center;
+    transform: translateY(-10%);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    padding: 30px;
+    padding-left: 350px;
+    padding-right: 150px;
+    pointer-events: auto;
+}
+
+.nav-item:hover .submenu {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.submenu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    padding-left: 30px;
+}
+
+.submenu ul li {
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+}
+
+.header-li {
+    font-size: 12px;
+    color: #6E6E73;
+    padding-bottom: 10px;
+}
+
+.li-rowh {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1d1d1f;
+}
+
+.li-row {
+    font-size: 14px; /* Phóng to nhẹ từ 12px để dễ đọc hơn nhưng vẫn chuẩn menu Apple */
+    color: #1d1d1f;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-nav.ms-auto {
+    margin-left: auto;
+    padding-right: 20px;
+}
+
+/* --- PROFESSIONAL SEARCH BAR (APPLE STYLE) --- */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px); /* Tăng độ nhòe chuẩn Apple */
+    z-index: 998;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+}
+
+.search-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 350px;
+    background: white;
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.search-inner-wrapper {
+    max-width: 700px; /* Thu hẹp lại để tập trung vào giữa màn hình */
+    margin: 0 auto;
+    width: 90%;
+}
+
+/* Khi tìm kiếm active */
+.navbar.search-active .navbar-nav,
+.navbar.search-active .navbar-toggler,
+.navbar.search-active .nav-link {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+}
+
+.navbar.search-active .search-overlay,
+.navbar.search-active .search-container {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Search Input Styling */
+.search-input-wrapper {
+    position: relative;
+    border-bottom: 1px solid #d2d2d7;
+    padding-top: 40px;
+    padding-bottom: 15px;
+}
+
+#search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 32px; /* Phóng to font tiêu đề tìm kiếm */
+    font-weight: 500;
+    padding: 0 45px;
+    color: #1d1d1f;
+    letter-spacing: -0.015em;
+}
+
+.search-inner-icon {
+    position: absolute;
+    left: 0;
+    top: 65%;
+    transform: translateY(-50%);
+    color: #86868b;
+    font-size: 24px;
+}
+
+.search-close-btn {
+    position: absolute;
+    right: 0;
+    top: 65%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #86868b;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* Search Content & Results */
+.quick-links h6, 
+#search-results-title {
+    font-size: 13px;
+    color: #86868b;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-weight: 400;
+}
+
+.quick-links ul li {
+    margin-bottom: 12px;
+}
+
+.quick-links ul li a {
+    color: #1d1d1f;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.quick-links ul li a i {
+    font-size: 12px;
+    color: #86868b;
+    margin-right: 10px;
+    transition: transform 0.3s;
+}
+
+.quick-links ul li a:hover {
+    color: #0066cc;
+}
+
+.quick-links ul li a:hover i {
+    transform: translateX(5px);
+    color: #0066cc;
+}
+
+#search-results {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.search-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f7;
+    transition: background 0.2s;
+}
+
+.search-image {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+
+.search-name {
+    font-size: 16px;
+    font-weight: 400;
+    color: #1d1d1f;
+}
+
+.search-price {
+    font-size: 13px;
+    color: #86868b;
+    margin-top: 2px;
+}

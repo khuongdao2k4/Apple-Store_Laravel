@@ -1,0 +1,22 @@
+/* Use the same styles as add-product for consistency */
+@import url("apple_add-product-styles.css");
+
+.edit-product-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 48px;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+.edit-product-container h2 {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#image-preview-container {
+    display: block; /* Vô hiệu hóa chế độ ẩn cho trang sửa vì có ảnh sẵn */
+}

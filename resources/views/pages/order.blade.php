@@ -56,9 +56,16 @@
 <div class="rf-bfe-main">
     {{-- Left Column: Product image + Trade In + AppleCare --}}
     <div class="rf-bfe-column-left">
-        <div>
-            <img id="main-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
-            alt="Product Image" style="display: block; margin: 0 auto; max-width: 100%; max-height: 80vh; object-fit: contain; padding-bottom: 50px;">
+        <div class="main-image-container">
+            <button class="slider-nav slider-prev" onclick="moveSlider(-1)">&#10094;</button>
+            <div class="image-slider" id="image-slider">
+                <div class="image-slide">
+                    <img id="main-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}" alt="Product Image">
+                </div>
+            </div>
+            <button class="slider-nav slider-next" onclick="moveSlider(1)">&#10095;</button>
+            <div class="slider-dots" id="slider-dots">
+            </div>
         </div>
         <h3><strong>Apple Trade In.</strong> <span style="font-weight: normal; color: #86868b;">Nhận 800.000đ–17.600.000đ điểm tín dụng để sử dụng khi mua iPhone mới.<sup>§</sup></span></h3>
 
@@ -205,7 +212,7 @@
         }
         </script>
 
-        <h3><strong>Gói bảo hành AppleCare+.</strong> <span style="font-weight: normal; color: #86868b;">Bảo vệ iPhone mới của bạn.</span></h3>
+        <h3 style="margin-top: 50px;"><strong>Gói bảo hành AppleCare+.</strong> <span style="font-weight: normal; color: #86868b;">Bảo vệ iPhone mới của bạn.</span></h3>
         <div class="applecare-options" id="applecare-options" style="display: flex; gap: 15px; margin-top: 10px; padding-bottom: 50px; padding-top: 10px;">
             <div class="applecare-card" id="applecare-yes-card" onclick="openApplecareModal()" style="flex: 1; border: 1px solid #d2d2d7; border-radius: 12px; padding: 25px 20px; text-align: left; display: flex; flex-direction: column; justify-content: flex-start; cursor: pointer; background-color: #ffffff; transition: border-color 0.2s;">
                 <div style="font-size: 17px; font-weight: 600; color: #1d1d1f; display: flex; align-items: center; gap: 5px;">
@@ -304,12 +311,22 @@
                 @php
                     $priceVal = (int)preg_replace('/[^0-9]/', '', $product->price);
                     if(empty($priceVal)) $priceVal = 0;
+                    
+                    // For demonstration, if there's only 1 image, we'll create a few variations
+                    // In a real app, this would come from a relationship like $product->images
+                    $images = [$product->image_url];
+                    // Faking multiple images for demonstration if only one exists
+                    if (count($images) == 1) {
+                        $images[] = $product->image_url; // same image for now
+                        $images[] = $product->image_url;
+                    }
                 @endphp
                 <div class="model-card {{ $index == 0 ? 'selected' : '' }}" 
                      data-id="{{ $product->id }}" 
                      data-name="{{ $product->name }}" 
                      data-price="{{ $priceVal }}" 
                      data-image="{{ asset($product->image_url) }}"
+                     data-images="{{ json_encode(array_map(function($img) { return asset($img); }, $images)) }}"
                      data-colors="{{ $product->colors }}"
                      onclick="selectModel(this)">
                     <div style="flex: 1; text-align: left;">
@@ -386,43 +403,76 @@
             <div style="font-size: 24px; color: #1d1d1f; font-weight: 300;">⊕</div>
         </div>
         
-        {{-- Apple-style total summary --}}
-        <div class="total-summary" style="margin-top: 40px; border-top: 1px solid #d2d2d7; padding-top: 30px;">
+    </div>
+</div>
 
-            {{-- Product headline --}}
-            <p id="summary-product-headline" style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin: 0 0 6px;">iPhone</p>
+{{-- ===== Apple-style Checkout Summary (below two-column layout) ===== --}}
+<div style="background: #f5f5f7; border-top: 1px solid #d2d2d7; padding: 60px 100px; margin-top: 0;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start;">
 
-            {{-- Total price large --}}
+        {{-- Left: Big headline + product image --}}
+        <div style="flex: 0 0 340px;">
+            <h2 style="font-size: 40px; font-weight: 700; color: #1d1d1f; line-height: 1.1; margin: 0 0 8px;">
+                <span id="checkout-product-name-title">iPhone</span><br>
+                <span style="font-weight: 700;">mới của bạn.</span>
+            </h2>
+            <p style="font-size: 21px; color: #86868b; font-weight: 400; margin: 0 0 30px;">Theo cách bạn muốn.</p>
+            <img id="checkout-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
+                 alt="Product" style="max-width: 280px; display: block;">
+        </div>
+
+        {{-- Middle: Pricing details --}}
+        <div style="flex: 1; min-width: 0;">
+            <p id="summary-product-headline" style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin: 0 0 10px;">iPhone</p>
+
             <p style="font-size: 15px; color: #1d1d1f; margin: 0 0 2px;">
-                Tổng cộng <strong id="summary-total-price" style="font-size: 17px;">0đ</strong>
+                Tổng cộng <strong id="summary-total-price" style="font-size: 15px;">0đ</strong>
+            </p>
+            <p style="font-size: 15px; color: #1d1d1f; margin: 4px 0;">hoặc</p>
+            <p style="font-size: 21px; font-weight: 700; color: #1d1d1f; margin: 0 0 4px; line-height: 1.2;">
+                <span id="summary-monthly-price">0đ</span>/tháng cho 24 tháng<sup style="font-size:12px; font-weight:400;">^</sup>
+            </p>
+            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
+                Ở mức phí dịch vụ 1,67%, sau khi thanh toán lần đầu 20% là <span id="summary-down-payment">0đ</span>
+            </p>
+            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
+                Bao gồm thuế GTGT khoảng <span id="summary-tax">0đ</span>.<sup style="font-size:9px;">^</sup>
+            </p>
+            <p style="font-size: 13px; color: #6e6e73; margin: 0 0 16px;">
+                <a href="#" style="color: #6e6e73; text-decoration: none;">Khám phá thêm các lựa chọn trả góp hàng tháng ⊕</a>
             </p>
 
-            {{-- Monthly installment --}}
-            <p style="font-size: 15px; color: #1d1d1f; margin: 0 0 4px;">
-                hoặc
-            </p>
-            <p style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin: 0 0 4px;">
-                <span id="summary-monthly-price">0đ</span>/tháng cho 24 tháng<sup style="font-size:11px;">^</sup>
-            </p>
-            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 16px;">
-                Ở mức phí dịch vụ 1,67%, sau khi thanh toán lần đầu 20%
-            </p>
-
-            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 16px 0;">
-
-            {{-- AppleCare row --}}
-            <div id="summary-applecare-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; color: #1d1d1f;">
+            <div id="summary-applecare-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 14px; color: #1d1d1f; border-top: 1px solid #d2d2d7; padding-top: 12px;">
                 <span>AppleCare+</span>
                 <span>5.499.000đ</span>
             </div>
 
-            {{-- Shipping info --}}
+            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 0 0 16px;">
+
+            <p style="font-size: 13px; font-weight: 400; color: #6e6e73; margin: 0 0 4px;">Vận chưa thể quyết định?</p>
+            <p style="font-size: 13px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
+                Bạn có thể nhấn "Lưu để xem lại sau" để dễ dàng quay lại xem sản phẩm.
+            </p>
+            <p style="font-size: 13px; margin: 0 0 16px;">
+                <a href="#" style="color: #6e6e73; text-decoration: none;">☐ Lưu để xem lại sau</a>
+            </p>
+
+            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 0 0 16px;">
+
+            <p style="font-size: 13px; color: #6e6e73; margin: 0; line-height: 1.5;">
+                Chi tiết giao hàng cho khu vực của bạn sẽ được hiển thị trong phần Thanh Toán.
+            </p>
+        </div>
+
+        {{-- Right: Shipping + Button --}}
+        <div style="flex: 0 0 200px;">
             <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px;">
-                <span style="font-size: 20px; color: #1d1d1f;">🚚</span>
+                <span style="font-size: 18px; margin-top: 2px;">🚚</span>
                 <div>
                     <p style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin: 0 0 2px;">Vận chuyển:</p>
-                    <p style="font-size: 13px; color: #6e6e73; margin: 0;">3–5 ngày làm việc</p>
-                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Vận Chuyển Miễn Phí</a>
+                    <p style="font-size: 13px; color: #6e6e73; margin: 0 0 2px;">3–5 ngày làm việc</p>
+                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Vận Chuyển Miễn Phí</a><br>
+                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Nhận thông tin về ngày giao hàng ⓘ</a>
                 </div>
             </div>
 
@@ -434,11 +484,32 @@
                 <input type="hidden" name="applecare" id="input-applecare" value="0">
                 <input type="hidden" name="image_url" id="input-image" value="">
 
-                <button type="submit" style="width: 100%; padding: 18px; border-radius: 980px; background-color: #0071e3; color: white; font-size: 17px; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.2s; letter-spacing: 0;" onmouseover="this.style.backgroundColor='#0077ed'" onmouseout="this.style.backgroundColor='#0071e3'">
+                <button type="submit"
+                    style="width: 100%; padding: 14px 20px; border-radius: 980px; background-color: #0071e3; color: white; font-size: 17px; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.2s; margin-bottom: 10px;"
+                    onmouseover="this.style.backgroundColor='#0077ed'"
+                    onmouseout="this.style.backgroundColor='#0071e3'">
                     Thêm vào giỏ hàng
                 </button>
             </form>
+
+            {{-- Mua ngay button --}}
+            <form action="{{ route('checkout') }}" method="GET" style="margin-top: 10px;">
+                <input type="hidden" name="product" id="buynow-product-name" value="">
+                <input type="hidden" name="price" id="buynow-total-price" value="">
+                <input type="hidden" name="storage" id="buynow-storage" value="">
+                <input type="hidden" name="color" id="buynow-color" value="">
+                <input type="hidden" name="applecare" id="buynow-applecare" value="0">
+                <input type="hidden" name="image_url" id="buynow-image" value="">
+                <input type="hidden" name="buy_now" value="1">
+                <button type="submit"
+                    style="width: 100%; padding: 14px 20px; border-radius: 980px; background-color: transparent; color: #0071e3; font-size: 17px; font-weight: 600; border: 1.5px solid #0071e3; cursor: pointer; transition: all 0.2s;"
+                    onmouseover="this.style.backgroundColor='#0071e3'; this.style.color='white';"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0071e3';">
+                    Mua ngay
+                </button>
+            </form>
         </div>
+
     </div>
 </div>
 
@@ -448,6 +519,10 @@
     let currentColor = null;
     let appleCarePrice = 0;
     
+    // Slider state
+    let currentSlide = 0;
+    let sliderImages = [];
+
     function formatCurrency(amount) {
         return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
     }
@@ -477,13 +552,16 @@
             name: el.dataset.name,
             price: parseInt(el.dataset.price),
             image: el.dataset.image,
+            images: el.dataset.images ? JSON.parse(el.dataset.images) : [el.dataset.image],
             colors: el.dataset.colors ? el.dataset.colors.split(',') : []
         };
         
         document.getElementById('page-title').innerText = "Mua " + currentModel.name;
-        document.getElementById('main-product-image').src = currentModel.image;
+        
+        // Initialize slider with model images
+        initSlider(currentModel.images);
 
-        // 1. Update storage prices first (so the prices show immediately)
+        // 1. Update storage prices first
         document.querySelectorAll('.storage-card').forEach(c => {
             const offset = parseInt(c.dataset.priceOffset);
             const totalPrice = currentModel.price + offset;
@@ -493,11 +571,9 @@
             }
         });
 
-        // 2. Set currentStorage by selecting the first/already-selected storage card
         const selectedStorageCard = document.querySelector('.storage-card.selected') || document.querySelector('.storage-card');
         if (selectedStorageCard) selectStorage(selectedStorageCard);
 
-        // 3. Render colors AFTER currentStorage is set (so updateSummary won't crash)
         const colorContainer = document.getElementById('color-selections');
         colorContainer.innerHTML = '';
         currentModel.colors.forEach((c, idx) => {
@@ -508,6 +584,55 @@
             div.onclick = function() { selectColor(this, cleanColor); };
             colorContainer.appendChild(div);
             if (idx === 0) selectColor(div, cleanColor);
+        });
+    }
+
+    function initSlider(images) {
+        sliderImages = images;
+        currentSlide = 0;
+        
+        const sliderContainer = document.getElementById('image-slider');
+        const dotsContainer = document.getElementById('slider-dots');
+        
+        sliderContainer.innerHTML = '';
+        dotsContainer.innerHTML = '';
+        
+        sliderImages.forEach((imgSrc, idx) => {
+            // Add slide
+            const slide = document.createElement('div');
+            slide.className = 'image-slide';
+            slide.innerHTML = `<img src="${imgSrc}" alt="Slide ${idx + 1}">`;
+            sliderContainer.appendChild(slide);
+            
+            // Add dot
+            const dot = document.createElement('div');
+            dot.className = 'slider-dot' + (idx === 0 ? ' active' : '');
+            dot.onclick = () => goToSlide(idx);
+            dotsContainer.appendChild(dot);
+        });
+        
+        updateSliderPosition();
+    }
+
+    function moveSlider(direction) {
+        currentSlide += direction;
+        if (currentSlide >= sliderImages.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = sliderImages.length - 1;
+        updateSliderPosition();
+    }
+
+    function goToSlide(index) {
+        currentSlide = index;
+        updateSliderPosition();
+    }
+
+    function updateSliderPosition() {
+        const slider = document.getElementById('image-slider');
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Update dots
+        document.querySelectorAll('.slider-dot').forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentSlide);
         });
     }
     
@@ -527,6 +652,10 @@
         document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         currentColor = color;
+        
+        // In a real application, you might update sliderImages here based on color
+        // For now, we'll keep the model images but we could filter them if data provided
+        
         updateSummary();
     }
     
@@ -535,21 +664,43 @@
         
         const finalPrice = currentModel.price + currentStorage.priceOffset + appleCarePrice;
         const monthlyPrice = Math.round(finalPrice / 24);
+        const downPayment = Math.round(finalPrice * 0.20);
+        const taxEstimate = Math.round(finalPrice * 8 / 108);
 
-        // Headline: "iPhone 16e 512GB"
-        document.getElementById('summary-product-headline').innerText =
-            `${currentModel.name} ${currentStorage.name}`;
+        const fullName = `${currentModel.name} ${currentStorage.name}`;
 
-        // Total & monthly
+        document.getElementById('summary-product-headline').innerText = fullName;
+
+        const titleEl = document.getElementById('checkout-product-name-title');
+        if (titleEl) titleEl.innerText = currentModel.name;
+
+        const checkoutImg = document.getElementById('checkout-product-image');
+        if (checkoutImg) checkoutImg.src = currentModel.image;
+
         document.getElementById('summary-total-price').innerText = formatCurrency(finalPrice);
         document.getElementById('summary-monthly-price').innerText = formatCurrency(monthlyPrice);
+
+        document.getElementById('summary-down-payment').innerText = formatCurrency(downPayment);
+        document.getElementById('summary-tax').innerText = formatCurrency(taxEstimate);
         
-        // Update hidden inputs for submission
         document.getElementById('input-product-name').value = currentModel.name;
         document.getElementById('input-total-price').value = finalPrice;
         document.getElementById('input-storage').value = currentStorage.name;
         document.getElementById('input-color').value = currentColor;
         document.getElementById('input-image').value = currentModel.image;
+
+        const bn = {
+            'buynow-product-name': currentModel.name,
+            'buynow-total-price': finalPrice,
+            'buynow-storage': currentStorage.name,
+            'buynow-color': currentColor,
+            'buynow-applecare': document.getElementById('input-applecare').value,
+            'buynow-image': currentModel.image,
+        };
+        Object.entries(bn).forEach(([id, val]) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+        });
     }
     
     document.addEventListener('DOMContentLoaded', init);

@@ -2,6 +2,29 @@
 
 @section('content')
 
+{{-- Sticky Header Bar --}}
+<div id="sticky-header" class="sticky-header-bar" style="display: none;">
+    <div class="sticky-header-content">
+        <div class="sticky-header-left">
+            <span id="sticky-product-name" style="font-size: 20px; font-weight: 600;">iPhone 16e</span>
+        </div>
+        <div class="sticky-header-right">
+            <div style="text-align: right;">
+                <div id="sticky-price-row" style="font-size: 14px; font-weight: 400; color: #1d1d1f;">
+                    Tổng cộng <span id="sticky-total-price">16.999.000đ</span> hoặc <span id="sticky-monthly-price">708.292đ</span>/tháng cho 24 tháng<sup>Δ</sup>
+                </div>
+                <div style="font-size: 12px; color: #1d1d1f; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 2px;">
+                    <svg viewBox="0 0 25 18" class="as-svgicon as-svgicon-shipping" role="img" aria-hidden="true" width="16" height="16" style="fill: currentColor;">
+                        <path d="M19.5,6.5h-1.042C18.172,6.177,17.86,5.908,17.5,5.74V4.5c0-0.552-0.448-1-1-1h-11c-0.552,0-1,0.448-1,1v9c0,0.552,0.448,1,1,1h0.101 c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2h5.202c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2H21.5c0.552,0,1-0.448,1-1 v-5C22.5,8.015,21.157,6.5,19.5,6.5z M6.5,15.5c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S7.327,15.5,6.5,15.5z M16,4.5v9h-1.042c-0.203-1.135-1.194-2-2.399-2c-0.019,0-0.038,0.002-0.057,0.003V4.5H16z M18.5,15.5 c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S19.327,15.5,18.5,15.5z M21.5,13.5h-0.601 c-0.203-1.135-1.194-2-2.399-2c-0.36,0-0.672,0.128-0.923,0.34V7.5h1.923c1.103,0,2,0.897,2,2V13.5z"></path>
+                    </svg>
+                    <span>3-5 ngày làm việc</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="deals-container">
     <div class="deal-info">
         <strong style="font-size:13px;">Carrier Deals at Apple</strong><br>
@@ -541,6 +564,20 @@
             document.getElementById('input-applecare').value = (choice === 'yes') ? '1' : '0';
             updateSummary();
         }
+
+        // Scroll listener for sticky header
+        window.addEventListener('scroll', function() {
+            const stickyHeader = document.getElementById('sticky-header');
+            const triggerEl = document.getElementById('page-price-subtitle');
+            if (triggerEl && stickyHeader) {
+                const triggerPos = triggerEl.getBoundingClientRect().bottom + window.scrollY;
+                if (window.scrollY > triggerPos) {
+                    stickyHeader.style.display = 'flex';
+                } else {
+                    stickyHeader.style.display = 'none';
+                }
+            }
+        });
     }
     
     function selectModel(el) {
@@ -670,6 +707,16 @@
         const fullName = `${currentModel.name} ${currentStorage.name}`;
 
         document.getElementById('summary-product-headline').innerText = fullName;
+
+        // Update Sticky Header
+        const stickyName = document.getElementById('sticky-product-name');
+        if (stickyName) stickyName.innerText = currentModel.name;
+        
+        const stickyTotal = document.getElementById('sticky-total-price');
+        if (stickyTotal) stickyTotal.innerText = formatCurrency(finalPrice);
+        
+        const stickyMonthly = document.getElementById('sticky-monthly-price');
+        if (stickyMonthly) stickyMonthly.innerText = formatCurrency(monthlyPrice);
 
         const titleEl = document.getElementById('checkout-product-name-title');
         if (titleEl) titleEl.innerText = currentModel.name;

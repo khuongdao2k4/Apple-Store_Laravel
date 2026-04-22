@@ -54,6 +54,60 @@
             window.location.href = "{{ route('delete-product') }}?id=" + id;
         }
     }
+    
+    function loadSeriesModal(products) {
+        if (!products || products.length === 0) return;
+        
+        let tabsHtml = '';
+        let contentHtml = '';
+        
+        products.forEach((product, index) => {
+            let activeClass = index === 0 ? 'active' : '';
+            let showClass = index === 0 ? 'show active' : '';
+            let tabId = 'product_tab_' + product.id;
+            
+            tabsHtml += `
+                <li class="nav-item">
+                    <a style="font-size:14px" class="nav-link ${activeClass}" data-bs-toggle="tab" href="#${tabId}">${product.name}</a>
+                </li>
+            `;
+            
+            let colors = product.colors ? product.colors.split(',') : [];
+            let colorsHtml = colors.map((c, i) => `<div class="color-option" style="background: ${c.trim()};" onclick="setColor(${i})"></div>`).join('');
+            
+            let priceVal = parseInt(product.price.replace(/[^0-9]/g, '')) || 0;
+            let priceFormatted = new Intl.NumberFormat('vi-VN').format(priceVal) + 'đ';
+            
+            contentHtml += `
+                <div class="tab-pane fade ${showClass}" id="${tabId}">
+                    <div class="modal-layout-row">
+                        <div class="modal-left" style="margin-top: 30px;">
+                            <img id="product-img-${product.id}" class="product-image" src="/${product.image_url}" alt="${product.name}" style="object-fit: contain;">
+                            <p style="text-align:center; padding-top:30px">Hiện có ${colors.length} màu</p>
+                            <div class="color-options-modal">
+                                ${colorsHtml}
+                            </div>
+                        </div>
+                        <div class="modal-right">
+                            <div class="price-container">
+                                <h1 style="font-size: 34px; padding-top: 20px; padding-bottom:20px">${product.name}</h1>
+                                <button style="border-radius: 30px;" class="buy-button" onclick="location.href='/order?series=${encodeURIComponent(product.series)}'">Mua ngay</button>
+                            </div>
+                            <p>Từ ${priceFormatted}</p>
+                            <ul class="feature-list">
+                                <li>Thiết kế cao cấp và màn hình sắc nét</li>
+                                <hr>
+                                <li>Hiệu năng mạnh mẽ với chip thế hệ mới</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('productTabs').innerHTML = tabsHtml;
+        document.getElementById('productTabContent').innerHTML = contentHtml;
+    }
 </script>
 <!-- Các phần nội dung -->
 <div id="container1" class="container active">
@@ -84,7 +138,15 @@
                     $val = preg_replace('/[^0-9]/', '', $p->price);
                     return $val != '' ? (int)$val : 999999999;
                 });
-                $minPriceFormatted = "Từ " . number_format($minPrice, 0, ',', '.') . "đ";
+                $maxPrice = $products->max(function($p) {
+                    $val = preg_replace('/[^0-9]/', '', $p->price);
+                    return $val != '' ? (int)$val : 0;
+                });
+                if ($minPrice == $maxPrice) {
+                    $priceFormatted = "Từ " . number_format($minPrice, 0, ',', '.') . "đ";
+                } else {
+                    $priceFormatted = "Từ " . number_format($minPrice, 0, ',', '.') . "đ đến " . number_format($maxPrice, 0, ',', '.') . "đ";
+                }
             @endphp
             
             <div class="product-card">
@@ -92,7 +154,7 @@
                 <button class="explore-btn" 
                         data-bs-toggle="modal" 
                         data-bs-target="#productModal"
-                        onclick="loadSeriesModal({{ $products->toJson() }})">
+                        onclick="loadSeriesModal({{ htmlspecialchars(json_encode($products)) }})">
                     Hãy khám phá thiết bị
                 </button>
                 <img src="{{ asset($seriesImage) }}" alt="{{ $seriesTitle }}" style="object-fit: contain;">
@@ -105,8 +167,8 @@
                 </div>
                 
                 <div class="price-container">
-                    <p>{{ $minPriceFormatted }} hoặc {{ number_format($minPrice / 24, 0, ',', '.') }}đ/tháng <br> trong 24 tháng*</p>
-                    <button class="buy-btn" onclick="window.location.href='{{ route('order', ['id' => $firstProduct->id]) }}'">Mua</button>
+                    <p>{{ $priceFormatted }} hoặc {{ number_format($minPrice / 24, 0, ',', '.') }}đ/tháng <br> trong 24 tháng*</p>
+                    <button class="buy-btn" onclick="window.location.href='{{ route('order', ['series' => $series]) }}'">Mua</button>
                 </div>
 
                 @if (session('role') === 'admin')
@@ -156,188 +218,18 @@
 </div>
 <div id="container3" class="container">
     <h1>Trang 3</h1>
-    <p>Nội dung trang 3.</p>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="top-modal">
+    <p>Nội dung tran        <div class="top-modal">
             <ul class="nav nav-tabs" id="productTabs">
-                <li class="nav-item">
-                    <a style="font-size:14px" class="nav-link active" data-bs-toggle="tab" href="#iphone16pro">iPhone 16
-                        Pro</a>
-                </li>
-                <li class="nav-item">
-                    <a style="font-size:14px" class="nav-link" data-bs-toggle="tab" href="#iphone16promax">iPhone 16
-                        Pro Max</a>
-                </li>
+                <!-- Javascript will render tabs here -->
             </ul>
         </div>
         <div class="modal-content main-modal-wrapper">
             <div class="modal-body p-0">
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="iphone16pro">
-                        <div class="modal-layout-row">
-                            <div class="modal-left">
-                                <button class="prev" onclick="changeImage(-1)">&#10094;</button>
-                                <img id="product-img" class="product-image"
-                                    src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone16promax-digitalmat-gallery-1-202409_GEO_US?wid=728&hei=666&fmt=p-jpg&qlt=95&.v=1723843667344"
-                                    alt="Product Image">
-                                <button class="next" onclick="changeImage(1)">&#10095;</button>
-
-                                <div class="dots">
-                                    <div class="dot active" onclick="setImage(0)"></div>
-                                    <div class="dot" onclick="setImage(1)"></div>
-                                    <div class="dot" onclick="setImage(2)"></div>
-                                    <div class="dot" onclick="setImage(3)"></div>
-                                    <div class="dot" onclick="setImage(4)"></div>
-                                    <div class="dot" onclick="setImage(5)"></div>
-                                </div>
-
-                                <p style="text-align:center; padding-top:30px">Available in 4 finishes</p>
-
-                                <div class="color-options-modal">
-                                    <div class="color-option" style="background: #d4af37;" onclick="setColor(0)">
-                                    </div>
-                                    <div class="color-option" style="background: #808080;" onclick="setColor(1)">
-                                    </div>
-                                    <div class="color-option" style="background: #f5f5dc;" onclick="setColor(2)">
-                                    </div>
-                                    <div class="color-option" style="background: #000000;" onclick="setColor(3)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-right">
-                                <div class="price-container">
-                                    <h1 style="font-size: 38px; padding-top: 20px; padding-bottom:20px">iPhone 16
-                                        Pro</h1>
-                                    <button style="border-radius: 30px;" class="buy-button"
-                                        onclick="location.href='order'">Buy</button>
-
-                                </div>
-                                <p>From $1199 or $49.95/mo. for 24 mo.</p>
-                                <ul class="feature-list">
-                                    <li><img style="width:40px; height:40px"
-                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4j2YKBEC7N11eLYpIfUodw-ySoeLl1dUhwTkDNE3uIH7mkj1"
-                                            alt="Icon"> Titanium design with a larger 6.9-inch Super Retina XDR
-                                        display
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/jpeg;base64,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"
-                                            alt="Icon"> The first iPhone designed for Apple Intelligence
-                                        <hr>
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,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"
-                                            alt="Icon"> Camera Control gives you an easier way to access camera
-                                        tools
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHcAAAB4CAMAAAD/sZ1tAAAANlBMVEUAAAD////9/f0cHBw/Pz/09PTFxcXZ2dkrKyvn5+daWlrBwcGbm5tvb2+wsLCEhITS0tLLy8vBvig/AAAF7UlEQVRoge2biXrbIAyAzVVOH33/l50OwLiNmzrBzrctbF3j2OM3QoAkxCBeU4Y39zVcGxdrhJCyF0Eau0T7M9d8LEYysxtXYIVm+TD73M9FZmA/aqUvnztck2SRr+zbXv4rY9PklWsXvEdk2ZPLTKzaLGs3V671uaWSqP1KbgH+ltZ+5SI2P+SnUWun+hSn9Th5AmPlFZy5ZinStaMaehc12jJIFrPhJu4HKef+VCpzFriMLfeTNUp4fQ4VivYsT/nZcBfueHMeFsGsW8vK/cgyOBMLYMOd/FG5ubnzqVjsY9KipXAt65g9GTsMlqQqbeZGVqrxdO7I00fMXBazP2kENUX5qlnANTRDyul07DBM1N4sZ0t6Js8XMwia5mqTuSz1cwcRF11WCeR+slpdws3LA3E/eB5xV3B5IBUuNfh8dcb2FkEzFy+v4Tbr/pv75r65b+6bexXX6aB/rOY4N0wxxrT5Ss1xilP9bzp5jBUYO++vqMe5E62VrW2gLX2VIWqq7rUwuybTYa7jsEdj2c/sUpnMjaufvn3uOe5IFa6mvYtiw53x0s9ah0QvEDpxI4cfiqCDIQcdfpirMPLkXb0nYx+uA6pFHzlr1oQKFEJtr27bOO07AUe5MzySHDaxVC2iGwLqEHNlYxjC6whzW6ePcsGhkmFAQzvk9s4MqO2Vq7KP2NW36znIRXMbJIcqzN7MTPhx1St0PcrotqAH6WY9R7mJ3SeUZttxY9WrIWAsKOE9B32w6+Md5EILSGvsdoQEDDzmjhwxiuCnFFHT7d6MdYyL3oXB2zg2G7dxo0AuyRKc2Y8bHONijdPmBb5z1Ww5tggiiH3mSeWrHqPA10obrrYU7bUUaAaPvkf/0jDVyjnlcL6IzY06X9HUhTE3fkbsOPGHuBM6cN57Y7xpNKnlJmxt0Ti82Jmgj3BJzLQs5DB8VZvKVUY2TYTG703QR7ihBq7ZT16rrFycQZs4xdSuXA9zI9y184hlHmmV+zYRo543a27ESPOzXIdRkNoWEnohBJnnSVwGm7UZr56W87iNQaCSFUKoYYIJOz/PyYpizbeH8AFu3Awdeo0SglnnSU12gB3B3pgp3vv0+uvkputY0Gltbx5VY9F2niv9zgT9e+7cKhIWMjXUCsv3gq1YiTbBs9z01WwO8EWuV8Onaj+rMVJgW9ppx6g7xD1SlAtBu5/q+cf8ozf3zT3MdZoKPaabz3QNS1X4xYs/wk287eTBSlaWbEdpJp6dI+3d+vs7BQ9xgWNwdrZqAHPK43YIfqblUNpm3u7NBeNO6YjrrxUW93YjomC5lbMbVDD3t6AebC+t8R6sVMv2BH7G73m9Ai9qxx3rwQUb2hYuyBveoS62SdzbHHlQzsT1IGPLdowzwDV1xwucszuCfogr6ZEZnUzoXxhGAZyE4FazwMl7W6qPtVdMKUUyMWx2wcBo1qudp8VuIOcpLlvQPpCfhM4DmnKgzifLGXzvlGZMd4D+tWQ+T+Qd+PWJfVPjCe7qGbE+R9LfVFwF5+/u5T6oV1+4MGAjWZwUGMS44b2d+j5cDCeFHL9Bx/f+FvKD/VtmBZinLFeDYZ5h5OQXc3d6foirw6o0IX/WvPqpMKcUfrGh+jet+/8Ol0Lar+Fett+9lfOLuOS6vkDO8kX6/BouJ55dk7+x4XJOxUX5Kis3RyYu48rCNdTga/KR0KHJ+UjGih9Ct13LJv9KcELuJflmJOecbyYiR50uya+j2GXmZmv4inxC2mQschYLx7VPz5/kIVTzJ3kFXnc7TyqaE6ubfFGz8NJwYlou5ccShTORcz5wjmmemg+cE6zbfGBB22u4X3NSH6u5JOxv8p9LvjdGLM7K9+bQ9Jd8b0w8L6cI/DQG3Sm9veS3l6T+r/ntDC4hc3qmVzp/2X2inYBv+fx4fmF9psdJAj6QIMreE/5z6/wC9HFsHnz+2ERuQakTft8+ryH4fIosexNPgyuf/+yeTxF0Hqf0by9sFt+P53Gw8PmjfsePcH2/e/7ouvK/cf8A3MA4ER31QF0AAAAASUVORK5CYII="
-                                            alt="Icon"> A18 Pro chip powers Apple Intelligence and AAA gaming
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,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"
-                                            alt="Icon"> 4K 120 fps Dolby Vision and 4 studio-quality mics
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/jpeg;base64,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"
-                                            alt="Icon"> Capture magical spatial photos and videos</li>
-                                </ul>
-                                <p style="padding-top:5px ;"><a href="#">Explore iPhone 16 Pro Max further ›</a></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade " id="iphone16promax">
-                        <div class="modal-layout-row">
-                            <div class="modal-left">
-                                <button class="prev" onclick="changeImage(-1)">&#10094;</button>
-                                <img id="product-img" class="product-image"
-                                    src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone16promax-digitalmat-gallery-1-202409_GEO_US?wid=728&hei=666&fmt=p-jpg&qlt=95&.v=1723843667344"
-                                    alt="Product Image">
-                                <button class="next" onclick="changeImage(1)">&#10095;</button>
-
-                                <div class="dots">
-                                    <div class="dot active" onclick="setImage(0)"></div>
-                                    <div class="dot" onclick="setImage(1)"></div>
-                                    <div class="dot" onclick="setImage(2)"></div>
-                                    <div class="dot" onclick="setImage(3)"></div>
-                                    <div class="dot" onclick="setImage(4)"></div>
-                                    <div class="dot" onclick="setImage(5)"></div>
-                                </div>
-
-                                <p style="text-align:center; padding-top:30px">Available in 5 finishes</p>
-
-                                <div class="color-options-modal">
-                                    <div class="color-option" style="background: #d4af37;" onclick="setColor(0)">
-                                    </div>
-                                    <div class="color-option" style="background: #808080;" onclick="setColor(1)">
-                                    </div>
-                                    <div class="color-option" style="background: #f5f5dc;" onclick="setColor(2)">
-                                    </div>
-                                    <div class="color-option" style="background: #000000;" onclick="setColor(3)">
-                                    </div>
-                                    <div class="color-option" style="background:rgb(228, 157, 157);"
-                                        onclick="setColor(3)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-right">
-                                <div class="price-container">
-                                    <h1 style="font-size: 34px; padding-top: 20px; padding-bottom:20px">iPhone 16
-                                        Pro Max</h1>
-                                    <button style="border-radius: 30px;" class="buy-button"
-                                        onclick="location.href='order'">Buy</button>
-
-
-                                </div>
-                                <p>From $1399 or $59.95/mo. for 24 mo.</p>
-                                <ul class="feature-list">
-                                    <li><img style="width:40px; height:40px"
-                                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw4j2YKBEC7N11eLYpIfUodw-ySoeLl1dUhwTkDNE3uIH7mkj1"
-                                            alt="Icon"> Titanium design with a larger 7.2-inch Super Retina XDR
-                                        display
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/jpeg;base64,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"
-                                            alt="Icon"> The first iPhone designed for Apple Intelligence
-                                        <hr>
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIYAAAB8CAMAAACbrjjcAAAAh1BMVEX///8AAAABAQH+/v7f39/7+/vAwMAFBQVOTk5sbGz4+PgKCgrOzs709PQMDAwwMDBfX1/o6OjY2NhSUlLExMQrKyvm5uZzc3MSEhKOjo5CQkJXV1ciIiK6urqHh4c5OTmZmZkZGRl5eXmioqIXFxdnZ2ceHh6urq5JSUk2NjaTk5OAgICenp4+TqjdAAAHaElEQVR4nO1biXbiOgz1gjHYJCUBwt5O92Xm/7/vSVdhmQJ9LR0nM+egnpYlaXyjXZaiVCKyTgWrXKrLf5qCk9+WUShXdAK9tEzFMPph2TYK9yNqHae2bRh97XN907ZyhEftvb9qXTeWxms/aRuFGmptzFXbKC4wLjAuMP5iGBQ8HPIL6/htUEPyXlpg8FeWv1XJQ4y1shT/8rphaJgb1gVg4KPOKZc6xlhKt+h2XaCcy/LSBIO4IcsSAguGNRBwLfM8MAZ8HGoT9Q3Y5DjABTAkPQqGQC/VQGhJQtGT9bpLNC4zqE0DMJgXTmWLVeQIT+FV+xh1zvai/e1V1YxQrJjCemY0EQd5eonGECRGNLt2pJ44KSkJM+yUIERe17BqeM2gGIfkYSE5OwBChTkjMIRgS1H+DFk7XHpLYYuwqnjldUUkIK+jJ1RPA0ahktdPMAIX7PpBQxs2RMpBehrfyJC5aEluKrBGWmhOi7KBbGjGnLkjTlnVQDHpaoYEdVcr5ZYfuR6xYtgGZAJmOJTPxZLtdQuCfhYlvCu79PQ4gtxrR3VudNzhyPVqrTJhV3pDYVskIBQ+MjW+hb+oLcXfKwn0QTVYWbPZPpNywJ2zYly7JmLJO2KX7ew1F7AUUmZeT4uGIvw7HJbEQmoKF0bFNKmncy1s+5BRZKoib2rIgaxK8VtNwyAPkfFm02DFcpk925DZ5KnfUXJIie+fyIPOYRyheSA2c0j6gnoe9X6RpgTk5Q2jkGguTgTv9/L1T5HdYrY2YZbEsFxd0RyxY8rRNqkzn5dOlqInDgp0GHJ/x5WSG+Joye0fj7h0kEMk2JKQmAuuTgwOk8JtYaUS58+QCTk4th+yo0NeoBwuiqKqOumo7HSqIoOvPZYTskiK7nTCdQVHaZOIkJk93CzXheIs6D3fnSrmT1xh1RB0IuIrA8/tNWeGW6EENotCqeeVJLJG2PH128SN+lPLSwnlBQf/oaLhHi5KMmkyjYwic58vMIvCBeNPXu40UZnkzYf/t+M1A6JF+hk01nJEBDeGfImIys/vTv4K4Xb9B8I0uzJqoyNmWdQ1FFjiHnGKqcVizuEGS+QDZjCvdM2E2gjotr3UlApCUdf4yiObx3lfBkGipiLxf3lhdpCBJddzBxxkvbacaa6+6eDDojselOUZ/mBwAyynb8BAJHE9qKrxfDHTUvqbh8EmNyseCRW0ZlHaLJzpQt8gyXgaBjL1F7l8Vi18rSnDDFLJVEfXcpuGuvQ/J1sqmBUfoMBmR/xhEVhJFaaQEYlmILqhelFs/i77TmQNI+3B1dqNHDCDj86KzenW3WkoU3zBHo3LXmFt+rV7Fhc2KNR9TutsdePAu2lPRctwe75T3RtsQZjXDB8HM9HgN4tNw7MpW7BMTnHDM8sn4+316X7f2GSMJiXlj88o8nSOiuJsojR4/bqnogfcoCMPP3fn01oleymucTnDcHOoipkETqLPx0FiqaarkyrqzcNyDae9Pd1NxFjmyArvsFtlFt+ruDPkr6EYnKIy2H0UvNbCR9bcO2z2T2UTs4dQ9w1LkTzmg+Qv7Oc5XEX0sI9r+th36HsIbiRZ6NncYO0IQZ1C4YTZOxj0RQ/eyjxi0T4CiR6dzYczyaqe5B59dYFxgXGB8U/C8D10y5Si8q6ZHbPj3Ohx+aiq4ZPmAaUGtnOPwjAj3nNQc+6VxWETm8onYHBHLpto3tzNm5jXOiEU7scFPUNKNGhAOU5YCpp2Wnoy3Sa62MeFgi0OCrxUffluehQnuPGCclbqxrhuixu6hyN1PtseNy4wLjAuMP4dGL6HeSjesCFPum4LBnGDS0mU1dGP2wtt6OTyFhVVkq1FWA8YYUW8yFvMN/wILZ+fvFPol0VroW2E/eJOL/d+NE4P4lS+wQbLGjFYd6vf90OahEEFAieBjnvbzTxJ8TeXSxcYFxgXGP8CjDBFG4QjbKMPXlHJPEJfVj/ye27zcF/oxTY6FsWTLouIztcUDdBrdGPMRKYLmwSyQovQzzExeM/NS8r9CpWln4rfUaEqHrumbO85sKIMjLRg31STo4OkiHMe8CV2oOdniwkGsfVVpRqcjLKqM/Foa60KmeOc1h3Ru6pJdlTTenhh6qRD/5xLE9/PGxwTc3N+YsNznxp2kanwgjYXMWjYkYwn5XQPLp0Vy1iP2L5gO5Y3Q7szbHhxj/5xXBab6eQkRIl3KH8tVwzCR53HsUw2BQxDm+20yWauIRHJIxJGJhN49FvJOBy3x7IRtMNvh/Y/nkr5DokkPL/QIvlLJv1OHkHOVNnbn8051lX+c1TPh+CZgEW2aQM6TGaXI/LoJkY8yHDWNMsnSZjhPfx4v5JBSstOVQbir28xbbNB++XZns+TcCPXsx91g9bKsz4ZJms6j7nXW6mk4kbtswjKtMKDCU7tz0VyOV/dj2YbK0nFCrHJ1eK+Uw/Bv3crSAFcpxyMuwlpzcNDVagHAg5nAu32ITxM6v3Z6cz9Vj1GMZ08LnDorPG0hA1HZjj/KAkUzIXuDSb+B+dGXRjKzVyIAAAAAElFTkSuQmCC"
-                                            alt="Icon"> Camera Control gives you an easier way to access camera
-                                        tools
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,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"
-                                            alt="Icon"> A18 Pro chip powers Apple Intelligence and AAA gaming
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/png;base64,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"
-                                            alt="Icon"> 4K 120 fps Dolby Vision and 4 studio-quality mics
-                                    </li>
-                                    <hr>
-                                    <li><img style="width:40px; height:40px"
-                                            src="data:image/jpeg;base64,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"
-                                            alt="Icon"> Capture magical spatial photos and videos</li>
-                                </ul>
-                                <p style="padding-top:5px ;"><a href="#">Explore iPhone 16 Pro Max further ›</a></p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-content" id="productTabContent">
+                    <!-- Javascript will render content here -->
+                </div>
+            </div>
+        </div>
                 </div>
                 <div class="modal-end">
                     <div class="offer">

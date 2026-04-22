@@ -31,8 +31,16 @@
 
 <div class="purchase-container">
     <div>
-        <h1 style="font-size: 48px; font-weight: bold;">Buy iPhone 16 Pro</h1>
-        <p style="font-size: 17px;">From $999 or $41.62/mo. for 24 mo.*</p>
+        @php
+            $seriesTitle = $products->first()->series ?? 'iPhone';
+            $minPrice = $products->min(function($p) {
+                $val = preg_replace('/[^0-9]/', '', $p->price);
+                return $val != '' ? (int)$val : 999999999;
+            });
+            $minPriceFormatted = number_format($minPrice, 0, ',', '.') . 'đ';
+        @endphp
+        <h1 style="font-size: 48px; font-weight: bold;" id="page-title">Mua {{ $seriesTitle }}</h1>
+        <p style="font-size: 17px;" id="page-price-subtitle">Từ {{ $minPriceFormatted }} hoặc {{ number_format($minPrice/24, 0, ',', '.') }}đ/tháng trong 24 tháng*</p>
         <div class="apple-intelligence">
             <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-selector-icon-apple-intelligence-202409?wid=17&hei=21&fmt=p-jpg&qlt=95&.v=1724970464935"
                 alt="Apple Intelligence">
@@ -48,9 +56,10 @@
 <div class="rf-bfe-main">
     {{-- Left Column: Product image + Trade In + AppleCare --}}
     <div class="rf-bfe-column-left">
-        <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-pro-model-unselect-gallery-1-202409?wid=5120&hei=2880&fmt=webp&qlt=70&.v=aWs5czA5aDFXU0FlMGFGRlpYRXk2UWFRQXQ2R0JQTk5udUZxTkR3ZVlpTEJnOG9obkp6NERCS3lnVm1tcnlVUjBoUVhuTWlrY2hIK090ZGZZbk9HeE1xUVVnSHY5eU9CcGxDMkFhalkvT0NuWUpOMGpEMHVTZEtYYVA3c1B3UzVmbW94YnYxc1YvNXZ4emJGL0IxNFp3&traceId=1"
-            alt="Product Image" style="display: block; margin: 0 auto; max-width: 100%; height: auto; object-fit: contain; padding-bottom: 50px;">
-
+        <div>
+            <img id="main-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
+            alt="Product Image" style="display: block; margin: 0 auto; max-width: 100%; max-height: 80vh; object-fit: contain; padding-bottom: 50px;">
+        </div>
         <h3><strong>Apple Trade In.</strong> <span style="font-weight: normal; color: #86868b;">Nhận 800.000đ–17.600.000đ điểm tín dụng để sử dụng khi mua iPhone mới.<sup>§</sup></span></h3>
 
         {{-- Trade-in option cards --}}
@@ -290,24 +299,27 @@
     <div class="rf-bfe-column-right">
         <h2><strong>Phiên bản.</strong> <span style="font-weight: normal; color: #86868b;">Mẫu nào phù hợp nhất với bạn?</span></h2>
 
-        <div class="model-card selected" data-price="999">
-            <div style="flex: 1; text-align: left;">
-                <strong>iPhone 16 Pro</strong>
-                <p>Màn hình 6.3 inch²</p>
-            </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">Từ $999<br>hoặc<br>${{ number_format(999 / 24, 2) }}/tháng<br>trong 24 tháng</p>
-            </div>
-        </div>
-
-        <div class="model-card" data-price="1199">
-            <div style="flex: 1; text-align: left;">
-                <strong>iPhone 16 Pro Max</strong>
-                <p>Màn hình 6.9 inch²</p>
-            </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">Từ $1,199<br>hoặc<br>${{ number_format(1199 / 24, 2) }}/tháng<br>trong 24 tháng</p>
-            </div>
+        <div id="model-selections">
+            @foreach($products as $index => $product)
+                @php
+                    $priceVal = (int)preg_replace('/[^0-9]/', '', $product->price);
+                    if(empty($priceVal)) $priceVal = 0;
+                @endphp
+                <div class="model-card {{ $index == 0 ? 'selected' : '' }}" 
+                     data-id="{{ $product->id }}" 
+                     data-name="{{ $product->name }}" 
+                     data-price="{{ $priceVal }}" 
+                     data-image="{{ asset($product->image_url) }}"
+                     data-colors="{{ $product->colors }}"
+                     onclick="selectModel(this)">
+                    <div style="flex: 1; text-align: left;">
+                        <strong>{{ $product->name }}</strong>
+                    </div>
+                    <div style="flex: 1; text-align: right;">
+                        <p style="text-align: right;">Từ {{ number_format($priceVal, 0, ',', '.') }}đ<br>hoặc<br>{{ number_format($priceVal / 24, 0, ',', '.') }}đ/tháng<br>trong 24 tháng</p>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
         <div class="help-box">
@@ -321,50 +333,46 @@
         <br>
         <h2><strong>Màu.</strong> <span style="font-weight: normal; color: #86868b;">Chọn màu bạn yêu thích.</span></h2>
         <br>
-        <b style="font-size: 17px; font-weight: 600; color: #1d1d1f;" id="color-label">Màu - Bạc</b>
-        <div class="color-options" style="padding: 15px 0;">
-            <div class="color-circle selected" style="background-color: #F3E2D1;"></div>
-            <div class="color-circle" style="background-color: #EDEDED;"></div>
-            <div class="color-circle" style="background-color: #FFFFFF;"></div>
-            <div class="color-circle" style="background-color: #B0B0B0;"></div>
+        <b style="font-size: 17px; font-weight: 600; color: #1d1d1f;" id="color-label">Màu sắc</b>
+        <div class="color-options" id="color-selections" style="padding: 15px 0;">
+            <!-- JS will populate colors here -->
         </div>
 
         <br>
         <h2><strong>Dung lượng lưu trữ.</strong> <span style="font-weight: normal; color: #86868b;">Bạn cần bao nhiêu dung lượng?</span></h2>
 
-        <div class="storage-card selected" data-price-offset="0" data-storage="128GB">
-            <div style="flex: 1; text-align: left;">
-                <strong>128GB¹</strong>
+        <div id="storage-selections">
+            <div class="storage-card selected" data-price-offset="0" data-storage="128GB" onclick="selectStorage(this)">
+                <div style="flex: 1; text-align: left;">
+                    <strong>128GB¹</strong>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <p style="text-align: right;" class="storage-price-text"></p>
+                </div>
             </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">$999<br>hoặc<br>${{ number_format(999 / 24, 2) }}/tháng<br>trong 24 tháng</p>
+            <div class="storage-card" data-price-offset="3000000" data-storage="256GB" onclick="selectStorage(this)">
+                <div style="flex: 1; text-align: left;">
+                    <strong>256GB¹</strong>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <p style="text-align: right;" class="storage-price-text"></p>
+                </div>
             </div>
-        </div>
-
-        <div class="storage-card" data-price-offset="100" data-storage="256GB">
-            <div style="flex: 1; text-align: left;">
-                <strong>256GB¹</strong>
+            <div class="storage-card" data-price-offset="8000000" data-storage="512GB" onclick="selectStorage(this)">
+                <div style="flex: 1; text-align: left;">
+                    <strong>512GB¹</strong>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <p style="text-align: right;" class="storage-price-text"></p>
+                </div>
             </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">${{ number_format(999 + 100) }}<br>hoặc<br>${{ number_format((999 + 100) / 24, 2) }}/tháng<br>trong 24 tháng</p>
-            </div>
-        </div>
-
-        <div class="storage-card" data-price-offset="300" data-storage="512GB">
-            <div style="flex: 1; text-align: left;">
-                <strong>512GB¹</strong>
-            </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">${{ number_format(999 + 300) }}<br>hoặc<br>${{ number_format((999 + 300) / 24, 2) }}/tháng<br>trong 24 tháng</p>
-            </div>
-        </div>
-
-        <div class="storage-card" data-price-offset="500" data-storage="1TB">
-            <div style="flex: 1; text-align: left;">
-                <strong>1TB¹</strong>
-            </div>
-            <div style="flex: 1; text-align: right;">
-                <p style="text-align: right;">${{ number_format(999 + 500) }}<br>hoặc<br>${{ number_format((999 + 500) / 24, 2) }}/tháng<br>trong 24 tháng</p>
+            <div class="storage-card" data-price-offset="13000000" data-storage="1TB" onclick="selectStorage(this)">
+                <div style="flex: 1; text-align: left;">
+                    <strong>1TB¹</strong>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <p style="text-align: right;" class="storage-price-text"></p>
+                </div>
             </div>
         </div>
 
@@ -377,7 +385,174 @@
             </div>
             <div style="font-size: 24px; color: #1d1d1f; font-weight: 300;">⊕</div>
         </div>
+        
+        {{-- Apple-style total summary --}}
+        <div class="total-summary" style="margin-top: 40px; border-top: 1px solid #d2d2d7; padding-top: 30px;">
+
+            {{-- Product headline --}}
+            <p id="summary-product-headline" style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin: 0 0 6px;">iPhone</p>
+
+            {{-- Total price large --}}
+            <p style="font-size: 15px; color: #1d1d1f; margin: 0 0 2px;">
+                Tổng cộng <strong id="summary-total-price" style="font-size: 17px;">0đ</strong>
+            </p>
+
+            {{-- Monthly installment --}}
+            <p style="font-size: 15px; color: #1d1d1f; margin: 0 0 4px;">
+                hoặc
+            </p>
+            <p style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin: 0 0 4px;">
+                <span id="summary-monthly-price">0đ</span>/tháng cho 24 tháng<sup style="font-size:11px;">^</sup>
+            </p>
+            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 16px;">
+                Ở mức phí dịch vụ 1,67%, sau khi thanh toán lần đầu 20%
+            </p>
+
+            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 16px 0;">
+
+            {{-- AppleCare row --}}
+            <div id="summary-applecare-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; color: #1d1d1f;">
+                <span>AppleCare+</span>
+                <span>5.499.000đ</span>
+            </div>
+
+            {{-- Shipping info --}}
+            <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px;">
+                <span style="font-size: 20px; color: #1d1d1f;">🚚</span>
+                <div>
+                    <p style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin: 0 0 2px;">Vận chuyển:</p>
+                    <p style="font-size: 13px; color: #6e6e73; margin: 0;">3–5 ngày làm việc</p>
+                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Vận Chuyển Miễn Phí</a>
+                </div>
+            </div>
+
+            <form action="{{ route('checkout') }}" method="GET">
+                <input type="hidden" name="product" id="input-product-name" value="">
+                <input type="hidden" name="price" id="input-total-price" value="">
+                <input type="hidden" name="storage" id="input-storage" value="">
+                <input type="hidden" name="color" id="input-color" value="">
+                <input type="hidden" name="applecare" id="input-applecare" value="0">
+                <input type="hidden" name="image_url" id="input-image" value="">
+
+                <button type="submit" style="width: 100%; padding: 18px; border-radius: 980px; background-color: #0071e3; color: white; font-size: 17px; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.2s; letter-spacing: 0;" onmouseover="this.style.backgroundColor='#0077ed'" onmouseout="this.style.backgroundColor='#0071e3'">
+                    Thêm vào giỏ hàng
+                </button>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    let currentModel = null;
+    let currentStorage = null;
+    let currentColor = null;
+    let appleCarePrice = 0;
+    
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
+    }
+
+    function init() {
+        const firstModel = document.querySelector('.model-card');
+        if(firstModel) {
+            selectModel(firstModel);
+        }
+        
+        const originalApplecareSelect = window.selectApplecare;
+        window.selectApplecare = function(choice) {
+            originalApplecareSelect(choice);
+            appleCarePrice = (choice === 'yes') ? 5499000 : 0;
+            document.getElementById('summary-applecare-row').style.display = (choice === 'yes') ? 'flex' : 'none';
+            document.getElementById('input-applecare').value = (choice === 'yes') ? '1' : '0';
+            updateSummary();
+        }
+    }
+    
+    function selectModel(el) {
+        document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        currentModel = {
+            id: el.dataset.id,
+            name: el.dataset.name,
+            price: parseInt(el.dataset.price),
+            image: el.dataset.image,
+            colors: el.dataset.colors ? el.dataset.colors.split(',') : []
+        };
+        
+        document.getElementById('page-title').innerText = "Mua " + currentModel.name;
+        document.getElementById('main-product-image').src = currentModel.image;
+
+        // 1. Update storage prices first (so the prices show immediately)
+        document.querySelectorAll('.storage-card').forEach(c => {
+            const offset = parseInt(c.dataset.priceOffset);
+            const totalPrice = currentModel.price + offset;
+            const priceTextEl = c.querySelector('.storage-price-text');
+            if (priceTextEl) {
+                priceTextEl.innerHTML = `${formatCurrency(totalPrice)}<br>hoặc<br>${formatCurrency(Math.round(totalPrice/24))}/tháng<br>trong 24 tháng<sup style="font-size:9px">ᵃ</sup>`;
+            }
+        });
+
+        // 2. Set currentStorage by selecting the first/already-selected storage card
+        const selectedStorageCard = document.querySelector('.storage-card.selected') || document.querySelector('.storage-card');
+        if (selectedStorageCard) selectStorage(selectedStorageCard);
+
+        // 3. Render colors AFTER currentStorage is set (so updateSummary won't crash)
+        const colorContainer = document.getElementById('color-selections');
+        colorContainer.innerHTML = '';
+        currentModel.colors.forEach((c, idx) => {
+            const cleanColor = c.trim();
+            const div = document.createElement('div');
+            div.className = 'color-circle' + (idx === 0 ? ' selected' : '');
+            div.style.backgroundColor = cleanColor;
+            div.onclick = function() { selectColor(this, cleanColor); };
+            colorContainer.appendChild(div);
+            if (idx === 0) selectColor(div, cleanColor);
+        });
+    }
+    
+    function selectStorage(el) {
+        document.querySelectorAll('.storage-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        currentStorage = {
+            name: el.dataset.storage,
+            priceOffset: parseInt(el.dataset.priceOffset)
+        };
+        
+        updateSummary();
+    }
+    
+    function selectColor(el, color) {
+        document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        currentColor = color;
+        updateSummary();
+    }
+    
+    function updateSummary() {
+        if (!currentModel || !currentStorage) return;
+        
+        const finalPrice = currentModel.price + currentStorage.priceOffset + appleCarePrice;
+        const monthlyPrice = Math.round(finalPrice / 24);
+
+        // Headline: "iPhone 16e 512GB"
+        document.getElementById('summary-product-headline').innerText =
+            `${currentModel.name} ${currentStorage.name}`;
+
+        // Total & monthly
+        document.getElementById('summary-total-price').innerText = formatCurrency(finalPrice);
+        document.getElementById('summary-monthly-price').innerText = formatCurrency(monthlyPrice);
+        
+        // Update hidden inputs for submission
+        document.getElementById('input-product-name').value = currentModel.name;
+        document.getElementById('input-total-price').value = finalPrice;
+        document.getElementById('input-storage').value = currentStorage.name;
+        document.getElementById('input-color').value = currentColor;
+        document.getElementById('input-image').value = currentModel.image;
+    }
+    
+    document.addEventListener('DOMContentLoaded', init);
+</script>
 
 @endsection

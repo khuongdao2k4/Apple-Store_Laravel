@@ -26,6 +26,10 @@ class AuthController extends Controller
             session(['email' => $user->email]);
             session(['role' => $user->role]);
 
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Chào mừng Admin quay trở lại!');
+            }
+
             return redirect()->route('home')->with('success', 'Đăng nhập thành công!');
         } else {
             return redirect()->back()->with('error', 'Email hoặc Mật khẩu không đúng!');

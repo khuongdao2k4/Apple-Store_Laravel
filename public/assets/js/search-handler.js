@@ -8,85 +8,140 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchResultsTitle = document.getElementById("search-results-title");
     const quickLinks = document.querySelector(".quick-links");
 
-    // Mở tìm kiếm
-    searchIcon.addEventListener("click", function (e) {
-        e.preventDefault();
-        navbar.classList.add("search-active");
-        setTimeout(() => searchInput.focus(), 300);
-    });
-
-    // Đóng tìm kiếm
-    function closeSearch() {
-        navbar.classList.remove("search-active");
-        searchInput.value = "";
-        searchResults.innerHTML = "";
-        searchResults.style.display = "none";
-        searchResultsTitle.style.display = "none";
-        quickLinks.style.display = "block";
+    // =============================================
+    // SEARCH - Mở / Đóng tìm kiếm
+    // =============================================
+    if (searchIcon) {
+        searchIcon.addEventListener("click", function (e) {
+            e.preventDefault();
+            navbar.classList.add("search-active");
+            setTimeout(() => searchInput && searchInput.focus(), 300);
+        });
     }
 
-    searchCloseBtn.addEventListener("click", closeSearch);
-    searchOverlay.addEventListener("click", closeSearch);
+    function closeSearch() {
+        if (navbar) navbar.classList.remove("search-active");
+        if (searchInput) searchInput.value = "";
+        if (searchResults) {
+            searchResults.innerHTML = "";
+            searchResults.style.display = "none";
+        }
+        if (searchResultsTitle) searchResultsTitle.style.display = "none";
+        if (quickLinks) quickLinks.style.display = "block";
+    }
 
-    // ESC to close
+    if (searchCloseBtn) searchCloseBtn.addEventListener("click", closeSearch);
+    if (searchOverlay) searchOverlay.addEventListener("click", closeSearch);
+
     document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && navbar.classList.contains("search-active")) {
+        if (e.key === "Escape" && navbar && navbar.classList.contains("search-active")) {
             closeSearch();
         }
     });
 
     // Xử lý tìm kiếm Real-time
     let debounceTimer;
-    searchInput.addEventListener("input", function () {
-        clearTimeout(debounceTimer);
-        let keyword = this.value.trim();
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            clearTimeout(debounceTimer);
+            let keyword = this.value.trim();
 
-        if (keyword.length > 0) {
-            quickLinks.style.display = "none";
-            debounceTimer = setTimeout(() => {
-                fetch(`apple_search.php?query=${encodeURIComponent(keyword)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            let resultHTML = data.map(p => `
-                                <li class="search-item" data-id="${p.id}">
-                                    <img src="${p.image_url}" alt="${p.name}" class="search-image">
-                                    <div class="search-info">
-                                        <span class="search-name">${p.name}</span>
-                                        <span class="search-price">${new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
-                                    </div>
-                                </li>
-                            `).join("");
+            if (keyword.length > 0) {
+                if (quickLinks) quickLinks.style.display = "none";
+                debounceTimer = setTimeout(() => {
+                    fetch(`apple_search.php?query=${encodeURIComponent(keyword)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                let resultHTML = data.map(p => `
+                                    <li class="search-item" data-id="${p.id}">
+                                        <img src="${p.image_url}" alt="${p.name}" class="search-image">
+                                        <div class="search-info">
+                                            <span class="search-name">${p.name}</span>
+                                            <span class="search-price">${new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
+                                        </div>
+                                    </li>
+                                `).join("");
 
-                            searchResults.innerHTML = resultHTML;
-                            searchResults.style.display = "block";
-                            searchResultsTitle.style.display = "block";
+                                if (searchResults) {
+                                    searchResults.innerHTML = resultHTML;
+                                    searchResults.style.display = "block";
+                                }
+                                if (searchResultsTitle) searchResultsTitle.style.display = "block";
 
-                            // Sự kiện click vào kết quả
-                            document.querySelectorAll(".search-item").forEach(item => {
-                                item.addEventListener("click", function () {
-                                    let productId = this.getAttribute("data-id");
-                                    // Tùy chỉnh URL chi tiết sản phẩm nếu cần
-                                    window.location.href = `index.php?url=order-test&id=${productId}`;
+                                document.querySelectorAll(".search-item").forEach(item => {
+                                    item.addEventListener("click", function () {
+                                        let productId = this.getAttribute("data-id");
+                                        window.location.href = `index.php?url=order-test&id=${productId}`;
+                                    });
                                 });
-                            });
-                        } else {
-                            searchResults.innerHTML = "<li class='py-2 text-muted'>Không tìm thấy sản phẩm nào khớp với từ khóa.</li>";
-                            searchResults.style.display = "block";
-                            searchResultsTitle.style.display = "block";
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Search Error:", error);
-                        searchResults.innerHTML = "<li class='py-2 text-danger'>Lỗi kết nối máy chủ.</li>";
-                        searchResults.style.display = "block";
-                    });
-            }, 300);
-        } else {
-            quickLinks.style.display = "block";
-            searchResults.innerHTML = "";
-            searchResults.style.display = "none";
-            searchResultsTitle.style.display = "none";
+                            } else {
+                                if (searchResults) {
+                                    searchResults.innerHTML = "<li class='py-2 text-muted'>Không tìm thấy sản phẩm nào khớp với từ khóa.</li>";
+                                    searchResults.style.display = "block";
+                                }
+                                if (searchResultsTitle) searchResultsTitle.style.display = "block";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Search Error:", error);
+                            if (searchResults) {
+                                searchResults.innerHTML = "<li class='py-2 text-danger'>Lỗi kết nối máy chủ.</li>";
+                                searchResults.style.display = "block";
+                            }
+                        });
+                }, 300);
+            } else {
+                if (quickLinks) quickLinks.style.display = "block";
+                if (searchResults) {
+                    searchResults.innerHTML = "";
+                    searchResults.style.display = "none";
+                }
+                if (searchResultsTitle) searchResultsTitle.style.display = "none";
+            }
+        });
+    }
+
+    // =============================================
+    // SUBMENU HOVER với delay - tránh submenu tắt đột ngột
+    // =============================================
+    const navItems = document.querySelectorAll(".navbar-nav .nav-item");
+
+    navItems.forEach(function (navItem) {
+        const submenuContainer = navItem.querySelector(".submenu-container");
+        if (!submenuContainer) return; 
+
+        let hideTimer = null;
+
+        function showSubmenu() {
+            // Hủy việc đóng các menu khác (nếu đang hover sang menu mới)
+            navItems.forEach(item => {
+                if (item !== navItem) item.classList.remove("submenu-open");
+            });
+            
+            clearTimeout(hideTimer);
+            navItem.classList.add("submenu-open");
         }
+
+        function scheduleHide() {
+            clearTimeout(hideTimer);
+            // Tăng delay lên 200ms để người dùng thoải mái di chuyển chuột
+            hideTimer = setTimeout(function () {
+                navItem.classList.remove("submenu-open");
+            }, 200);
+        }
+
+        // Mouseenter/leave trên toàn bộ nav-item (li)
+        navItem.addEventListener("mouseenter", showSubmenu);
+        navItem.addEventListener("mouseleave", scheduleHide);
+        
+        // Đảm bảo khi di chuột vào submenu-container nó không bị coi là "rời khỏi"
+        submenuContainer.addEventListener("mouseenter", function() {
+            clearTimeout(hideTimer);
+            navItem.classList.add("submenu-open");
+        });
+
+        // Bổ sung sự kiện bắt buộc ẩn khi chuột trỏ ra khỏi submenu-container
+        submenuContainer.addEventListener("mouseleave", scheduleHide);
     });
 });

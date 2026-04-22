@@ -11,23 +11,40 @@ body {
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 1000;
-    min-height: 44px;
+    z-index: 2000; /* Tăng cao để không bị che khuất */
+    height: 44px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.nav-hidden {
+    transform: translateY(-100%);
+}
+
+/* Đảm bảo chuỗi container truyền đúng height xuống nav-item */
+.navbar > .container-fluid,
+.navbar > .container-fluid > .navbar-collapse,
+.navbar > .container-fluid > .navbar-collapse > .navbar-nav {
+    height: 100%;
 }
 
 .navbar-nav {
     flex-grow: 1;
     justify-content: right;
-    align-items: center;
+    align-items: stretch;
+
 }
 
-.nav-item a {
+.nav-item .nav-link {
     color: black !important;
     font-size: 12px;
-    padding-right: 10px;
+    padding: 0 18px !important;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
 }
 
-.nav-item a:hover {
+.nav-item .nav-link:hover {
     color: #404040 !important;
 }
 
@@ -37,6 +54,9 @@ body {
 
 .nav-item {
     position: relative;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important; /* luôn phủ hết chiều cao navbar */
 }
 
 /* Submenu Containers */
@@ -46,17 +66,20 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 2000; /* Đồng bộ với navbar */
     background: rgba(0, 0, 0, 0);
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    pointer-events: none;
+    pointer-events: none; /* Ẩn: không nhận chuột */
 }
 
-.nav-item:hover .submenu-container {
+.nav-item:hover .submenu-container,
+.nav-item.submenu-open .submenu-container {
     visibility: visible;
     opacity: 1;
     background: rgba(0, 0, 0, 0.6);
+    pointer-events: none; /* Màn đen không chặn chuột để bắt được sự kiện rời đi */
 }
 
 .submenu {
@@ -79,7 +102,8 @@ body {
     pointer-events: auto;
 }
 
-.nav-item:hover .submenu {
+.nav-item:hover .submenu,
+.nav-item.submenu-open .submenu {
     transform: translateY(0);
     opacity: 1;
 }

@@ -83,7 +83,7 @@ require_once '../app/views/layouts/navbar.php';
         <div class="rf-bfe-column-left">
 
             <img src="<?php echo htmlspecialchars($product["image_url"]); ?>" alt="Product Image"
-                style="width:810px; height: 530px; padding-bottom: 50px;">
+                style="max-width: 100%; height: auto; object-fit: contain; padding-bottom: 50px;">
 
             <h3><strong>Apple Trade In.</strong> Get $40–$630 credit toward your new iPhone.</h3>
             <div class="trade-options">

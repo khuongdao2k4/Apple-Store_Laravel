@@ -1,72 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'register.php'])
 
 @section('content')
-<?php
 
-// File kết nối database
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $lastname = trim($_POST['lastname']);
-    $firstname = trim($_POST['firstname']);
-    $country = trim($_POST['country']);
-    $day = trim($_POST['day']);
-    $month = trim($_POST['month']);
-    $year = trim($_POST['year']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-    $confirm_password = trim($_POST['confirm_password'] ?? '');
-    $captcha = trim($_POST['captcha'] ?? '');
-
-    // Xác thực CAPTCHA
-    if (empty($captcha) || strtoupper($captcha) !== ($_SESSION['captcha_code'] ?? '')) {
-        $_SESSION['error'] = "Mã xác nhận (CAPTCHA) không chính xác!";
-        header("Location: register");
-        exit();
-    }
-
-    // Xác thực Mật khẩu
-    if ($password !== $confirm_password) {
-        $_SESSION['error'] = "Mật khẩu xác nhận không khớp!";
-        header("Location: register");
-        exit();
-    }
-
-    // Chuyển ngày tháng năm thành định dạng YYYY-MM-DD
-    $birthdate = "$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-" . str_pad($day, 2, '0', STR_PAD_LEFT);
-
-    // Kiểm tra email đã tồn tại chưa
-    $check_email = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $check_email->bind_param("s", $email);
-    $check_email->execute();
-    $check_email->store_result();
-
-    if ($check_email->num_rows > 0) {
-        $_SESSION['error'] = "Email đã tồn tại!";
-        header("Location: register");
-        exit();
-    }
-    $check_email->close();
-
-    // Mã hóa mật khẩu
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
-    // Thêm dữ liệu vào database
-    $sql = "INSERT INTO users (lastname, firstname, country, birthdate, email, password) VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssss", $lastname, $firstname, $country, $birthdate, $email, $hashed_password);
-
-    if ($stmt->execute()) {
-        $_SESSION['success'] = "Tài khoản Apple của bạn đã được tạo thành công!";
-    } else {
-        $_SESSION['error'] = "Lỗi hệ thống khi đăng ký!";
-    }
-
-    $stmt->close();
-    $conn->close();
-    header("Location: register");
-    exit();
-}
-?>
 
 
 
@@ -87,17 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 class="text-decoration-none">Đăng Nhập <i class="fa fa-arrow-up-right-from-square ms-1"
                     style="font-size: 11px;"></i></a></p>
 
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger text-start"> <?= $_SESSION['error'];
-            unset($_SESSION['error']); ?> </div>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success text-start"> <?= $_SESSION['success'];
-            unset($_SESSION['success']); ?> </div>
+        @if (session('error'))
+            <div class="alert alert-danger text-start"> {{ session('error') }} </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success text-start"> {{ session('success') }} </div>
             <div class="text-center mb-4"><a href="login" class="btn btn-primary rounded-pill px-4">Đăng nhập ngay</a></div>
-        <?php endif; ?>
+        @endif
 
         <form action="register" method="POST">
+            @csrf
             <div class="row g-3 mb-4">
                 <div class="col-6">
                     <div class="apple-input-group">
@@ -166,12 +100,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <hr class="my-4 text-muted" style="opacity: 0.15;">
+            <p class="fw-bold mb-2 text-start" style="font-size: 15px;">Địa chỉ Email</p>
             <div class="apple-input-group mb-3">
                 <input type="email" class="apple-input" name="email" placeholder="name@example.com" required>
             </div>
-            <div class="apple-input-group mb-3">
+            <p class="fw-bold mb-2 text-start mt-4" style="font-size: 15px;">Mật khẩu</p>
+            <div class="apple-input-group mb-1">
                 <input type="password" class="apple-input" name="password" placeholder="Mật Khẩu" required>
             </div>
+            <p class="text-start text-muted mb-3" style="font-size: 13px;"><i class="fa-solid fa-shield-halved text-success me-1"></i> Mật khẩu của bạn phải có ít nhất 8 ký tự, bao gồm chữ số, chữ in hoa và chữ thường.</p>
             <div class="apple-input-group mb-4">
                 <input type="password" class="apple-input" name="confirm_password" placeholder="Xác nhận Mật khẩu"
                     required>
@@ -243,5 +180,190 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 
+<style>
+/* Hiệu ứng mượt mà khi báo lỗi */
+@keyframes slideDownFade {
+    0% { opacity: 0; transform: translateY(-3px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.google-error-msg {
+    color: #c80000 !important;
+    background-color: #fdf2f2;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px; /* Khung bo góc mềm mại */
+    padding: 10px 12px;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    box-shadow: 0 2px 4px rgba(200, 0, 0, 0.05); /* Hiệu ứng nổi nhẹ */
+    animation: slideDownFade 0.2s ease-out forwards;
+}
+.google-error-icon {
+    font-size: 15px;
+    margin-top: 2px;
+    color: #d93025;
+}
+/* Style viền chuẩn áp dụng cho thẻ container */
+.google-invalid-input {
+    border: 2px solid #e30000 !important;
+    border-radius: 12px; /* Dựa theo form Apple */
+}
+.google-invalid-input:focus-within {
+    box-shadow: 0 0 0 4px rgba(227, 0, 0, 0.15) !important;
+    border-color: #e30000 !important;
+}
+.google-valid-input {
+    border: 2px solid #34c759 !important; /* Xanh lá chuẩn Apple */
+    border-radius: 12px;
+}
+.google-valid-input:focus-within {
+    box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.15) !important;
+    border-color: #34c759 !important;
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]{2,}$/u;
+    
+    const rules = {
+        lastname: { 
+            required: true, 
+            pattern: nameRegex,
+            message: "Họ không hợp lệ (không chứa số, tối thiểu 2 ký tự)." 
+        },
+        firstname: { 
+            required: true, 
+            pattern: nameRegex,
+            message: "Tên không hợp lệ (không chứa số, tối thiểu 2 ký tự)." 
+        },
+        country: { required: true, message: "Vui lòng chọn quốc gia." },
+        day: { required: true, message: "Chọn ngày." },
+        month: { required: true, message: "Chọn tháng." },
+        year: { required: true, message: "Chọn năm." },
+        email: { 
+            required: true, 
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+            message: "Vui lòng nhập một địa chỉ email hợp lệ." 
+        },
+        password: { 
+            required: true, 
+            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/,
+            message: "Mật khẩu chưa đủ mạnh. Vui lòng làm theo hướng dẫn bảo mật." 
+        },
+        confirm_password: { 
+            required: true, 
+            match: 'password',
+            message: "Mật khẩu xác nhận không khớp." 
+        },
+        captcha: { required: true, message: "Vui lòng nhập mã CAPTCHA." }
+    };
+
+    function validateField(input) {
+        const name = input.name;
+        if (!rules[name]) return true;
+        
+        let isValid = true;
+        let errorMessage = rules[name].message;
+        const val = input.value.trim();
+
+        if (rules[name].required && val === "") {
+            isValid = false;
+        } else if (rules[name].pattern && !rules[name].pattern.test(val)) {
+            isValid = false;
+        } else if (rules[name].minLength && val.length < rules[name].minLength) {
+            isValid = false;
+        } else if (rules[name].match) {
+            const matchInput = document.querySelector(`input[name="${rules[name].match}"]`);
+            if (val !== matchInput.value) {
+                isValid = false;
+            }
+        }
+
+        const group = input.closest('.apple-input-group') || input;
+        let errorEl = group.parentNode.querySelector('.error-text[data-for="'+name+'"]');
+        if (!errorEl) {
+            errorEl = document.createElement('div');
+            // Thêm class chuẩn Google
+            errorEl.className = 'error-text google-error-msg text-start';
+            errorEl.setAttribute('data-for', name);
+            group.parentNode.insertBefore(errorEl, group.nextSibling);
+        }
+
+        if (!isValid) {
+            group.classList.add('google-invalid-input');
+            group.classList.remove('google-valid-input');
+            errorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>${errorMessage}</span>`;
+            errorEl.style.display = 'flex';
+        } else {
+            group.classList.remove('google-invalid-input');
+            if(val !== "") {
+                group.classList.add('google-valid-input');
+            } else {
+                group.classList.remove('google-valid-input');
+            }
+            errorEl.style.display = 'none';
+        }
+        return isValid;
+    }
+
+    const form = document.querySelector('form[action="register"]');
+    if(form) {
+        const inputs = form.querySelectorAll('input, select');
+        
+        inputs.forEach(input => {
+            // Chỉ thông báo lỗi khi click ra ngoài ô input (blur)
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            // Ẩn lỗi khi người dùng bắt đầu nhập lại, chưa thông báo lại liền
+            input.addEventListener('input', function() {
+                const name = input.name;
+                if (!rules[name]) return;
+                
+                const group = input.closest('.apple-input-group') || input;
+                group.classList.remove('google-valid-input'); // Tạm bỏ màu xanh khi đang gõ
+                
+                let errorEl = group.parentNode.querySelector('.error-text[data-for="'+name+'"]');
+                if (errorEl && errorEl.style.display !== 'none') {
+                    // Trừ trường hợp confirm password có thể check real-time để biết khớp nhanh
+                    if (name === 'confirm_password') {
+                        validateField(input);
+                    } else {
+                        group.classList.remove('google-invalid-input');
+                        errorEl.style.display = 'none';
+                    }
+                }
+            });
+            
+            if(input.tagName === 'SELECT') {
+                input.addEventListener('change', function() {
+                    validateField(this);
+                });
+            }
+        });
+
+        // Check toàn bộ lần cuối trước khi submit chặn form
+        form.addEventListener('submit', function(e) {
+            let isFormValid = true;
+            inputs.forEach(input => {
+                if (rules[input.name]) {
+                    if (!validateField(input)) {
+                        isFormValid = false;
+                    }
+                }
+            });
+            if (!isFormValid) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
 @endsection
 

@@ -160,7 +160,7 @@ div .card .card-title {
 }
 
 .categories-list li img {
-    width: 50px;
+    width: auto;
     height: 56px;
     display: block;
     margin: 0 auto;
@@ -178,21 +178,25 @@ div .card .card-title {
 
 /* Section Consider heights & Spacing */
 .section-consider .image-wrapper {
-    height: 600px; /* Adjusting for 4 items */
+    height: 600px;
+    /* Adjusting for 4 items */
 }
 
 /* Thêm khoảng cách giữa các slide trong carousel */
-.image-carousel .slick-slide, .image-carousel-icon .slick-slide {
+.image-carousel .slick-slide,
+.image-carousel-icon .slick-slide {
     padding: 0 10px;
 }
 
 /* Đảm bảo carousel container không bị mất lề do padding của slide */
-.image-carousel, .image-carousel-icon {
+.image-carousel,
+.image-carousel-icon {
     margin: 0 -10px;
 }
 
 /* Tùy chỉnh nút điều hướng Slick */
-.slick-prev:before, .slick-next:before {
+.slick-prev:before,
+.slick-next:before {
     color: #000;
     font-size: 30px;
 }

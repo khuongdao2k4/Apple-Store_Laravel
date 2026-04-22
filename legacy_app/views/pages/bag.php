@@ -71,6 +71,7 @@ require_once '../app/views/layouts/navbar.php';
         height: 140px;
         margin-right: 20px;
         border-radius: 5px;
+        object-fit: contain;
     }
     .order-details {
         flex: 1;

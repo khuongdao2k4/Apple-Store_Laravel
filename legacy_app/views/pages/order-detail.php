@@ -145,7 +145,7 @@ require_once '../app/views/layouts/navbar.php';
 
 <div class="main-container">
     <div class="info-section">
-        <img style="width:100%; height: 76%; padding-top: 20px;" src="<?= htmlspecialchars($imageUrl) ?>"
+        <img style="width:100%; height: 76%; object-fit: contain; padding-top: 20px;" src="<?= htmlspecialchars($imageUrl) ?>"
             alt="Product Image">
 
         <div class="payment-options">

@@ -16,9 +16,13 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'series',
+        'series_title',
+        'series_image',
         'image_url',
         'colors',
         'price',
         'quantity',
+        'sort_order',
     ];
 }

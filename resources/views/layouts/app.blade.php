@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Đăng Nhập Tài Khoản Apple</title> <!-- Default title, maybe override with yield later -->
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/navbar-shared.css') }}?v={{ time() }}">
     <!-- Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -52,9 +54,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="{{ route('home') }}"><i
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}"><i
                                 class="fa-brands fa-apple fa-xl"></i></a></li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">Cửa Hàng</a>
+                    <li class="nav-item"><a class="nav-link" href="#">Cửa Hàng</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -82,7 +84,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="{{ route('mac') }}">Mac</a>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('mac') }}">Mac</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -122,7 +124,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">iPad</a>
+                    <li class="nav-item"><a class="nav-link" href="#">iPad</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -159,7 +161,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link"
+                    <li class="nav-item"><a class="nav-link"
                             href="{{ route('store') }}">iPhone</a>
                         <div class="submenu-container">
                             <div class="submenu">
@@ -197,7 +199,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">Watch</a>
+                    <li class="nav-item"><a class="nav-link" href="#">Watch</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -231,7 +233,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">AirPods</a>
+                    <li class="nav-item"><a class="nav-link" href="#">AirPods</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -258,7 +260,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">TV & Nhà</a>
+                    <li class="nav-item"><a class="nav-link" href="#">TV & Nhà</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -286,7 +288,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">Giải Trí</a>
+                    <li class="nav-item"><a class="nav-link" href="#">Giải Trí</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -318,7 +320,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">Phụ Kiện</a>
+                    <li class="nav-item"><a class="nav-link" href="#">Phụ Kiện</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -351,7 +353,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item" ; style="padding: 0px 10px"><a class="nav-link" href="#">Hỗ Trợ</a>
+                    <li class="nav-item"><a class="nav-link" href="#">Hỗ Trợ</a>
                         <div class="submenu-container">
                             <div class="submenu">
                                 <ul>
@@ -389,8 +391,22 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link search-icon"><i class="fa-solid fa-magnifying-glass fa-lg"></i></a>
                     </li>
-                    <li class="nav-item"><a href="{{ route('bag') }}" class="nav-link"><i
-                                class="fa-solid fa-bag-shopping fa-lg"></i></a>
+                    <li class="nav-item">
+                        <a href="{{ route('bag') }}" class="nav-link position-relative">
+                            <i class="fa-solid fa-bag-shopping fa-lg"></i>
+                            @php
+                                $cartCount = 0;
+                                if(session()->has('email')) {
+                                    $email = strtolower(session('email'));
+                                    $cartCount = \App\Models\CartItem::where('email', $email)->sum('quantity');
+                                }
+                            @endphp
+                            @if($cartCount > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 0.25em 0.5em;">
+                                    {{ $cartCount }}
+                                </span>
+                            @endif
+                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -476,5 +492,30 @@
             style="width: 125px; height: 40px;" alt="">
     </footer>
     <script src="{{ asset('assets/js/search-handler.js') }}?v={{ time() }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let lastScrollTop = 0;
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar.offsetHeight;
+
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Trượt xuống một đoạn bằng chiều dài của navbar thì ẩn đi
+                if (scrollTop > navbarHeight) {
+                    if (scrollTop > lastScrollTop) {
+                        // Scroll down
+                        navbar.classList.add('nav-hidden');
+                    } else {
+                        // Scroll up
+                        navbar.classList.remove('nav-hidden');
+                    }
+                } else {
+                    navbar.classList.remove('nav-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+            });
+        });
+    </script>
 </body>
 </html>

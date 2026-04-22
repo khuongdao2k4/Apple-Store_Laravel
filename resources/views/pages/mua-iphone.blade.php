@@ -49,6 +49,11 @@
         element.classList.add('active');
     }
 
+    function confirmDelete(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+            window.location.href = "{{ route('delete-product') }}?id=" + id;
+        }
+    }
 </script>
 <!-- Các phần nội dung -->
 <div id="container1" class="container active">
@@ -58,130 +63,60 @@
             <h2>Mọi phiên bản. <p>Hãy chọn mẫu bạn thích.</p>
             </h2>
         </div>
-        <?php
-        $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
-        ?>
-        <?php if ($role === 'admin'): ?>
+        @php
+            $role = session('role', '');
+        @endphp
+        @if ($role === 'admin')
             <div class="admin-actions">
-                <button class="add-product-btn" onclick="location.href='add-product'">Thêm sản phẩm</button>
+                <button class="add-product-btn" onclick="location.href='{{ route('add-product') }}'">Thêm sản phẩm</button>
             </div>
-        <?php endif; ?>
+        @endif
     </div>
     <section class="product-section" style="padding-right: 20px;">
-        <div class="product-card">
-            <h3>iPhone 16 Pro & <br>
-                iPhone 16 Pro Max</h3>
-            <button class="explore-btn" data-bs-toggle="modal" data-bs-target="#productModal">Hãy khám phá thiết
-                bị</button>
-            <img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone16prohero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1725567335931"
-                alt="">
-            <div class="color-options">
-                <span class="color active" style="background-color: #d4c3b6;"></span>
-                <span class="color" style="background-color: #8e8e93;"></span>
-                <span class="color" style="background-color: #1c1c1e;"></span>
-            </div>
-            <div class="price-container">
-                <p>Từ 28.999.000đ hoặc 1.181.000đ/tháng <br> trong 24 tháng*</p>
-                <button class="buy-btn" class="btn btn-primary" onclick="window.location.href='order'">Mua</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <h3>iPhone 16 & <br>
-                iPhone 16 Plus</h3>
-            <button class="explore-btn" data-bs-toggle="modal" data-bs-target="#productModal">Hãy khám phá thiết
-                bị</button>
-            <img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone16hero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1723234230295"
-                alt="">
-            <div class="color-options">
-                <span class="color active" style="background-color: #add8e6;"></span>
-                <span class="color" style="background-color: #f8c8dc;"></span>
-                <span class="color" style="background-color: #8e8e93;"></span>
-                <span class="color" style="background-color: #1c1c1e;"></span>
-            </div>
-            <div class="price-container">
-                <p>Từ 22.999.000đ hoặc 936.000đ/tháng <br> trong 24 tháng*</p>
-                <button class="buy-btn" onclick="window.location.href='order-test'" ;>Mua</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <p>ĐẶT TRƯỚC VÀO NGÀY 28 THÁNG 2</p>
-            <h3 style="padding-top: 0px;">iPhone 16e</h3>
-            <button class="explore-btn" data-bs-toggle="modal" data-bs-target="#productModal">Hãy khám phá thiết
-                bị</button>
-            <img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone-16e-202502?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1739495700381"
-                alt="">
-            <div class="color-options">
-                <span class="color active" style="background-color:rgb(227, 216, 216);"></span>
-                <span class="color" style="background-color: #1c1c1e;"></span>
-            </div>
-            <div class="price-container">
-                <p>Từ 16.999.000đ hoặc 692.000đ/mỗi<br> tháng trong 24 tháng*</p>
-                <button onclick="window.location.href='order-test'" ; class="buy-btn">Xem Giá</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <h3>iPhone 15 & <br>
-                iPhone 15 Plus</h3>
-            <img src="https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/iphone-card-40-iphone16hero-202409?wid=680&hei=528&fmt=p-jpg&qlt=95&.v=1723234230295"
-                alt="">
-            <button class="explore-btn" data-bs-toggle="modal" data-bs-target="#productModal">Hãy khám phá thiết
-                bị</button>
-            <div class="color-options">
-                <span class="color active" style="background-color:rgb(255, 255, 255);"></span>
-                <span class="color" style="background-color: #f8c8dc;"></span>
-                <span class="color" style="background-color:rgb(228, 228, 104);"></span>
-                <span class="color" style="background-color:rgb(160, 160, 167);"></span>
-                <span class="color" style="background-color: #1c1c1e;"></span>
-            </div>
-            <div class="price-container">
-                <p>Từ 19.999.000đhoặc 814.000đ/tháng <br> trong 24 tháng*</p>
-                <button onclick="window.location.href='order-test'" ; class="buy-btn">Mua</button>
-            </div>
-        </div>
+        @foreach($groupedProducts as $series => $products)
+            @php
+                $firstProduct = $products->first();
+                $seriesTitle = $firstProduct->series_title ?? $firstProduct->name;
+                $seriesImage = $firstProduct->series_image ?? $firstProduct->image_url;
+                
+                // Find minimum price in the group
+                $minPrice = $products->min(function($p) {
+                    $val = preg_replace('/[^0-9]/', '', $p->price);
+                    return $val != '' ? (int)$val : 999999999;
+                });
+                $minPriceFormatted = "Từ " . number_format($minPrice, 0, ',', '.') . "đ";
+            @endphp
+            
+            <div class="product-card">
+                <h3>{!! str_replace('&', '& <br>', $seriesTitle) !!}</h3>
+                <button class="explore-btn" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#productModal"
+                        onclick="loadSeriesModal({{ $products->toJson() }})">
+                    Hãy khám phá thiết bị
+                </button>
+                <img src="{{ asset($seriesImage) }}" alt="{{ $seriesTitle }}" style="object-fit: contain;">
+                
+                <div class="color-options">
+                    @php $allColors = explode(',', $firstProduct->colors); @endphp
+                    @foreach($allColors as $index => $color)
+                        <span class="color {{ $index === 0 ? 'active' : '' }}" style="background-color: {{ trim($color) }};"></span>
+                    @endforeach
+                </div>
+                
+                <div class="price-container">
+                    <p>{{ $minPriceFormatted }} hoặc {{ number_format($minPrice / 24, 0, ',', '.') }}đ/tháng <br> trong 24 tháng*</p>
+                    <button class="buy-btn" onclick="window.location.href='{{ route('order', ['id' => $firstProduct->id]) }}'">Mua</button>
+                </div>
 
-        <?php
-        $conn = new mysqli("localhost", "root", "", "phone_website");
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        $sql = "SELECT * FROM products";
-        $result = $conn->query($sql);
-
-        if (!$result) {
-            die("Lỗi truy vấn: " . $conn->error);
-        }
-
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo '<div class="product-card">';
-                echo '<h3 style="padding-bottom:20px;">' . htmlspecialchars($row["name"]) . '</h3>';
-                echo '<img style="width: 300px; height: 230px;padding-top:10px; margin-top:10px;object-fit: cover;" src="' . htmlspecialchars($row["image_url"]) . '" alt="' . htmlspecialchars($row["name"]) . '">';
-                echo '<button class="explore-btn" data-bs-toggle="modal" data-bs-target="#productModal">Hãy khám phá thiết bị</button>';
-
-                // Màu sắc sản phẩm
-                echo '<div class="color-options"; style="padding-top:10px">';
-                $colors = explode(",", $row["colors"]);
-                foreach ($colors as $index => $color) {
-                    $activeClass = $index === 0 ? 'active' : '';
-                    echo '<span class="color ' . $activeClass . '" style="background-color: ' . htmlspecialchars(trim($color)) . ';"></span>';
-                }
-                echo '</div>';
-
-                // Giá và nút mua hàng
-                echo '<div class="price-container">';
-                echo '<p>' . htmlspecialchars($row["price"]) . '</p>';
-                echo '<button class="buy-btn" onclick="window.location.href=\'order-test?id=' . $row["id"] . '\'">Mua</button>';
-                echo '</div>';
-                echo '<button class="edit-btn" onclick="window.location.href=\'edit-product?id=' . $row["id"] . '\'">Edit</button>';
-                echo '<button class="delete-btn" onclick="confirmDelete(' . $row["id"] . ')">Delete</button>';
-                echo '</div>'; // Đóng thẻ product-card
-            }
-        } else {
-            echo "<p>Không có sản phẩm nào.</p>";
-        }
-        $conn->close();
-        ?>
+                @if (session('role') === 'admin')
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-primary" style="font-size: 10px;" onclick="window.location.href='{{ route('edit-product', ['id' => $firstProduct->id]) }}'">Sửa Nhóm</button>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </section>
     </section>
 
     <br id="section2">
@@ -239,11 +174,11 @@
                 </li>
             </ul>
         </div>
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="tab-content mt-3">
+        <div class="modal-content main-modal-wrapper">
+            <div class="modal-body p-0">
+                <div class="tab-content">
                     <div class="tab-pane fade show active" id="iphone16pro">
-                        <div class="modal-content">
+                        <div class="modal-layout-row">
                             <div class="modal-left">
                                 <button class="prev" onclick="changeImage(-1)">&#10094;</button>
                                 <img id="product-img" class="product-image"
@@ -322,7 +257,7 @@
                     </div>
 
                     <div class="tab-pane fade " id="iphone16promax">
-                        <div class="modal-content">
+                        <div class="modal-layout-row">
                             <div class="modal-left">
                                 <button class="prev" onclick="changeImage(-1)">&#10094;</button>
                                 <img id="product-img" class="product-image"

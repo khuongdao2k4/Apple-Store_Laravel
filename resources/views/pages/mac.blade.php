@@ -10,19 +10,19 @@
 		<div class="categories-container">
 			<ul class="categories-list">
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/macbookair_light__dfypt7o3xfgy_large.svg"
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mbn_1fa302e95.png"
 							alt="iPhone 16 Pro"><br>MacBook Air</a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/macbookair_light__dfypt7o3xfgy_large.svg"
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mba_ea12e0d5b.png"
 							alt="iPhone 16"><br>MacBook Pro</a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/imac_light__cx5ex9nbqxme_large.svg"
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mbp_bfa749034.png"
 							alt="iPhone 16e"><br>iMac<br><span class="new-label">Mới</span></a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_mini_light__e7ojhup2ezau_large.svg"
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_imac_24_832584093.png"
 							alt="iPhone 15"><br>Mac mini</a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_studio_light__fcr3455qk0i2_large.svg"
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mac_mini_bff82a643.png"
 							alt="So Sánh"><br>Mac Studio</a></li>
 				<li><a href="#"><img
 							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_pro_light__bly2b0ua4seq_large.svg"

@@ -23,5 +23,11 @@ class Order extends Model
         'storage',
         'color',
         'price',
+        'phone',
+        'address',
+        'payment_method',
+        'status',
+        'vnp_transaction_no',
+        'vnp_response_code',
     ];
 }

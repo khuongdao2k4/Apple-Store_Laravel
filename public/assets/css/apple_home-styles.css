@@ -319,17 +319,4 @@ footer a {
     font-size: 10px;
     font-weight: 600;
 }
-.submenu-container { pointer-events: none !important; }
-.submenu { pointer-events: auto !important; }
-
-/* CSS Hover Intent Optimization */
-.submenu-container { transition: opacity 0.15s ease-out, visibility 0s linear 0.15s !important; }
-.nav-item:hover .submenu-container { transition: opacity 0.25s ease-in 0.12s, visibility 0s linear 0.12s !important; }
-.submenu { transition: transform 0.15s ease-out, opacity 0.15s ease-out !important; }
-.nav-item:hover .submenu { transition: transform 0.25s ease-in 0.12s, opacity 0.25s ease-in 0.12s !important; }
-
-/* Exact 'a' Tag Hover Enforcement */
-.nav-item:hover .submenu-container, .submenu-container { visibility: hidden !important; opacity: 0 !important; transition: opacity 0.15s ease-out 0.1s, visibility 0s linear 0.25s !important; }
-.nav-item > a:hover ~ .submenu-container, .submenu-container:hover { visibility: visible !important; opacity: 1 !important; transition: opacity 0.25s ease-in 0.12s, visibility 0s linear 0.12s !important; }
-.nav-item:hover .submenu, .submenu { transform: translateY(-10%) !important; opacity: 0 !important; transition: transform 0.15s ease-out 0.1s, opacity 0.15s ease-out 0.1s !important; }
-.nav-item > a:hover ~ .submenu-container .submenu, .submenu-container:hover .submenu { transform: translateY(0) !important; opacity: 1 !important; transition: transform 0.25s ease-in 0.12s, opacity 0.25s ease-in 0.12s !important; }
+/* End of file - conflicting rules removed */

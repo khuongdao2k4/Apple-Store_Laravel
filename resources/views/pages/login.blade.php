@@ -1,38 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'login.php'])
 
 @section('content')
-<?php
 
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $stmt = $conn->prepare("SELECT id, firstname, lastname, password, role FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-        $user = $result->fetch_assoc();
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id']; // Lưu ID người dùng vào session
-            $_SESSION['user_name'] = $user['firstname'] . ' ' . $user['lastname'];
-            $_SESSION['email'] = $email;
-            $_SESSION['role'] = $user['role'];
-
-            $_SESSION['success'] = "Đăng nhập thành công!";
-            header("Location: home");
-            exit();
-        } else {
-            $_SESSION['error'] = "Mật khẩu không đúng!";
-        }
-    } else {
-        $_SESSION['error'] = "Email không tồn tại!";
-    }
-}
-?>
 
 
 
@@ -55,14 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2 class="text-center fw-bold mb-3" style="font-size: 30px; letter-spacing: -0.02em;">Tài khoản Apple</h2>
             <p class="text-center text-muted mb-4" style="font-size: 17px;">Quản lý Tài khoản Apple của bạn</p>
 
-            @if (session()->has('error'))
+            @if (session('error'))
                 <div class="alert alert-danger text-start"> {{ session('error') }} </div>
             @endif
-            @if (session()->has('success'))
+            @if (session('success'))
                 <div class="alert alert-success text-start"> {{ session('success') }} </div>
             @endif
 
             <form action="login" method="POST">
+                @csrf
                 <div class="apple-input-group mb-4">
                     <input type="email" class="apple-input" name="email" placeholder="Email hoặc Số điện thoại" required>
                     <div class="apple-input-divider"></div>

@@ -59,7 +59,7 @@ require_once '../app/views/layouts/navbar.php';
     <div class="rf-bfe-main row">
         <div class="rf-bfe-column-left">
             <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-16-pro-model-unselect-gallery-1-202409?wid=5120&hei=2880&fmt=webp&qlt=70&.v=aWs5czA5aDFXU0FlMGFGRlpYRXk2UWFRQXQ2R0JQTk5udUZxTkR3ZVlpTEJnOG9obkp6NERCS3lnVm1tcnlVUjBoUVhuTWlrY2hIK090ZGZZbk9HeE1xUVVnSHY5eU9CcGxDMkFhalkvT0NuWUpOMGpEMHVTZEtYYVA3c1B3UzVmbW94YnYxc1YvNXZ4emJGL0IxNFp3&traceId=1"
-                alt="Product Image" style="width:930px; height: 570px; padding-bottom: 50px;">
+                alt="Product Image" style="max-width: 100%; height: auto; object-fit: contain; padding-bottom: 50px;">
 
             <h3><strong>Apple Trade In.</strong> Get $40–$630 credit toward your new iPhone.</h3>
             <div class="trade-options">

@@ -11,10 +11,20 @@ class PageController extends Controller
     public function mac() { return view('pages.mac'); }
     public function store() { return view('pages.store'); }
     public function muaIphone() { 
-        $products = Product::all();
-        return view('pages.mua-iphone', compact('products')); 
+        // Group products by series and order by sort_order
+        $groupedProducts = Product::orderBy('sort_order', 'asc')
+            ->get()
+            ->groupBy('series');
+            
+        return view('pages.mua-iphone', compact('groupedProducts')); 
     }
-    public function bag() { return view('pages.bag'); }
+    public function bag() {
+        $orders = [];
+        if (session()->has('email')) {
+            $orders = \App\Models\Order::where('email', session('email'))->get();
+        }
+        return view('pages.bag', compact('orders')); 
+    }
     
     public function addProduct() { return view('pages.add-product'); }
     public function editProduct() { return view('pages.edit-product'); }

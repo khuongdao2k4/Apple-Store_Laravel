@@ -11,15 +11,7 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-.navbar {
-    background: rgb(254, 249, 249);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 999;
-}
+/* CSS navbar cũ đã được xóa để dùng navbar-shared.css */
 
 .navbar-nav {
     flex-grow: 1;
@@ -88,40 +80,7 @@ body {
 }
 
 /* Submenu */
-.submenu-container {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0);
-    /* Ban đầu trong suốt */
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    overflow: visible;
-    z-index: 2000;
-}
-
-.submenu {
-    width: 100vw;
-    max-height: 60vh;
-    background: white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: grid;
-    grid-template-columns: 320px 200px 200px;
-    align-items: start;
-    justify-items: center;
-    transform: translateY(-10%);
-    opacity: 0;
-    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
-    padding: 30px;
-    padding-left: 350px;
-    padding-right: 150px;
-    z-index: 9999;
-}
+/* CSS submenu cũ đã được xóa */
 
 .submenu ul {
     list-style: none;
@@ -479,17 +438,16 @@ body {
 /* Modal trên cùng */
 .top-modal {
     position: absolute;
-    top: -70px;
+    top: -55px;
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 335px;
-}
-.top-modal {
+    width: auto;
+    white-space: nowrap;
+    z-index: 1055;
     pointer-events: auto; /* Đảm bảo có thể bấm được */
 }
 
@@ -668,20 +626,7 @@ footer a {
     color: black;
     text-decoration: none;
 }
-.submenu-container { pointer-events: none !important; }
-.submenu { pointer-events: auto !important; }
-
-/* CSS Hover Intent Optimization */
-.submenu-container { transition: opacity 0.15s ease-out, visibility 0s linear 0.15s !important; }
-.nav-item:hover .submenu-container { transition: opacity 0.25s ease-in 0.12s, visibility 0s linear 0.12s !important; }
-.submenu { transition: transform 0.15s ease-out, opacity 0.15s ease-out !important; }
-.nav-item:hover .submenu { transition: transform 0.25s ease-in 0.12s, opacity 0.25s ease-in 0.12s !important; }
-
-/* Exact 'a' Tag Hover Enforcement */
-.nav-item:hover .submenu-container, .submenu-container { visibility: hidden !important; opacity: 0 !important; transition: opacity 0.15s ease-out 0.1s, visibility 0s linear 0.25s !important; }
-.nav-item > a:hover ~ .submenu-container, .submenu-container:hover { visibility: visible !important; opacity: 1 !important; transition: opacity 0.25s ease-in 0.12s, visibility 0s linear 0.12s !important; }
-.nav-item:hover .submenu, .submenu { transform: translateY(-10%) !important; opacity: 0 !important; transition: transform 0.15s ease-out 0.1s, opacity 0.15s ease-out 0.1s !important; }
-.nav-item > a:hover ~ .submenu-container .submenu, .submenu-container:hover .submenu { transform: translateY(0) !important; opacity: 1 !important; transition: transform 0.25s ease-in 0.12s, opacity 0.25s ease-in 0.12s !important; }
+/* End of file - conflicting rules removed */
 /* Admin button styles */
 .product-card .edit-btn, 
 .product-card .delete-btn {

@@ -63,7 +63,12 @@ class AdminController extends Controller
 
     public function addProduct()
     {
-        return view('pages.admin.add-product');
+        $existingSeries = Product::select('series', 'series_title', 'series_image')
+            ->get()
+            ->unique('series')
+            ->values();
+
+        return view('pages.admin.add-product', compact('existingSeries'));
     }
 
     public function storeProduct(Request $request)

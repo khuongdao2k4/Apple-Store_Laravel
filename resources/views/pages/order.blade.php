@@ -440,8 +440,10 @@
                 <span style="font-weight: 700;">mới của bạn.</span>
             </h2>
             <p style="font-size: 21px; color: #86868b; font-weight: 400; margin: 0 0 30px;">Theo cách bạn muốn.</p>
-            <img id="checkout-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
-                 alt="Product" style="max-width: 280px; display: block;">
+            <div style="background: #ffffff; border-radius: 24px; padding: 20px; display: flex; justify-content: center; align-items: center; width: 300px; height: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                <img id="checkout-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
+                     alt="Product" style="max-width: 100%; max-height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply;">
+            </div>
         </div>
 
         {{-- Middle: Pricing details --}}
@@ -499,15 +501,15 @@
                 </div>
             </div>
 
-            <form action="{{ route('checkout') }}" method="GET">
-                <input type="hidden" name="product" id="input-product-name" value="">
-                <input type="hidden" name="price" id="input-total-price" value="">
-                <input type="hidden" name="storage" id="input-storage" value="">
-                <input type="hidden" name="color" id="input-color" value="">
-                <input type="hidden" name="applecare" id="input-applecare" value="0">
-                <input type="hidden" name="image_url" id="input-image" value="">
+            <form id="add-to-cart-form">
+                <input type="hidden" id="input-product-name" value="">
+                <input type="hidden" id="input-total-price" value="">
+                <input type="hidden" id="input-storage" value="">
+                <input type="hidden" id="input-color" value="">
+                <input type="hidden" id="input-applecare" value="0">
+                <input type="hidden" id="input-image" value="">
 
-                <button type="submit"
+                <button type="button" onclick="addToCart()"
                     style="width: 100%; padding: 14px 20px; border-radius: 980px; background-color: #0071e3; color: white; font-size: 17px; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.2s; margin-bottom: 10px;"
                     onmouseover="this.style.backgroundColor='#0077ed'"
                     onmouseout="this.style.backgroundColor='#0071e3'">
@@ -536,6 +538,7 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
     let currentModel = null;
     let currentStorage = null;
@@ -819,7 +822,66 @@
         });
     }
     
+    function addToCart() {
+        const data = {
+            _token: '{{ csrf_token() }}',
+            product_name: document.getElementById('input-product-name').value,
+            price: document.getElementById('input-total-price').value,
+            storage: document.getElementById('input-storage').value,
+            color: document.getElementById('input-color').value,
+            applecare: document.getElementById('input-applecare').value,
+            image_url: document.getElementById('input-image').value
+        };
+
+        fetch('{{ route('cart-add') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 401) {
+                window.location.href = '{{ route('login') }}';
+                throw new Error('Unauthorized');
+            }
+            return response.json();
+        })
+        .then(result => {
+            if (result && result.success) {
+                Swal.fire({
+                    title: 'Đã thêm vào giỏ hàng!',
+                    text: 'Sản phẩm đã được thêm thành công.',
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0071e3',
+                    cancelButtonColor: '#86868b',
+                    confirmButtonText: 'Xem giỏ hàng',
+                    cancelButtonText: 'Mua tiếp',
+                    customClass: {
+                        popup: 'apple-alert-popup',
+                        confirmButton: 'apple-alert-confirm',
+                        cancelButton: 'apple-alert-cancel'
+                    }
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        window.location.href = '{{ route('bag') }}';
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
     document.addEventListener('DOMContentLoaded', init);
 </script>
 
+<style>
+    .apple-alert-popup { border-radius: 20px !important; padding: 20px !important; }
+    .apple-alert-confirm { border-radius: 12px !important; padding: 10px 24px !important; font-weight: 600 !important; }
+    .apple-alert-cancel { border-radius: 12px !important; padding: 10px 24px !important; font-weight: 600 !important; }
+</style>
+
+@endpush
 @endsection

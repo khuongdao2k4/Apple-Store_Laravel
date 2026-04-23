@@ -87,7 +87,11 @@ class AdminController extends Controller
     public function editProduct($id)
     {
         $product = Product::findOrFail($id);
-        return view('pages.admin.edit-product', compact('product'));
+        $existingSeries = Product::select('series', 'series_title', 'series_image')
+            ->get()
+            ->unique('series')
+            ->values();
+        return view('pages.admin.edit-product', compact('product', 'existingSeries'));
     }
 
     public function updateProduct(Request $request)

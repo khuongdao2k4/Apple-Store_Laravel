@@ -77,10 +77,13 @@
     }
 
     .product-info img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        background-color: #ffffff;
+        padding: 8px;
         border-radius: 12px;
+        border: 1px solid #d2d2d7;
     }
 
     .product-details h3 {
@@ -228,14 +231,14 @@
                         <div class="product-details">
                             <h3 style="font-size: 15px;">{{ $item->product_name }} (x{{ $item->quantity }})</h3>
                             <p>{{ $item->storage }} | {{ $item->color }}</p>
-                            <p style="font-weight: bold; color: black; margin-top: 5px;">${{ number_format($priceVal * $item->quantity) }}</p>
+                            <p style="font-weight: bold; color: black; margin-top: 5px;">{{ number_format($priceVal * $item->quantity, 0, ',', '.') }}đ</p>
                         </div>
                     </div>
                 @endforeach
 
                 <div class="summary-row">
                     <span>Tạm tính</span>
-                    <span>${{ number_format($totalPrice) }}</span>
+                    <span>{{ number_format($totalPrice, 0, ',', '.') }}đ</span>
                 </div>
                 <div class="summary-row">
                     <span>Giao hàng</span>
@@ -244,7 +247,7 @@
                 
                 <div class="summary-row summary-total">
                     <span>Tổng cộng</span>
-                    <span>${{ number_format($totalPrice) }}</span>
+                    <span>{{ number_format($totalPrice, 0, ',', '.') }}đ</span>
                 </div>
 
                 <button type="button" id="submit-order" class="confirm-button">Xác nhận đặt hàng</button>

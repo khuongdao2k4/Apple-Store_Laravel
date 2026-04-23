@@ -85,10 +85,22 @@ class OrderController extends Controller
                 $priceVal = intval(preg_replace('/[^0-9]/', '', $priceStr));
                 $totalPriceNumeric = $priceVal;
 
+                $itemData = [
+                    [
+                        'product_name' => $request->input('product'),
+                        'image_url' => $request->input('image_url'),
+                        'storage' => $request->input('storage'),
+                        'color' => $request->input('color'),
+                        'price' => $priceVal,
+                        'quantity' => 1,
+                    ]
+                ];
+
                 $order = Order::create([
                     'username' => session('user_name'),
                     'email' => $email,
                     'product' => $request->input('product'),
+                    'items' => $itemData,
                     'image_url' => $request->input('image_url'),
                     'storage' => $request->input('storage'),
                     'color' => $request->input('color'),
@@ -100,26 +112,46 @@ class OrderController extends Controller
                 ]);
                 $orderIds[] = $order->id_order;
             } elseif (!$cartItems->isEmpty()) {
-                // Handle Normal Bag Checkout
+                // Handle Normal Bag Checkout - Combine into 1 order
+                $productNames = [];
+                $firstImageUrl = $cartItems->first()->image_url;
+                $storages = [];
+                $colors = [];
+                $itemData = [];
+                
                 foreach ($cartItems as $item) {
                     $itemPriceVal = intval(preg_replace('/[^0-9]/', '', $item->price));
                     $totalPriceNumeric += $itemPriceVal * $item->quantity;
+                    $productNames[] = $item->product_name . " (x" . $item->quantity . ")";
+                    
+                    if (!in_array($item->storage, $storages)) $storages[] = $item->storage;
+                    if (!in_array($item->color, $colors)) $colors[] = $item->color;
 
-                    $order = Order::create([
-                        'username' => session('user_name'),
-                        'email' => $email,
-                        'product' => $item->product_name . " (x" . $item->quantity . ")",
+                    $itemData[] = [
+                        'product_name' => $item->product_name,
                         'image_url' => $item->image_url,
                         'storage' => $item->storage,
                         'color' => $item->color,
                         'price' => $itemPriceVal,
-                        'phone' => $request->input('phone'),
-                        'address' => $request->input('address'),
-                        'payment_method' => $request->input('payment_method', 'COD'),
-                        'status' => 'pending',
-                    ]);
-                    $orderIds[] = $order->id_order;
+                        'quantity' => $item->quantity,
+                    ];
                 }
+
+                $order = Order::create([
+                    'username' => session('user_name'),
+                    'email' => $email,
+                    'product' => \Illuminate\Support\Str::limit(implode(', ', $productNames), 250),
+                    'items' => $itemData,
+                    'image_url' => $firstImageUrl,
+                    'storage' => \Illuminate\Support\Str::limit(implode(', ', $storages), 250),
+                    'color' => \Illuminate\Support\Str::limit(implode(', ', $colors), 250),
+                    'price' => $totalPriceNumeric,
+                    'phone' => $request->input('phone'),
+                    'address' => $request->input('address'),
+                    'payment_method' => $request->input('payment_method', 'COD'),
+                    'status' => 'pending',
+                ]);
+                $orderIds[] = $order->id_order;
             } else {
                 return response()->json(['success' => false, 'message' => 'Giỏ hàng trống hoặc thiếu thông tin sản phẩm.'], 400);
             }

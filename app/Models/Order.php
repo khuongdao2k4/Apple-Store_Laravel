@@ -19,6 +19,7 @@ class Order extends Model
         'username',
         'email',
         'product',
+        'items',
         'image_url',
         'storage',
         'color',
@@ -29,5 +30,9 @@ class Order extends Model
         'status',
         'vnp_transaction_no',
         'vnp_response_code',
+    ];
+
+    protected $casts = [
+        'items' => 'array',
     ];
 }

@@ -102,10 +102,13 @@
     .item-image {
         flex: 0 0 250px;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
     }
     .item-image img {
-        width: 100%;
-        max-width: 200px;
+        width: 200px;
+        height: 200px;
         object-fit: contain;
     }
     .item-details {
@@ -514,31 +517,75 @@
             </div>
             
             @if ($orders->count() > 0)
-                <div class="bag-items" style="border-top: 1px solid #d2d2d7;">
+                <div class="bag-items" style="border-top: none;">
                     @foreach ($orders as $order)
-                        <div class="bag-item">
-                            <div class="item-image">
-                                <img src="{{ asset($order->image_url) }}" alt="Order Image" style="filter: none;">
-                            </div>
-                            <div class="item-details" style="display: flex; justify-content: space-between;">
-                                <div style="flex: 1; padding-right: 20px;">
-                                    <div class="item-title" style="margin-bottom: 8px;">{{ $order->product }}</div>
-                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 4px;">{{ $order->storage }} | {{ $order->color }}</div>
-                                    <div style="font-size: 14px; color: #86868b; margin-bottom: 4px;">Mã đơn: #{{ $order->id_order }} &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
-                                    <div style="font-size: 14px; color: #86868b;">Thanh toán: {{ $order->payment_method }}</div>
+                        @if($order->items)
+                            <div class="order-block" style="padding-bottom: 40px; margin-bottom: 40px; border-bottom: 1px solid #d2d2d7;">
+                                <div style="font-size: 14px; color: #86868b; margin-bottom: 20px; display: flex; justify-content: space-between;">
+                                    <div>Mã đơn: <span style="color: #1d1d1f; font-weight: 500;">#{{ $order->id_order }}</span> &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
+                                    <div>Thanh toán: {{ $order->payment_method }}</div>
                                 </div>
-                                <div style="text-align: right; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end;">
-                                    <div style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">
+                                
+                                <div class="order-items-list" style="padding: 0 10px;">
+                                    @foreach($order->items as $item)
+                                        <div class="bag-item" style="border-bottom: none; padding: 15px 0;">
+                                            <div class="item-image" style="flex: 0 0 120px;">
+                                                <img src="{{ asset($item['image_url']) }}" alt="Order Image" style="width: 100px; height: 100px; object-fit: contain; filter: none;">
+                                            </div>
+                                            <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
+                                                <div style="flex: 1; padding-right: 20px;">
+                                                    <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
+                                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ $item['color'] }}</div>
+                                                    <div style="font-size: 14px; color: #86868b;">Bảo hành: Không có AppleCare</div>
+                                                </div>
+                                                <div style="text-align: right;">
+                                                    <div style="font-size: 18px; font-weight: 500;">
+                                                        {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $item['price'])), 0, ',', '.') }}đ
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 20px 10px 0 10px;">
+                                    <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 13px; padding: 8px 16px;">{{ $order->status }}</span>
+                                    <div style="font-size: 24px; font-weight: 600;">
+                                        Tổng cộng: 
                                         @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
-                                            {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
+                                            <span>{{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ</span>
                                         @else
-                                            {{ $order->price }}
+                                            <span>{{ $order->price }}</span>
                                         @endif
                                     </div>
-                                    <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 12px; padding: 6px 14px;">{{ $order->status }}</span>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            {{-- Legacy Support --}}
+                            <div class="bag-item">
+                                <div class="item-image">
+                                    <img src="{{ asset($order->image_url) }}" alt="Order Image" style="filter: none;">
+                                </div>
+                                <div class="item-details" style="display: flex; justify-content: space-between;">
+                                    <div style="flex: 1; padding-right: 20px;">
+                                        <div class="item-title" style="margin-bottom: 8px;">{{ $order->product }}</div>
+                                        <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 4px;">{{ $order->storage }} | {{ $order->color }}</div>
+                                        <div style="font-size: 14px; color: #86868b; margin-bottom: 4px;">Mã đơn: #{{ $order->id_order }} &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
+                                        <div style="font-size: 14px; color: #86868b;">Thanh toán: {{ $order->payment_method }}</div>
+                                    </div>
+                                    <div style="text-align: right; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end;">
+                                        <div style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">
+                                            @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
+                                                {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
+                                            @else
+                                                {{ $order->price }}
+                                            @endif
+                                        </div>
+                                        <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 12px; padding: 6px 14px;">{{ $order->status }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
 

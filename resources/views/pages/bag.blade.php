@@ -507,38 +507,42 @@
             @endif
         </div>
 
-        <!-- Orders Tab Content (Kept exactly identical to avoid breaking old features, just matching the tabs logic) -->
+        <!-- Orders Tab Content -->
         <div id="orders-tab" class="tab-content">
-            <h2 style="font-size: 28px; font-weight: 600; margin-bottom: 30px;">Quản lý và theo dõi các đơn hàng gần đây.</h2>
+            <div class="bag-header" style="text-align: left; margin-bottom: 20px; padding-top: 0;">
+                <h2 style="font-size: 32px; font-weight: 600;">Quản lý và theo dõi các đơn hàng gần đây.</h2>
+            </div>
             
             @if ($orders->count() > 0)
-                @foreach ($orders as $order)
-                    <div class="old-order-item">
-                        <img src="{{ asset($order->image_url) }}" alt="Order Image">
-                        <div class="old-order-details">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <h3 style="font-size: 22px; font-weight: bold; margin: 0 0 5px 0;">{{ $order->product }}</h3>
-                                <span class="order-status-badge status-{{ strtolower($order->status) }}">{{ $order->status }}</span>
+                <div class="bag-items" style="border-top: 1px solid #d2d2d7;">
+                    @foreach ($orders as $order)
+                        <div class="bag-item">
+                            <div class="item-image">
+                                <img src="{{ asset($order->image_url) }}" alt="Order Image" style="filter: none;">
                             </div>
-                            <p style="margin: 0 0 10px 0;">{{ $order->storage }} | {{ $order->color }}</p>
-                            <p style="font-size: 13px; color: #86868b; margin: 0 0 5px 0;">
-                                Mã đơn: #{{ $order->id_order }} | Ngày: {{ $order->created_at->format('d/m/Y') }}
-                            </p>
-                            <p style="font-size: 13px; color: #86868b; margin: 0;">Phương thức: {{ $order->payment_method }}</p>
+                            <div class="item-details" style="display: flex; justify-content: space-between;">
+                                <div style="flex: 1; padding-right: 20px;">
+                                    <div class="item-title" style="margin-bottom: 8px;">{{ $order->product }}</div>
+                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 4px;">{{ $order->storage }} | {{ $order->color }}</div>
+                                    <div style="font-size: 14px; color: #86868b; margin-bottom: 4px;">Mã đơn: #{{ $order->id_order }} &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
+                                    <div style="font-size: 14px; color: #86868b;">Thanh toán: {{ $order->payment_method }}</div>
+                                </div>
+                                <div style="text-align: right; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end;">
+                                    <div style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">
+                                        @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
+                                            {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
+                                        @else
+                                            {{ $order->price }}
+                                        @endif
+                                    </div>
+                                    <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 12px; padding: 6px 14px;">{{ $order->status }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div style="text-align: right; width: 150px;">
-                            <p style="font-size: 22px; font-weight: bold; color: black; margin: 0;">
-                                @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
-                                    {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
-                                @else
-                                    {{ $order->price }}
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
 
-                <div class="pagination-wrapper mt-4" style="text-align: center;">
+                <div class="pagination-wrapper mt-4 mb-4" style="text-align: center;">
                     {{ $orders->appends(['tab' => 'orders', 'bag_page' => request('bag_page')])->links() }}
                 </div>
             @else

@@ -805,14 +805,14 @@
         document.getElementById('input-product-name').value = currentModel.name;
         document.getElementById('input-total-price').value = finalPrice;
         document.getElementById('input-storage').value = currentStorage.name;
-        document.getElementById('input-color').value = currentColor;
+        document.getElementById('input-color').value = colorName;
         document.getElementById('input-image').value = currentModel.image;
 
         const bn = {
             'buynow-product-name': currentModel.name,
             'buynow-total-price': finalPrice,
             'buynow-storage': currentStorage.name,
-            'buynow-color': currentColor,
+            'buynow-color': colorName,
             'buynow-applecare': document.getElementById('input-applecare').value,
             'buynow-image': currentModel.image,
         };

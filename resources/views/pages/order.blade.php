@@ -550,32 +550,69 @@
         return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
     }
 
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
     function getColorName(hex) {
         if (!hex) return 'Mặc định';
         hex = hex.toLowerCase().trim();
-        const colorMap = {
-            '#000000': 'Đen',
-            '#ffffff': 'Trắng',
-            '#ff0000': 'Đỏ',
-            '#0000ff': 'Xanh Dương',
-            '#00ff00': 'Xanh Lá',
-            '#ffff00': 'Vàng',
-            '#800080': 'Tím',
-            '#ffc0cb': 'Hồng',
-            '#808080': 'Xám',
-            '#00ffff': 'Xanh Ngọc',
-            '#00fa9a': 'Xanh Lơ',
-            '#00e676': 'Xanh Lục',
-            '#5a5ad2': 'Xanh Dương',
-            '#aa00ff': 'Tím',
-            '#bf40ff': 'Tím Đậm',
-            '#464644': 'Titan Đen',
-            '#f9f6ef': 'Titan Trắng',
-            '#2e3641': 'Titan Xanh',
-            '#8f8a84': 'Titan Tự Nhiên',
-            '#b5b3a9': 'Titan Tự Nhiên'
-        };
-        return colorMap[hex] || 'Tuỳ chọn';
+        
+        const namedColors = [
+            { hex: '#000000', name: 'Đen' },
+            { hex: '#ffffff', name: 'Trắng' },
+            { hex: '#ff0000', name: 'Đỏ' },
+            { hex: '#0000ff', name: 'Xanh Dương' },
+            { hex: '#00ff00', name: 'Xanh Lá' },
+            { hex: '#ffff00', name: 'Vàng' },
+            { hex: '#800080', name: 'Tím' },
+            { hex: '#ffc0cb', name: 'Hồng' },
+            { hex: '#808080', name: 'Xám' },
+            { hex: '#00ffff', name: 'Xanh Ngọc' },
+            { hex: '#ffa500', name: 'Cam' },
+            { hex: '#464644', name: 'Titan Đen' },
+            { hex: '#f9f6ef', name: 'Titan Trắng' },
+            { hex: '#2e3641', name: 'Titan Xanh' },
+            { hex: '#8f8a84', name: 'Titan Tự Nhiên' },
+            { hex: '#b5b3a9', name: 'Titan Tự Nhiên' },
+            { hex: '#4b0082', name: 'Chàm' },
+            { hex: '#ee82ee', name: 'Tím Nhạt' },
+            { hex: '#00ced1', name: 'Xanh Lơ' },
+            { hex: '#1e90ff', name: 'Xanh Biển' },
+            { hex: '#32cd32', name: 'Xanh Lục' },
+            { hex: '#a52a2a', name: 'Nâu' }
+        ];
+
+        const exact = namedColors.find(c => c.hex === hex);
+        if (exact) return exact.name;
+
+        const targetRgb = hexToRgb(hex);
+        if (!targetRgb) return 'Tuỳ chọn';
+
+        let minDistance = Infinity;
+        let nearestName = 'Tuỳ chọn';
+
+        for (const color of namedColors) {
+            const rgb = hexToRgb(color.hex);
+            if (!rgb) continue;
+
+            const dr = targetRgb.r - rgb.r;
+            const dg = targetRgb.g - rgb.g;
+            const db = targetRgb.b - rgb.b;
+            const distance = Math.sqrt(dr * dr + dg * dg + db * db);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestName = color.name;
+            }
+        }
+
+        return nearestName;
     }
 
     function init() {

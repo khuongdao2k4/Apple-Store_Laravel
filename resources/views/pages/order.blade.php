@@ -550,6 +550,34 @@
         return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
     }
 
+    function getColorName(hex) {
+        if (!hex) return 'Mặc định';
+        hex = hex.toLowerCase().trim();
+        const colorMap = {
+            '#000000': 'Đen',
+            '#ffffff': 'Trắng',
+            '#ff0000': 'Đỏ',
+            '#0000ff': 'Xanh Dương',
+            '#00ff00': 'Xanh Lá',
+            '#ffff00': 'Vàng',
+            '#800080': 'Tím',
+            '#ffc0cb': 'Hồng',
+            '#808080': 'Xám',
+            '#00ffff': 'Xanh Ngọc',
+            '#00fa9a': 'Xanh Lơ',
+            '#00e676': 'Xanh Lục',
+            '#5a5ad2': 'Xanh Dương',
+            '#aa00ff': 'Tím',
+            '#bf40ff': 'Tím Đậm',
+            '#464644': 'Titan Đen',
+            '#f9f6ef': 'Titan Trắng',
+            '#2e3641': 'Titan Xanh',
+            '#8f8a84': 'Titan Tự Nhiên',
+            '#b5b3a9': 'Titan Tự Nhiên'
+        };
+        return colorMap[hex] || 'Tuỳ chọn';
+    }
+
     function init() {
         const firstModel = document.querySelector('.model-card');
         if(firstModel) {
@@ -690,6 +718,9 @@
         el.classList.add('selected');
         currentColor = color;
         
+        const colorName = getColorName(color);
+        document.getElementById('color-label').innerText = colorName ? `Màu sắc - ${colorName}` : 'Màu sắc';
+        
         // In a real application, you might update sliderImages here based on color
         // For now, we'll keep the model images but we could filter them if data provided
         
@@ -704,7 +735,8 @@
         const downPayment = Math.round(finalPrice * 0.20);
         const taxEstimate = Math.round(finalPrice * 8 / 108);
 
-        const fullName = `${currentModel.name} ${currentStorage.name}`;
+        const colorName = getColorName(currentColor);
+        const fullName = `${currentModel.name} ${currentStorage.name} - ${colorName}`;
 
         document.getElementById('summary-product-headline').innerText = fullName;
 

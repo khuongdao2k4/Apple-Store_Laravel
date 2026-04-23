@@ -71,7 +71,7 @@
         background-color: #0071e3;
         color: white;
         border: none;
-        border-radius: 980px;
+        border-radius: 15px;
         padding: 12px 24px;
         font-size: 17px;
         font-weight: 400;
@@ -259,43 +259,49 @@
     .bag-summary-container {
         display: flex;
         justify-content: flex-end;
-        padding-top: 40px;
+        padding-top: 20px;
+        padding-bottom: 40px;
     }
     .bag-summary {
         width: 100%;
-        max-width: 500px;
+        max-width: 700px;
     }
     .summary-row {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         font-size: 17px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
     }
     .summary-row.total-row {
-        font-size: 24px;
+        font-size: 32px;
         font-weight: 600;
         border-top: 1px solid #d2d2d7;
-        padding-top: 20px;
-        margin-top: 10px;
+        padding-top: 24px;
+        margin-top: 16px;
     }
     .summary-row.installment-row {
-        font-size: 24px;
-        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 500;
+        margin-top: 24px;
+        align-items: flex-start;
     }
     .summary-installment-desc {
-        font-size: 12px;
-        color: #1d1d1f;
+        font-size: 14px;
+        color: #86868b;
+        font-weight: 400;
+        margin-top: 4px;
     }
     .summary-tax-row {
         text-align: right;
-        font-size: 12px;
+        font-size: 13px;
         color: #1d1d1f;
-        margin-top: 20px;
-        line-height: 1.5;
+        margin-top: 24px;
+        line-height: 1.6;
     }
     .summary-checkout-row {
-        text-align: right;
-        margin-top: 30px;
+        text-align: end;
+        margin-top: 40px;
     }
 
     /* Empty State */
@@ -487,7 +493,7 @@
                         </div>
                         
                         <div class="summary-checkout-row">
-                            <button class="btn-checkout" style="width: 100%; padding: 16px; font-size: 17px;" onclick="location.href='{{ route('checkout') }}'">Thanh Toán</button>
+                            <button class="btn-checkout" style="width: 45%; padding: 16px; font-size: 17px; " onclick="location.href='{{ route('checkout') }}'">Thanh Toán</button>
                         </div>
                     </div>
                 </div>

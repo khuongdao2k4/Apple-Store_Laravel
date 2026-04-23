@@ -418,8 +418,9 @@
                                 {{-- AppleCare+ Static Display --}}
                                 <div class="service-block">
                                     <div class="service-header">
-                                        <div class="service-title">
-                                            <span class="service-title-icon"></span> Thêm AppleCare+ cho {{ $item->product_name }} cho mức giá 5.499.000đ
+                                        <div class="service-title" style="display: flex; align-items: center;">
+                                            <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus_ICON?wid=800&hei=800&fmt=jpeg&qlt=90&fit=constrain&.v=NCtyMU9JdVpIVnJwaHNhN0RoQytrbHBLMzlLdW0zb1ZjUGpUUE1kYUlMY2ZKN0k1QXkvZmhaRGFteVRZTU9MajltL1NSWVF4eU0yK0ozVG10L3E2d25iMjF4RmlZZXZVcEFBNVZkS1k0VUY4bzhjYTlKRDBSTFZ3YzlieG9MeSs" alt="AppleCare+" style="width: 18px; height: 18px; margin-right: 8px;"> 
+                                            Thêm AppleCare+ cho {{ $item->product_name }} cho mức giá 5.499.000đ
                                         </div>
                                         <button class="btn-add-service">Thêm</button>
                                     </div>
@@ -434,7 +435,7 @@
 
                                 {{-- Delivery Info --}}
                                 <div class="delivery-block">
-                                    <div class="delivery-icon">📦</div>
+                                    <div class="delivery-icon" style="font-size: 24px;">🚚</div>
                                     <div class="delivery-text">
                                         <strong>3-5 ngày làm việc</strong><br>
                                         Tùy chọn giao hàng cho: <a href="#" class="delivery-link">Chọn Địa Điểm</a>

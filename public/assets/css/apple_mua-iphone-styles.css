@@ -275,8 +275,10 @@ body {
 
 .price-container {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    margin-top: 15px;
+    padding: 0 15px;
 }
 
 .color-options {
@@ -303,8 +305,14 @@ body {
 .product-card p {
     font-size: 14px;
     color: gray;
-    padding-left: 10px;
-    padding-top: 20px;
+    margin: 0;
+    padding: 0;
+    padding-right: 15px;
+    flex: 1;
+    min-width: 0; /* Bắt buộc flex item thu nhỏ và cho phép chữ rớt dòng */
+    word-wrap: break-word;
+    white-space: normal; /* Override inherited nowrap */
+    line-height: 1.4; /* Improve readability when wrapped */
 }
 
 /* Nút Mua */
@@ -312,11 +320,13 @@ body {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 18px;
+    font-size: 15px;
     border-radius: 20px;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: 0.3s;
 }
 

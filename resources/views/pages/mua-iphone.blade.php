@@ -34,6 +34,225 @@
 </div>
 
 
+<style>
+    /* Apple Style Modal CSS */
+    .modal-xl { max-width: 1200px; }
+    
+    #productModal .modal-content {
+        background: transparent !important;
+        border: none !important;
+    }
+
+    #productModal .modal-content-wrapper {
+        background: white;
+        border-radius: 28px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .top-series-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .pill-tab {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #d2d2d7;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        color: #1d1d1f;
+        text-decoration: none;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .pill-tab.active {
+        background: #1d1d1f;
+        color: white;
+        border-color: #1d1d1f;
+    }
+
+    .inner-modal-tabs {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .inner-pill {
+        background: #f5f5f7;
+        border-radius: 12px;
+        padding: 6px 12px;
+        font-size: 13px;
+        color: #1d1d1f;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .inner-pill.active {
+        background: #e8e8ed;
+        font-weight: 600;
+    }
+
+    .modal-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        background: #f5f5f7;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1100;
+        border: none;
+        color: #86868b;
+    }
+
+    .modal-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+        padding: 40px;
+    }
+
+    .modal-left-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main-product-img {
+        width: 100%;
+        max-height: 380px;
+        object-fit: contain;
+    }
+
+    .carousel-dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        background: #d2d2d7;
+        border-radius: 50%;
+    }
+
+    .dot.active { background: #86868b; }
+
+    .spec-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .spec-item {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 24px;
+        align-items: flex-start;
+    }
+
+    .spec-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .spec-icon i { font-size: 24px; color: #1d1d1f; }
+    .spec-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+    .spec-content {
+        font-size: 14px;
+        line-height: 1.4;
+        color: #1d1d1f;
+    }
+
+    .spec-title {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .modal-apple-footer {
+        background: #f5f5f7;
+        padding: 24px 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.5fr;
+        gap: 30px;
+    }
+
+    .footer-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .footer-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        color: #1d1d1f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .footer-text {
+        font-size: 11px;
+        color: #1d1d1f;
+        line-height: 1.3;
+    }
+
+    .footer-link {
+        color: #06c;
+        text-decoration: none;
+    }
+
+    .buy-pill-btn {
+        background: #0071e3;
+        color: white;
+        border: none;
+        border-radius: 18px;
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .explore-more-link {
+        color: #06c;
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+        margin-top: 20px;
+    }
+    
+    .price-subtext {
+        font-size: 12px;
+        color: #86868b;
+        margin-bottom: 20px;
+    }
+
+    .color-options-row {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+</style>
+
 <script>
     function showContainer(containerId, element) {
         let containers = document.querySelectorAll('.container');
@@ -58,7 +277,14 @@
     function loadSeriesModal(products) {
         if (!products || products.length === 0) return;
         
-        let tabsHtml = '';
+        // Populate Top Series Tabs (Pills outside white card)
+        let topTabsHtml = '';
+        // Note: For now we only show the current series. 
+        topTabsHtml = `<div class="pill-tab active">${products[0].series}</div>`;
+        document.getElementById('topSeriesTabs').innerHTML = topTabsHtml;
+
+        // Populate Inner Tabs (Models within series)
+        let innerTabsHtml = '';
         let contentHtml = '';
         
         products.forEach((product, index) => {
@@ -66,47 +292,101 @@
             let showClass = index === 0 ? 'show active' : '';
             let tabId = 'product_tab_' + product.id;
             
-            tabsHtml += `
-                <li class="nav-item">
-                    <a style="font-size:14px" class="nav-link ${activeClass}" data-bs-toggle="tab" href="#${tabId}">${product.name}</a>
-                </li>
+            innerTabsHtml += `
+                <a class="inner-pill ${activeClass}" data-bs-toggle="tab" href="#${tabId}">${product.name}</a>
             `;
-            
-            let colors = product.colors ? product.colors.split(',') : [];
-            let colorsHtml = colors.map((c, i) => `<div class="color-option" style="background: ${c.trim()};" onclick="setColor(${i})"></div>`).join('');
             
             let priceVal = parseInt(product.price.replace(/[^0-9]/g, '')) || 0;
             let priceFormatted = new Intl.NumberFormat('vi-VN').format(priceVal) + 'đ';
-            
+            let colors = product.colors ? product.colors.split(',') : [];
+            let colorsHtml = colors.map((c, i) => `<div class="color-option" style="background: ${c.trim()}; width: 12px; height: 12px; border-radius: 50%; border: 1px solid #d2d2d7;"></div>`).join('');
+
+            // Spec list logic (using placeholders for icons)
+            let specsHtml = `
+                <div class="spec-item">
+                    <div class="spec-icon"><i class="bi bi-display"></i></div>
+                    <div class="spec-content">
+                        <span class="spec-title">Màn hình 6,3 inch với ProMotion lên đến 120Hz.</span>
+                        Mặt trước Ceramic Shield 2 cho khả năng chống trầy xước tốt hơn gấp 3 lần. Thiết kế nguyên khối nhôm rèn.
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-icon"><i class="bi bi-camera"></i></div>
+                    <div class="spec-content">
+                        <span class="spec-title">Hệ thống camera pro.</span>
+                        Chụp cận hơn nữa với thu phóng chất lượng quang học 8x và camera sau 48MP.
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-icon"><i class="bi bi-cpu"></i></div>
+                    <div class="spec-content">
+                        <span class="spec-title">Camera trước 18MP Center Stage.</span>
+                        Nhiều cách linh hoạt để căn chỉnh khung hình. Chụp selfie nhóm thông minh hơn, video Ghi Hình Kép để quay đồng thời cả phía trước và phía sau, và hơn thế nữa.
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-icon"><i class="bi bi-cpu"></i></div>
+                    <div class="spec-content">
+                        <span class="spec-title">Chip A19 Pro với GPU 6 lõi.</span>
+                        Tản nhiệt hơi nước. Nhanh thần tốc.
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-icon"><i class="bi bi-battery-full"></i></div>
+                    <div class="spec-content">
+                        <span class="spec-title">Thời lượng pin đột phá.</span>
+                        Thời gian xem video lên đến 31 giờ.
+                    </div>
+                </div>
+            `;
+
             contentHtml += `
                 <div class="tab-pane fade ${showClass}" id="${tabId}">
-                    <div class="modal-layout-row">
-                        <div class="modal-left" style="margin-top: 30px;">
-                            <img id="product-img-${product.id}" class="product-image" src="/${product.image_url}" alt="${product.name}" style="object-fit: contain;">
-                            <p style="text-align:center; padding-top:30px">Hiện có ${colors.length} màu</p>
-                            <div class="color-options-modal">
+                    <div class="modal-grid">
+                        <div class="modal-left-col">
+                            <img class="main-product-img" src="/${product.image_url}" alt="${product.name}">
+                            <div class="carousel-dots">
+                                <div class="dot active"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                            <p style="font-size: 12px; color: #86868b; margin-bottom: 8px;">Có ${colors.length} màu</p>
+                            <div class="color-options-row">
                                 ${colorsHtml}
                             </div>
                         </div>
-                        <div class="modal-right">
-                            <div class="price-container">
-                                <h1 style="font-size: 34px; padding-top: 20px; padding-bottom:20px">${product.name}</h1>
-                                <button style="border-radius: 30px;" class="buy-button" onclick="location.href='/order?series=${encodeURIComponent(product.series)}'">Mua ngay</button>
+                        <div class="modal-right-col">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                <div style="flex: 1;">
+                                    <h2 style="font-size: 32px; font-weight: 600; margin: 0;">${product.name}</h2>
+                                    <div class="price-subtext" style="margin-top: 5px;">Từ ${priceFormatted} hoặc 1.425.000đ/tháng trong 24 tháng</div>
+                                </div>
+                                <button class="buy-pill-btn" onclick="location.href='/order?series=${encodeURIComponent(product.series)}'">Mua</button>
                             </div>
-                            <p>Từ ${priceFormatted}</p>
-                            <ul class="feature-list">
-                                <li>Thiết kế cao cấp và màn hình sắc nét</li>
-                                <hr>
-                                <li>Hiệu năng mạnh mẽ với chip thế hệ mới</li>
-                            </ul>
+                            
+                            <div class="spec-list" style="margin-top: 20px;">
+                                ${specsHtml}
+                            </div>
+
+                            <a href="#" class="explore-more-link">Khám phá thêm về ${product.name} ></a>
                         </div>
                     </div>
                 </div>
             `;
         });
         
-        document.getElementById('productTabs').innerHTML = tabsHtml;
+        document.getElementById('innerProductTabs').innerHTML = innerTabsHtml;
         document.getElementById('productTabContent').innerHTML = contentHtml;
+
+        // Handle inner pill active state
+        document.querySelectorAll('.inner-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                document.querySelectorAll('.inner-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
     }
 </script>
 <!-- Các phần nội dung -->
@@ -154,7 +434,7 @@
                 <button class="explore-btn" 
                         data-bs-toggle="modal" 
                         data-bs-target="#productModal"
-                        onclick="loadSeriesModal({{ htmlspecialchars(json_encode($products)) }})">
+                        onclick='loadSeriesModal(@json($products))'>
                     Hãy khám phá thiết bị
                 </button>
                 <img src="{{ asset($seriesImage) }}" alt="{{ $seriesTitle }}" style="object-fit: contain;">
@@ -212,56 +492,55 @@
         </div>
     </section>
 </div>
-<div id="container2" class="container">
-    <h1>Trang 2</h1>
-    <p>Nội dung trang 2.</p>
-</div>
-<div id="container3" class="container">
-    <h1>Trang 3</h1>
-    <p>Nội dung tran        <div class="top-modal">
-            <ul class="nav nav-tabs" id="productTabs">
-                <!-- Javascript will render tabs here -->
-            </ul>
-        </div>
-        <div class="modal-content main-modal-wrapper">
-            <div class="modal-body p-0">
-                <div class="tab-content" id="productTabContent">
-                    <!-- Javascript will render content here -->
-                </div>
+
+{{-- Product Discovery Modal --}}
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true" style="z-index: 9999;">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background: transparent !important; border: none !important;">
+            <!-- Top Series Pills (outside main white card) -->
+            <div class="top-series-tabs" id="topSeriesTabs">
+                <!-- Javascript will render series pills here -->
             </div>
-        </div>
+
+            <div class="modal-content-wrapper">
+                <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+
+                <div class="modal-body p-0">
+                    <!-- Inner Sub-tabs (Pro, Pro Max, etc.) -->
+                    <div style="padding: 30px 40px 0 40px;">
+                        <div class="inner-modal-tabs" id="innerProductTabs">
+                            <!-- Javascript will render sub-tabs here -->
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="productTabContent">
+                        <!-- Javascript will render content here -->
+                    </div>
                 </div>
-                <div class="modal-end">
-                    <div class="offer">
-                        <img class="icon"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAclBMVEX///8PwwkAvwDV89SH2obo+Ofz/PKG24Tc89yZ4Jee4p1h0l8KwwCV35Tl+OW26bXZ9Nl92XvO8M33/vfC7cKk46M7yjhQzk4qxyZn02VVzlOL2ort+uyu5q1g0l9213RGzETI78dr02m36bYlxiFx1nCbN14MAAAER0lEQVR4nO3d6XbaMBAF4FrsILawxOwkgfd/xZrQc1rQCEZCY4/T+/13oovlRbI1/vULAAAAAAAAAAAAAAAAAAAAAAAAAKAys3b1ZjLR2vPmKs+MDlm+as7bKeNtF8viz1qbaVE0xZjlYpso3+RgjJ5wf1ljDt0E+bYDU3WUB8zg5f3Y05zvwvReytc+ag9YRDy+cM6ZZBqPv3s2m8QGnKs8wbismccGrLrpbHERG/UJWERshAds1aSLXlkTftVY1ilgEXEZGrBZpz56YZphAUd1C1hEHAUlfK9XH72w7yEB3+q3C4ud+Pazd2HYTux6dqGSEaKvGYY/lmrSf9jkq2mnetNV7rlW80+n1I9kzSDFcDON7oDKaC13+wnRSW0WchzLe6OGPexu2qd+nrCrjbwR1dH6zI1X7rYxd7bCiJGBXTG3zd2EU9HGxpm6CXPeljNiF2rroxfunaW1vNnirbsl87cpmdvXDG/Khrjr1thJqW7K7GvExWIo3NY4Gzchb06KOElxz8Llcq9qzFM+EqqBhF5IqAYSev2XCRfCbY2zSJfQrjdNfTZr9740eh/qmIG6Fz2MrdVDp1tIiIT6ISES6sdM+PHjE9by4eEVeikS6oeESKgfEvoT2qrXH5BSjoA325Y+W+LJDObarpBQDST0QkI1kNALCdVAQi8kVAMJvZBQDST0QkI1kNALCdVAQi8kVAMJvZBQjVISbnedz/3gzv6zs2sly+FXQsLR/rt8lCszZi+/GEw+4dfDB43mK2UainjC8ZMnqWacNI9LOqFvSfs//094abR0Qvct63t2nTbRPeGEnNogwktPhRMuOAllVzEIJzw/Dyi99lQ4IbGk3WH3iTPdEk74ydmH58SZbgknHHISyq4fFk7Iec82qCZOOOnrIVF54Y70Mn7phM9L8sUW++MSvy+dPrsvla5TID+2ODwqy2fNIWUaSgnjw5011Ojwwthdwiy0Usb44/WJ2oGntXw+zNM8gIRqIKEXEqqBhF5IqEbKhK/VrpfScxPyKmER84Qd4bbG6bgJedOXREU64andSETlD15Fujaxnki4rVFmxPos5jdoTu5vU8ZQIdTO7Wsn5qZunWRuycUyzdwCpuxaydRE4VGwrXGORCu5s5dkyYGgeuAleCfayJ69JA7hQv4h2uIwHznVRMM+lshnEtYse/NGt3qNeW9JzoGxi+x6p0Ktmm920XN8IfOzSktfPWYzfkDW4091wp7HKqmgH4Jfkf3bszdJFAp9uaVmn5mJ+NBM7T7DEv7eR836acwLWM8enqkS9yRP9YcPbxn+3cyNdV0imug5iEM9Ir7yLLZfg4+vWfPSXOfkpH03mlP09x3/GOqOaBK8lLQ9+0YrVStGc+c0nwRuD3N9IYt4+TDhd50nw/V17KnBd0vWw1ePP1erMV70e9XrL8aNMpZzAAAAAAAAAAAAAAAAAAAAAAT7DRjpbCW8ri8wAAAAAElFTkSuQmCC"
-                            alt="Credit Card Icon">
-                        <div class="content">
-                            <div class="title">Apple Card Monthly Installments</div>
-                            <div class="text">Pay over time, interest-free when you choose to check out with Apple
-                                Card Monthly Installments.</div>
+
+                <!-- Modal Footer Bar -->
+                <div class="modal-apple-footer">
+                    <div class="footer-item">
+                        <div class="footer-icon"><i class="bi bi-credit-card"></i></div>
+                        <div class="footer-text">
+                            <strong>Tài Chính</strong><br>
+                            Các cách trả góp tuyệt vời, bao gồm lựa chọn lãi suất 0%.*
                         </div>
                     </div>
-
-                    <div class="offer">
-                        <img class="icon"
-                            src="data:image/png;base64,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"
-                            alt="Credit Card Icon">
-                        <div class="content">
-                            <div class="title">Trade in for credit</div>
-                            <div class="text">Get credit toward your purchase when you trade in an eligible iPhone.
-                            </div>
+                    <div class="footer-item">
+                        <div class="footer-icon"><i class="bi bi-arrow-repeat"></i></div>
+                        <div class="footer-text">
+                            <strong>Apple Trade In</strong><br>
+                            Đổi thiết bị đủ điều kiện của bạn lấy điểm tín dụng cho lần mua hàng tiếp theo.<sup>1</sup>
                         </div>
                     </div>
-
-                    <div class="offer">
-                        <img class="icon"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAclBMVEX///8PwwkAvwDV89SH2obo+Ofz/PKG24Tc89yZ4Jee4p1h0l8KwwCV35Tl+OW26bXZ9Nl92XvO8M33/vfC7cKk46M7yjhQzk4qxyZn02VVzlOL2ort+uyu5q1g0l9213RGzETI78dr02m36bYlxiFx1nCbN14MAAAER0lEQVR4nO3d6XbaMBAF4FrsILawxOwkgfd/xZrQc1rQCEZCY4/T+/13oovlRbI1/vULAAAAAAAAAAAAAAAAAAAAAAAAAKAys3b1ZjLR2vPmKs+MDlm+as7bKeNtF8viz1qbaVE0xZjlYpso3+RgjJ5wf1ljDt0E+bYDU3WUB8zg5f3Y05zvwvReytc+ag9YRDy+cM6ZZBqPv3s2m8QGnKs8wbismccGrLrpbHERG/UJWERshAds1aSLXlkTftVY1ilgEXEZGrBZpz56YZphAUd1C1hEHAUlfK9XH72w7yEB3+q3C4ud+Pazd2HYTux6dqGSEaKvGYY/lmrSf9jkq2mnetNV7rlW80+n1I9kzSDFcDON7oDKaC13+wnRSW0WchzLe6OGPexu2qd+nrCrjbwR1dH6zI1X7rYxd7bCiJGBXTG3zd2EU9HGxpm6CXPeljNiF2rroxfunaW1vNnirbsl87cpmdvXDG/Khrjr1thJqW7K7GvExWIo3NY4Gzchb06KOElxz8Llcq9qzFM+EqqBhF5IqAYSev2XCRfCbY2zSJfQrjdNfTZr9740eh/qmIG6Fz2MrdVDp1tIiIT6ISES6sdM+PHjE9by4eEVeikS6oeESKgfEvoT2qrXH5BSjoA325Y+W+LJDObarpBQDST0QkI1kNALCdVAQi8kVAMJvZBQDST0QkI1kNALCdVAQi8kVAMJvZBQjVISbnedz/3gzv6zs2sly+FXQsLR/rt8lCszZi+/GEw+4dfDB43mK2UainjC8ZMnqWacNI9LOqFvSfs//094abR0Qvct63t2nTbRPeGEnNogwktPhRMuOAllVzEIJzw/Dyi99lQ4IbGk3WH3iTPdEk74ydmH58SZbgknHHISyq4fFk7Iec82qCZOOOnrIVF54Y70Mn7phM9L8sUW++MSvy+dPrsvla5TID+2ODwqy2fNIWUaSgnjw5011Ojwwthdwiy0Usb44/WJ2oGntXw+zNM8gIRqIKEXEqqBhF5IqEbKhK/VrpfScxPyKmER84Qd4bbG6bgJedOXREU64andSETlD15Fujaxnki4rVFmxPos5jdoTu5vU8ZQIdTO7Wsn5qZunWRuycUyzdwCpuxaydRE4VGwrXGORCu5s5dkyYGgeuAleCfayJ69JA7hQv4h2uIwHznVRMM+lshnEtYse/NGt3qNeW9JzoGxi+x6p0Ktmm920XN8IfOzSktfPWYzfkDW4091wp7HKqmgH4Jfkf3bszdJFAp9uaVmn5mJ+NBM7T7DEv7eR836acwLWM8enqkS9yRP9YcPbxn+3cyNdV0imug5iEM9Ir7yLLZfg4+vWfPSXOfkpH03mlP09x3/GOqOaBK8lLQ9+0YrVStGc+c0nwRuD3N9IYt4+TDhd50nw/V17KnBd0vWw1ePP1erMV70e9XrL8aNMpZzAAAAAAAAAAAAAAAAAAAAAAT7DRjpbCW8ri8wAAAAAElFTkSuQmCC"
-                            alt="Credit Card Icon">
-                        <div class="content">
-                            <div class="title">Get a sweet carrier deal at Apple</div>
-                            <div class="text">Save even more on your new iPhone when you finance with select carrier
-                                deals.</div>
+                    <div class="footer-item">
+                        <div class="footer-icon"><i class="bi bi-truck"></i></div>
+                        <div class="footer-text">
+                            <strong>Giao hàng miễn phí ngày làm việc tiếp theo</strong><br>
+                            Chỉ khả dụng tại Thành Phố Hồ Chí Minh đối với một số sản phẩm Apple có sẵn nhất định được đặt hàng trước 15:00.
                         </div>
                     </div>
                 </div>
@@ -269,8 +548,9 @@
         </div>
     </div>
 </div>
-</div>
 
+{{-- Icons CDN --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 @endsection
 

@@ -31,11 +31,14 @@ class CartController extends Controller
         $storage = $request->input('storage');
         $color = $request->input('color');
 
+        $applecare = $request->input('applecare') == '1' ? true : false;
+
         // Check if item already exists in cart for this user
         $item = CartItem::where('email', $email)
             ->where('product_name', $productName)
             ->where('storage', $storage)
             ->where('color', $color)
+            ->where('applecare', $applecare)
             ->first();
 
         if ($item) {
@@ -49,6 +52,7 @@ class CartController extends Controller
                 'color' => $color,
                 'image_url' => $request->input('image_url'),
                 'quantity' => 1,
+                'applecare' => $applecare,
             ]);
         }
 

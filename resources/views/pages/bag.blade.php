@@ -424,22 +424,38 @@
                                     <button class="btn-remove" onclick="removeItem({{ $item->id }})">Xóa</button>
                                 </div>
 
-                                {{-- AppleCare+ Static Display --}}
+                                {{-- AppleCare+ Display based on selection --}}
                                 <div class="service-block">
-                                    <div class="service-header">
-                                        <div class="service-title" style="display: flex; align-items: center;">
-                                            <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus_ICON?wid=800&hei=800&fmt=jpeg&qlt=90&fit=constrain&.v=NCtyMU9JdVpIVnJwaHNhN0RoQytrbHBLMzlLdW0zb1ZjUGpUUE1kYUlMY2ZKN0k1QXkvZmhaRGFteVRZTU9MajltL1NSWVF4eU0yK0ozVG10L3E2d25iMjF4RmlZZXZVcEFBNVZkS1k0VUY4bzhjYTlKRDBSTFZ3YzlieG9MeSs" alt="AppleCare+" style="width: 18px; height: 18px; margin-right: 8px;"> 
-                                            Thêm AppleCare+ cho {{ $item->product_name }} cho mức giá 5.499.000đ
+                                    @if($item->applecare)
+                                        <div class="service-header">
+                                            <div class="service-title" style="display: flex; align-items: center; color: #1d7c34;">
+                                                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus_ICON?wid=800&hei=800&fmt=jpeg&qlt=90&fit=constrain&.v=NCtyMU9JdVpIVnJwaHNhN0RoQytrbHBLMzlLdW0zb1ZjUGpUUE1kYUlMY2ZKN0k1QXkvZmhaRGFteVRZTU9MajltL1NSWVF4eU0yK0ozVG10L3E2d25iMjF4RmlZZXZVcEFBNVZkS1k0VUY4bzhjYTlKRDBSTFZ3YzlieG9MeSs" alt="AppleCare+" style="width: 18px; height: 18px; margin-right: 8px;">
+                                                ✓ AppleCare+ đã được thêm — 5.499.000đ
+                                            </div>
                                         </div>
-                                        <button class="btn-add-service">Thêm</button>
-                                    </div>
-                                    <ul class="service-details">
-                                        <li>Nay đã có dịch vụ sửa chữa không hạn chế cho trường hợp hư hỏng do sự cố bất ngờ.</li>
-                                        <li>Dịch vụ sửa chữa được Apple chứng nhận sử dụng linh kiện Apple chính hãng</li>
-                                        <li>Dịch Vụ Thay Thế Cấp Tốc không áp dụng cho trường hợp vượt quá phí thay màn hình hoặc hỏng kính mặt sau</li>
-                                        <li>Ưu tiên tiếp cận các chuyên gia Apple</li>
-                                    </ul>
-                                    <a href="#" class="service-link">Tìm hiểu thêm ⊕</a>
+                                        <ul class="service-details">
+                                            <li>Nay đã có dịch vụ sửa chữa không hạn chế cho trường hợp hư hỏng do sự cố bất ngờ.</li>
+                                            <li>Dịch vụ sửa chữa được Apple chứng nhận sử dụng linh kiện Apple chính hãng</li>
+                                            <li>Dịch Vụ Thay Thế Cấp Tốc không áp dụng cho trường hợp vượt quá phí thay màn hình hoặc hỏng kính mặt sau</li>
+                                            <li>Ưu tiên tiếp cận các chuyên gia Apple</li>
+                                        </ul>
+                                        <a href="#" class="service-link">Tìm hiểu thêm ⊕</a>
+                                    @else
+                                        <div class="service-header">
+                                            <div class="service-title" style="display: flex; align-items: center;">
+                                                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus_ICON?wid=800&hei=800&fmt=jpeg&qlt=90&fit=constrain&.v=NCtyMU9JdVpIVnJwaHNhN0RoQytrbHBLMzlLdW0zb1ZjUGpUUE1kYUlMY2ZKN0k1QXkvZmhaRGFteVRZTU9MajltL1NSWVF4eU0yK0ozVG10L3E2d25iMjF4RmlZZXZVcEFBNVZkS1k0VUY4bzhjYTlKRDBSTFZ3YzlieG9MeSs" alt="AppleCare+" style="width: 18px; height: 18px; margin-right: 8px;">
+                                                Thêm AppleCare+ cho {{ $item->product_name }} cho mức giá 5.499.000đ
+                                            </div>
+                                            <button class="btn-add-service">Thêm</button>
+                                        </div>
+                                        <ul class="service-details">
+                                            <li>Nay đã có dịch vụ sửa chữa không hạn chế cho trường hợp hư hỏng do sự cố bất ngờ.</li>
+                                            <li>Dịch vụ sửa chữa được Apple chứng nhận sử dụng linh kiện Apple chính hãng</li>
+                                            <li>Dịch Vụ Thay Thế Cấp Tốc không áp dụng cho trường hợp vượt quá phí thay màn hình hoặc hỏng kính mặt sau</li>
+                                            <li>Ưu tiên tiếp cận các chuyên gia Apple</li>
+                                        </ul>
+                                        <a href="#" class="service-link">Tìm hiểu thêm ⊕</a>
+                                    @endif
                                 </div>
 
                                 {{-- Delivery Info --}}
@@ -536,7 +552,13 @@
                                                 <div style="flex: 1; padding-right: 20px;">
                                                     <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
                                                     <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ $item['color'] }}</div>
-                                                    <div style="font-size: 14px; color: #86868b;">Bảo hành: Không có AppleCare</div>
+                                                    <div style="font-size: 14px; color: #86868b;">Bảo hành: 
+                                                    @if(!empty($item['applecare']) && $item['applecare'])
+                                                        <span style="color: #1e7e34; font-weight: 500;">✓ AppleCare+</span>
+                                                    @else
+                                                        Không có AppleCare
+                                                    @endif
+                                                </div>
                                                 </div>
                                                 <div style="text-align: right;">
                                                     <div style="font-size: 18px; font-weight: 500;">
@@ -561,27 +583,46 @@
                                 </div>
                             </div>
                         @else
-                            {{-- Legacy Support --}}
-                            <div class="bag-item">
-                                <div class="item-image">
-                                    <img src="{{ asset($order->image_url) }}" alt="Order Image" style="filter: none;">
+                            {{-- Legacy Support - same layout as multi-item orders --}}
+                            <div class="order-block" style="padding-bottom: 40px; margin-bottom: 40px; border-bottom: 1px solid #d2d2d7;">
+                                <div style="font-size: 14px; color: #86868b; margin-bottom: 20px; display: flex; justify-content: space-between;">
+                                    <div>Mã đơn: <span style="color: #1d1d1f; font-weight: 500;">#{{ $order->id_order }}</span> &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
+                                    <div>Thanh toán: {{ $order->payment_method }}</div>
                                 </div>
-                                <div class="item-details" style="display: flex; justify-content: space-between;">
-                                    <div style="flex: 1; padding-right: 20px;">
-                                        <div class="item-title" style="margin-bottom: 8px;">{{ $order->product }}</div>
-                                        <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 4px;">{{ $order->storage }} | {{ $order->color }}</div>
-                                        <div style="font-size: 14px; color: #86868b; margin-bottom: 4px;">Mã đơn: #{{ $order->id_order }} &nbsp;|&nbsp; Ngày đặt: {{ $order->created_at->format('d/m/Y') }}</div>
-                                        <div style="font-size: 14px; color: #86868b;">Thanh toán: {{ $order->payment_method }}</div>
-                                    </div>
-                                    <div style="text-align: right; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-end;">
-                                        <div style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">
-                                            @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
-                                                {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
-                                            @else
-                                                {{ $order->price }}
-                                            @endif
+
+                                <div class="order-items-list" style="padding: 0 10px;">
+                                    <div class="bag-item" style="border-bottom: none; padding: 15px 0;">
+                                        <div class="item-image" style="flex: 0 0 120px;">
+                                            <img src="{{ asset($order->image_url) }}" alt="Order Image" style="width: 100px; height: 100px; object-fit: contain; filter: none;">
                                         </div>
-                                        <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 12px; padding: 6px 14px;">{{ $order->status }}</span>
+                                        <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
+                                            <div style="flex: 1; padding-right: 20px;">
+                                                <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $order->product }}</div>
+                                                <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $order->storage }} | {{ $order->color }}</div>
+                                                <div style="font-size: 14px; color: #86868b;">Bảo hành: Không có AppleCare</div>
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <div style="font-size: 18px; font-weight: 500;">
+                                                    @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
+                                                        {{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ
+                                                    @else
+                                                        {{ $order->price }}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 20px 10px 0 10px;">
+                                    <span class="order-status-badge status-{{ strtolower($order->status) }}" style="font-size: 13px; padding: 8px 16px;">{{ $order->status }}</span>
+                                    <div style="font-size: 24px; font-weight: 600;">
+                                        Tổng cộng:
+                                        @if(is_numeric(str_replace(['$', ',', 'đ', '.'], '', $order->price)))
+                                            <span>{{ number_format(floatval(str_replace(['$', ',', 'đ', '.'], '', $order->price)), 0, ',', '.') }}đ</span>
+                                        @else
+                                            <span>{{ $order->price }}</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

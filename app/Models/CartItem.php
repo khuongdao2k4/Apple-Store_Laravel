@@ -16,5 +16,6 @@ class CartItem extends Model
         'color',
         'image_url',
         'quantity',
+        'applecare',
     ];
 }

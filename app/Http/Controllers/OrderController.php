@@ -51,7 +51,8 @@ class OrderController extends Controller
                 'storage' => $request->query('storage'),
                 'color' => $request->query('color'),
                 'image_url' => $request->query('image_url'),
-                'quantity' => 1
+                'quantity' => 1,
+                'applecare' => $request->query('applecare') == '1'
             ];
             $cartItems = collect([ (object)$item ]);
         }
@@ -93,6 +94,7 @@ class OrderController extends Controller
                         'color' => $request->input('color'),
                         'price' => $priceVal,
                         'quantity' => 1,
+                        'applecare' => $request->input('applecare') == '1',
                     ]
                 ];
 
@@ -134,6 +136,7 @@ class OrderController extends Controller
                         'color' => $item->color,
                         'price' => $itemPriceVal,
                         'quantity' => $item->quantity,
+                        'applecare' => (bool)$item->applecare,
                     ];
                 }
 

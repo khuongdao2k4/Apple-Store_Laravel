@@ -54,27 +54,31 @@
     .top-series-tabs {
         display: flex;
         justify-content: center;
-        gap: 12px;
-        margin-bottom: 24px;
+        width: fit-content;
+        margin: 0 auto 24px auto;
+        background: #f5f5f7;
+        border-radius: 40px;
+        padding: 5px;
     }
 
     .pill-tab {
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid #d2d2d7;
-        border-radius: 20px;
-        padding: 8px 16px;
-        font-size: 14px;
+        background: transparent;
+        border: none;
+        border-radius: 30px;
+        padding: 10px 24px;
+        font-size: 15px;
+        font-weight: 500;
         color: #1d1d1f;
         text-decoration: none;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
         cursor: pointer;
     }
 
     .pill-tab.active {
         background: #1d1d1f;
         color: white;
-        border-color: #1d1d1f;
     }
+
 
     .inner-modal-tabs {
         display: flex;
@@ -277,23 +281,23 @@
     function loadSeriesModal(products) {
         if (!products || products.length === 0) return;
         
-        // Populate Top Series Tabs (Pills outside white card)
         let topTabsHtml = '';
-        // Note: For now we only show the current series. 
-        topTabsHtml = `<div class="pill-tab active">${products[0].series}</div>`;
-        document.getElementById('topSeriesTabs').innerHTML = topTabsHtml;
-
-        // Populate Inner Tabs (Models within series)
-        let innerTabsHtml = '';
         let contentHtml = '';
         
         products.forEach((product, index) => {
+            // Determine the correct image URL
+            let finalImageUrl = product.image_url;
+            if (!finalImageUrl.startsWith('http') && !finalImageUrl.startsWith('/')) {
+                finalImageUrl = '/' + finalImageUrl;
+            }
+
             let activeClass = index === 0 ? 'active' : '';
             let showClass = index === 0 ? 'show active' : '';
             let tabId = 'product_tab_' + product.id;
             
-            innerTabsHtml += `
-                <a class="inner-pill ${activeClass}" data-bs-toggle="tab" href="#${tabId}">${product.name}</a>
+            // Generate top modal tabs
+            topTabsHtml += `
+                <button class="pill-tab ${activeClass}" data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">${product.name}</button>
             `;
             
             let priceVal = parseInt(product.price.replace(/[^0-9]/g, '')) || 0;
@@ -344,7 +348,7 @@
                 <div class="tab-pane fade ${showClass}" id="${tabId}">
                     <div class="modal-grid">
                         <div class="modal-left-col">
-                            <img class="main-product-img" src="/${product.image_url}" alt="${product.name}">
+                            <img class="main-product-img" src="${finalImageUrl}" alt="${product.name}">
                             <div class="carousel-dots">
                                 <div class="dot active"></div>
                                 <div class="dot"></div>
@@ -377,16 +381,11 @@
             `;
         });
         
-        document.getElementById('innerProductTabs').innerHTML = innerTabsHtml;
+        const topSeriesContainer = document.getElementById('topSeriesTabs');
+        if (topSeriesContainer) {
+            topSeriesContainer.innerHTML = topTabsHtml;
+        }
         document.getElementById('productTabContent').innerHTML = contentHtml;
-
-        // Handle inner pill active state
-        document.querySelectorAll('.inner-pill').forEach(pill => {
-            pill.addEventListener('click', function() {
-                document.querySelectorAll('.inner-pill').forEach(p => p.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
     }
 </script>
 <!-- Các phần nội dung -->
@@ -405,6 +404,7 @@
                 <button class="add-product-btn" onclick="location.href='{{ route('add-product') }}'">Thêm sản phẩm</button>
             </div>
         @endif
+        
     </div>
     <section class="product-section" style="padding-right: 20px;">
         @foreach($groupedProducts as $series => $products)
@@ -498,7 +498,7 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content" style="background: transparent !important; border: none !important;">
             <!-- Top Series Pills (outside main white card) -->
-            <div class="top-series-tabs" id="topSeriesTabs">
+            <div class="top-series-tabs" id="topSeriesTabs" role="tablist">
                 <!-- Javascript will render series pills here -->
             </div>
 
@@ -508,14 +508,7 @@
                 </button>
 
                 <div class="modal-body p-0">
-                    <!-- Inner Sub-tabs (Pro, Pro Max, etc.) -->
-                    <div style="padding: 30px 40px 0 40px;">
-                        <div class="inner-modal-tabs" id="innerProductTabs">
-                            <!-- Javascript will render sub-tabs here -->
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="productTabContent">
+                    <div class="tab-content" id="productTabContent" style="padding-top: 30px;">
                         <!-- Javascript will render content here -->
                     </div>
                 </div>

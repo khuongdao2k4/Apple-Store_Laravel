@@ -139,40 +139,53 @@
         document.getElementById('buying-guide-scroll').addEventListener('scroll', () => {
             updateNavButtons('buying-guide-scroll', 'prev-btn-bg', 'next-btn-bg');
         });
+        
+        document.getElementById('savings-scroll').addEventListener('scroll', () => {
+            updateNavButtons('savings-scroll', 'prev-btn-savings', 'next-btn-savings');
+        });
 
         // Khởi tạo trạng thái nút ban đầu
         window.addEventListener('load', () => {
             updateNavButtons('buying-guide-scroll', 'prev-btn-bg', 'next-btn-bg');
+            updateNavButtons('savings-scroll', 'prev-btn-savings', 'next-btn-savings');
         });
     </script>
 
     <!-- Section: Nhiều cách để tiết kiệm -->
-    <section class="section-padding bg-light">
+    <section class="section-padding horizontal-scroll-section">
         <div class="container">
             <h2 class="section-headline mb-5">Nhiều cách để tiết kiệm. <span class="section-subheadline">Tìm cách phù hợp với bạn.</span></h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="apple-card">
-                        <div>
-                            <span class="card-eyebrow text-muted">APPLE TRADE IN</span>
-                            <h4 class="apple-card-title">Nhận giá trị quy đổi từ 3.800.000đ đến 18.200.000đ khi đổi máy Mac cũ lấy máy mới.*</h4>
-                        </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <button id="prev-btn-savings" class="scroll-nav-btn prev" onclick="scrollSection('savings-scroll', -500)"><i class="bi bi-chevron-left"></i></button>
+        <button id="next-btn-savings" class="scroll-nav-btn next show" onclick="scrollSection('savings-scroll', 500)"><i class="bi bi-chevron-right"></i></button>
+
+        <div class="cards-scroll-container" id="savings-scroll">
+            <!-- Card 1: Apple Trade In -->
+            <div class="card-item" style="min-width: 480px;">
+                <div class="apple-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-tradein-202603?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=bnBGZmQyZENCQjV2MDY0V0laRVBER1hHTmYyb3piY1Y0THVqMzBBNDVoTkx0QXRvdnJ4V1dBNW1Qd2w2K1l1dlMwV0hhcmdVdXZzZ1NwTlFUaEgwTHdMY3RGMHNGL3RGQTdEcFpMejZDZFE');">
+                    <div>
+                        <span class="card-eyebrow text-muted">APPLE TRADE IN</span>
+                        <h4 class="apple-card-title">Tiết kiệm khi mua Mac mới bằng cách trao đổi thiết bị hợp lệ.<sup>Δ</sup></h4>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="apple-card">
-                        <div>
-                            <span class="card-eyebrow text-muted">TRẢ GÓP</span>
-                            <h4 class="apple-card-title">Trả góp hàng tháng với lãi suất thấp, chỉ từ 0%.*</h4>
-                        </div>
+            </div>
+            <!-- Card 2: Installments -->
+            <div class="card-item" style="min-width: 480px;">
+                <div class="apple-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/ipad-card-50-monthly-installments-202503?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=dmNtNCtodDJvQTBIQ0d3WHg4bUVxMzhEc29tTzFZcVJzWmpnd0dqTS82cUVoeEc1MlQxYXlqK0lIMGZORU9HYlVrc1JZVkQ0S2s0elFpK2Y1K2lCS1NsOG1PN3FBRzN3cEphZ2ZrZllTNFlZQnNPWGg5Mk1Ub2dhYnlGMGVVNng');">
+                    <div>
+                        <span class="card-eyebrow text-muted">TÀI CHÍNH</span>
+                        <h4 class="apple-card-title">Thanh toán hàng tháng thật dễ dàng. Bao gồm lựa chọn lãi suất 0%.<sup>§</sup></h4>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="apple-card">
-                        <div>
-                            <span class="card-eyebrow text-muted">GIÁO DỤC</span>
-                            <h4 class="apple-card-title">Tiết kiệm khi mua máy Mac mới với giá ưu đãi dành cho sinh viên.*</h4>
-                        </div>
+            </div>
+            <!-- Card 3: Education -->
+            <div class="card-item" style="min-width: 480px; margin-right: 20px;">
+                <div class="apple-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-education-202504?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=emVzQ3llK0t4OHJwS2lhMGVteFJuMDFVOTgvQlNKWWhkOHROMU1vSnZIWUF3Wk1qdTlJUXpYbmUrMWJwLzZvbTJTaS9RTTYzTWg5VUhTM1Ara0JyS0RQQ0hNZlF5ZTRab1NRVFFlY0M3aDQ');">
+                    <div>
+                        <span class="card-eyebrow text-muted">CHÍNH SÁCH TRỢ GIÁ CHO GIÁO DỤC</span>
+                        <h4 class="apple-card-title" style="max-width: 400px;">Tiết kiệm với chính sách trợ giá cho giáo dục khi mua sắm tại Cửa Hàng Dành Cho Ngành Giáo Dục.<sup>2</sup></h4>
                     </div>
                 </div>
             </div>

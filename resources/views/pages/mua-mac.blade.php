@@ -28,11 +28,12 @@
     </nav>
 
     <!-- Section: Mọi phiên bản -->
-    <section id="all-models" class="section-padding bg-light">
+    <section id="all-models" class="section-padding bg-light" style="overflow: visible;">
         <div class="container">
             <h2 class="section-headline mb-5">Mọi phiên bản. <span class="section-subheadline">Hãy chọn mẫu bạn thích.</span></h2>
-            
-            <div class="model-scroll-container">
+        </div>
+        
+        <div class="model-scroll-container">
                 @foreach($products as $p)
                 <div class="product-card d-flex flex-column justify-content-between">
                     <div>
@@ -78,7 +79,6 @@
                     </div>
                 </div>
                 @endforeach
-            </div>
         </div>
     </section>
 

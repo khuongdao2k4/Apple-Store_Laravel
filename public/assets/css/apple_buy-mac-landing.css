@@ -80,10 +80,40 @@ body {
 /* Product Selection Section */
 .model-scroll-container {
     display: flex;
-    gap: 20px;
     overflow-x: auto;
-    padding: 20px 0 40px;
+    gap: 24px;
+    /* Căn lề trái/phải mặc định cho Mobile */
+    padding: 30px 20px 60px 20px;
     scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    align-items: stretch;
+}
+
+/* Căn lề chính xác cho màn hình lớn (Desktop) */
+@media (min-width: 1400px) {
+    .model-scroll-container {
+        padding-left: calc((100vw - 1320px) / 2 + 12px);
+        padding-right: calc((100vw - 1320px) / 2 + 12px);
+    }
+}
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .model-scroll-container {
+        padding-left: calc((100vw - 1140px) / 2 + 12px);
+        padding-right: calc((100vw - 1140px) / 2 + 12px);
+    }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .model-scroll-container {
+        padding-left: calc((100vw - 960px) / 2 + 12px);
+        padding-right: calc((100vw - 960px) / 2 + 12px);
+    }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .model-scroll-container {
+        padding-left: calc((100vw - 720px) / 2 + 12px);
+        padding-right: calc((100vw - 720px) / 2 + 12px);
+    }
 }
 
 .model-scroll-container::-webkit-scrollbar {
@@ -96,10 +126,21 @@ body {
     background: #fff;
     border-radius: 18px;
     padding: 30px;
-    box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Apple Card General */
+/* Hiệu ứng nổi lên khi di chuột vào - Giảm độ mạnh */
+.product-card:hover {
+    transform: translateY(-8px) scale(1.01); /* Chỉ nhảy lên 8px và to thêm 1% */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ nhàng hơn */
+    z-index: 10;
+}
+
 .apple-card {
     background: #fff;
     border-radius: 28px;

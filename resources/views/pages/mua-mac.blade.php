@@ -233,41 +233,43 @@
 
     <!-- Section: Apple Store tạo nên mọi khác biệt -->
     <section id="apple-store-diff" class="section-padding">
-        <div class="container text-center">
-            <h2 class="section-headline mb-2">Apple Store tạo nên mọi khác biệt.</h2>
-            <p class="section-subheadline mb-5">Thêm nhiều lý do để mua sắm cùng chúng tôi.</p>
+        <div class="container text-start">
+            <h2 class="section-headline mb-5">Apple Store tạo nên mọi khác biệt. <span class="section-subheadline">Thêm nhiều lý do để mua sắm cùng chúng tôi.</span></h2>
             
-            <div class="banner-card bg-light shadow-sm">
-                <div class="banner-content">
-                    <h3 class="display-5 fw-bold mb-3">Tùy chỉnh máy Mac của bạn.</h3>
-                    <p class="text-muted lead">Chọn chip, bộ nhớ, dung lượng lưu trữ và cả màu sắc.</p>
+            <div class="banner-card bg-white shadow-sm" style="max-width: 980px;">
+                <div class="banner-content pt-5 ps-5 text-start">
+                    <h3 class="apple-banner-title mb-2">Tùy chỉnh máy Mac của bạn.</h3>
+                    <p class="apple-banner-text">Chọn chip, bộ nhớ, dung lượng lưu trữ và cả màu sắc.</p>
                 </div>
-                <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_mini__c2m1x4q6m7e3_large.png" class="banner-image" alt="Custom Mac">
+                <div class="banner-image-wrapper">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-100-customize-202603?wid=1960&hei=740&fmt=png-alpha&.v=WGVJR1JzeVlHQndDQ0hPeUcxZEhIVVNmTzIwVEdWL0ZUQlpNR2hpaFowcHJSYTIyTmVtUXQ0Q1I1cVhOOGlKMDAzOVFHb3N0MkVmS01ZcFh0d1Y4R2hlODcrV3lMcmtBTFFKYWh5cWxTS28" class="banner-image-bottom" alt="Custom Mac">
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Section: Thiết Lập Và Hỗ Trợ -->
     <section id="setup-support" class="section-padding bg-light">
-        <div class="container">
+        <div class="container text-start">
             <h2 class="section-headline mb-5">Thiết Lập Và Hỗ Trợ. <span class="section-subheadline">Các Chuyên Gia của chúng tôi sẵn sàng giúp đỡ.</span></h2>
-            <div class="row g-4">
+            
+            <div class="row g-4 ms-0" style="max-width: 980px;">
                 <div class="col-md-6">
-                    <div class="apple-card">
-                        <span class="card-eyebrow text-muted">TRUYỀN DỮ LIỆU DỄ DÀNG</span>
-                        <h4 class="apple-card-title mb-4" style="max-width: 450px;">Máy Mac mới? Hãy xem việc di chuyển nội dung của bạn qua máy mới dễ dàng như thế nào.</h4>
-                        <div class="text-center mt-auto">
-                            <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_studio__c2m1x4q6m7e3_large.png" class="img-fluid" style="max-height: 250px;">
+                    <div class="apple-card support-card">
+                        <div class="card-content mb-auto">
+                            <span class="card-eyebrow text-muted">TRUYỀN DỮ LIỆU DỄ DÀNG</span>
+                            <h4 class="apple-card-title mt-2">Máy Mac mới? Hãy xem việc di chuyển nội dung của bạn qua máy mới dễ dàng như thế nào.</h4>
                         </div>
+                        <div class="support-card-image-bg" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-transfer-202510?wid=960&hei=1000&fmt=p-jpg');"></div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="apple-card">
-                        <span class="card-eyebrow text-muted">APPLECARE+</span>
-                        <h4 class="apple-card-title mb-4" style="max-width: 450px;">Được hưởng bảo hành lên đến 3 năm cho trường hợp hư hỏng do sự cố bất ngờ và hỗ trợ kỹ thuật bởi chuyên gia của Apple.</h4>
-                        <div class="text-center mt-auto">
-                            <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/applecare_logo__dfx1l6n2o2q6_large.png" width="120">
+                    <div class="apple-card support-card">
+                        <div class="card-content mb-auto">
+                            <span class="card-eyebrow text-muted">APPLECARE+</span>
+                            <h4 class="apple-card-title mt-2">Được hưởng bảo hành lên đến 3 năm cho trường hợp hư hỏng do sự cố bất ngờ.</h4>
                         </div>
+                        <div class="support-card-image-bg" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-applecare-202108?wid=960&hei=1000&fmt=p-jpg');"></div>
                     </div>
                 </div>
             </div>

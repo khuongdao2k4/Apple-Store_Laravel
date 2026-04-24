@@ -99,6 +99,59 @@ body {
     box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
 }
 
+/* Apple Card General */
+.apple-card {
+    background: #fff;
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.support-card {
+    min-height: 520px;
+    padding: 0; /* Bỏ padding chung để ảnh có thể tràn lề */
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.support-card .card-content {
+    padding: 40px 40px 0 40px; /* Chỉ giữ padding cho phần chữ */
+}
+
+.support-card-image-bg {
+    width: 100%;
+    flex: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+}
+
+/* Tinh chỉnh riêng cho từng thẻ để giống mẫu nhất */
+.support-card:first-child .support-card-image-bg {
+    background-size: 100% auto; /* Thẻ máy Mac tràn sát lề */
+}
+
+.support-card:last-child .support-card-image-bg {
+    background-size: 75% auto; /* Thẻ AppleCare có khoảng thở nhẹ */
+    background-position: bottom 40px center;
+}
+
+.apple-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--apple-text);
+    line-height: 1.2;
+}
+
 /* Banner Card */
 .banner-card {
     min-height: 500px;
@@ -106,18 +159,34 @@ body {
     border-radius: 28px;
     overflow: hidden;
     position: relative;
-    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: left; /* Đảm bảo căn lề trái mặc định */
 }
 
-.banner-content {
-    max-width: 500px;
-    margin: 0 auto;
-    text-align: center;
+.apple-banner-title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--apple-text);
 }
 
-.banner-image {
+.apple-banner-text {
+    font-size: 17px;
+    color: var(--apple-text-secondary);
+}
+
+.banner-image-wrapper {
     width: 100%;
-    margin-top: 40px;
+    padding-top: 20px;
+}
+
+.banner-image-bottom {
+    width: 100%;
+    height: auto;
+    display: block;
     object-fit: contain;
 }
 

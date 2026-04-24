@@ -277,32 +277,76 @@
     </section>
 
     <!-- Section: Một trải nghiệm rất Mac -->
-    <section id="mac-experience" class="section-padding">
-        <div class="container">
-            <h2 class="section-headline mb-5">Một trải nghiệm rất Mac. <span class="section-subheadline">Được thiết kế để kết nối với mọi thứ của Apple.</span></h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="apple-card bg-light">
+    <section id="experience-mac" class="section-padding overflow-hidden">
+        <div class="container text-start">
+            <h2 class="section-headline mb-4">Một trải nghiệm rất Mac. <span class="section-subheadline">Được thiết kế để kết nối với mọi thứ của Apple.</span></h2>
+        </div>
+        
+        <div class="horizontal-scroll-section">
+            <div class="cards-scroll-container" id="experience-mac-scroll">
+                <!-- Card 1: Apple Music -->
+                <div class="apple-card experience-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-50-apple-music-202412?wid=800&hei=1000&fmt=p-jpg');">
+                    <div class="card-content">
                         <h4 class="apple-card-title">Tặng 3 tháng sử dụng Apple Music miễn phí.</h4>
-                        <p class="text-muted small">Đi kèm khi mua một số thiết bị Apple.</p>
-                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_pro__c2m1x4q6m7e3_large.png" class="img-fluid mt-auto">
+                        <p class="card-description mt-2">Đi kèm khi mua một số thiết bị Apple.<sup>*</sup></p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="apple-card bg-light">
-                        <span class="card-eyebrow text-muted">MACOS</span>
-                        <h4 class="apple-card-title">Khám phá xem macOS Tahoe có gì mới.</h4>
-                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_studio_display__c2m1x4q6m7e3_large.png" class="img-fluid mt-auto">
+
+                <!-- Card 2: macOS -->
+                <div class="apple-card experience-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-macos-202603?wid=960&hei=1000&fmt=p-jpg');">
+                    <div class="card-content">
+                        <span class="card-eyebrow text-muted">macos</span>
+                        <h4 class="apple-card-title mt-1">Khám phá xem macOS Tahoe có gì mới.</h4>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="apple-card bg-light">
+
+                <!-- Card 3: Continuity -->
+                <div class="apple-card experience-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-continuity-202510_GEO_VN?wid=960&hei=1000&fmt=p-jpg');">
+                    <div class="card-content">
                         <span class="card-eyebrow text-muted">THÔNG SUỐT</span>
-                        <h4 class="apple-card-title">Mạnh mẽ khi riêng lẻ. Mạnh gấp bội khi lập đội.</h4>
-                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_iphone__m6e3d2m1x4q6_large.png" class="img-fluid mt-auto">
+                        <h4 class="apple-card-title mt-1">Mạnh mẽ khi riêng lẻ. Mạnh gấp bội khi lập đội.</h4>
+                    </div>
+                </div>
+
+                <!-- Card 4: Creator Studio (Dark Theme) -->
+                <div class="apple-card experience-card dark-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-50-apple-creator-studio-202601?wid=960&hei=1000&fmt=p-jpg');">
+                    <div class="card-content text-white">
+                        <span class="card-eyebrow text-white-50">APPLE CREATOR STUDIO</span>
+                        <h4 class="apple-card-title mt-1">Tặng 3 tháng sử dụng miễn phí khi mua Mac.<sup>‡</sup></h4>
+                        <p class="card-description mt-2 text-white-50">Apple Creator Studio bao gồm các ứng dụng nâng cao năng suất như Final Cut Pro, Logic Pro, Pixelmator Pro và nhiều tiện ích khác.</p>
+                    </div>
+                </div>
+
+                <!-- Card 5: iCloud+ -->
+                <div class="apple-card experience-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-icloud-202504?wid=960&hei=1000&fmt=p-jpg');">
+                    <div class="card-content">
+                        <span class="card-eyebrow text-muted">ICLOUD+</span>
+                        <h4 class="apple-card-title mt-1">Nhận dung lượng lưu trữ bạn cần, cùng quyền riêng tư bạn xứng đáng có. Nâng cấp gói iCloud+ ngay.<sup>#</sup></h4>
+                    </div>
+                </div>
+
+                <!-- Card 6: Split Card (College & Work) -->
+                <div class="split-experience-card">
+                    <!-- Sub-card Top: College -->
+                    <div class="apple-card sub-experience-card dark-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-25-college-202108?wid=960&hei=480&fmt=p-jpg');">
+                        <div class="card-content text-white">
+                            <span class="card-eyebrow text-white-50">APPLE TẠI ĐẠI HỌC</span>
+                            <h4 class="apple-card-title mt-1" style="max-width: 250px;">Đạt điểm cao nhất, bất kể môn nào với Apple.</h4>
+                        </div>
+                    </div>
+                    <!-- Sub-card Bottom: Work -->
+                    <div class="apple-card sub-experience-card dark-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-25-work-202108?wid=960&hei=480&fmt=p-jpg');">
+                        <div class="card-content text-white">
+                            <span class="card-eyebrow text-white-50">APPLE TẠI NƠI LÀM VIỆC</span>
+                            <h4 class="apple-card-title mt-1" style="max-width: 280px;">Thêm sức mạnh cho công việc của bạn với phần cứng, phần mềm và dịch vụ từ Apple.</h4>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Navigation Buttons -->
+            <button id="prev-btn-exp" class="scroll-nav-btn prev" onclick="scrollSection('experience-mac-scroll', -500)"><i class="bi bi-chevron-left"></i></button>
+            <button id="next-btn-exp" class="scroll-nav-btn next show" onclick="scrollSection('experience-mac-scroll', 500)"><i class="bi bi-chevron-right"></i></button>
         </div>
     </section>
 </div>

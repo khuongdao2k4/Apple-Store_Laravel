@@ -322,3 +322,35 @@ body {
     font-size: 18px;
     color: #1d1d1f;
 }
+
+/* Experience Section Styles */
+.experience-card {
+    min-width: 400px;
+    min-height: 500px;
+    background-color: #fff;
+}
+
+.dark-card {
+    background-color: #000 !important;
+}
+
+.dark-card .apple-card-title {
+    color: #fff !important;
+}
+
+.split-experience-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    gap: 16px;
+}
+
+.sub-experience-card {
+    min-height: 242px;
+    flex: 1;
+    padding: 0;
+}
+
+.sub-experience-card .card-content {
+    padding: 30px 30px 0 30px;
+}

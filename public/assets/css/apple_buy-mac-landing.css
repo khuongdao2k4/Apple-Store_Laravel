@@ -354,3 +354,297 @@ body {
 .sub-experience-card .card-content {
     padding: 30px 30px 0 30px;
 }
+
+/* Color Swatches Styles */
+.color-swatches {
+    margin: 15px 0;
+    height: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.swatch-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.swatch-dot:hover {
+    transform: scale(1.2);
+}
+
+/* Explore Device Styles */
+.product-image-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.explore-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 113, 227, 0.9);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.product-card:hover .explore-btn {
+    opacity: 1;
+    bottom: 30px;
+}
+
+/* Modal Styles */
+.apple-modal .modal-content {
+    border-radius: 30px;
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header-tabs {
+    background: rgba(245, 245, 247, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.modal-tab-item {
+    font-size: 13px;
+    color: #1d1d1f;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.modal-tab-item.active {
+    background: #fff;
+    border-color: #1d1d1f;
+    font-weight: 600;
+}
+
+.spec-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f5f5f7;
+}
+
+.spec-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* Refined Modal Styles */
+.apple-modal .modal-dialog {
+    max-width: 1000px;
+    margin-top: 50px;
+}
+
+.apple-modal .modal-content {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.modal-main-body {
+    background: #fff;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Container bao bọc thanh Tab và Mũi tên */
+.tabs-capsule-wrapper {
+    position: relative;
+    max-width: 85%;
+    margin: 0 auto 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+}
+
+.modal-header-tabs {
+    background: rgba(245, 245, 247, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 6px 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    border-radius: 50px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth; /* Cuộn mượt khi nhấn nút */
+}
+
+/* Nút mũi tên cuộn */
+.scroll-arrow {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    display: none; /* Ẩn mặc định */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 15;
+    color: #1d1d1f;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.scroll-arrow.visible {
+    display: flex;
+}
+
+.scroll-arrow.left { left: 5px; }
+.scroll-arrow.right { right: 5px; }
+
+/* Hiệu ứng Fade mờ dần ở 2 đầu */
+.tabs-capsule-wrapper::before,
+.tabs-capsule-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    z-index: 12;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    border-radius: 50px;
+}
+
+.tabs-capsule-wrapper.show-left::before {
+    left: 0;
+    background: linear-gradient(to right, #f5f5f7 20%, transparent);
+    opacity: 1;
+}
+
+.tabs-capsule-wrapper.show-right::after {
+    right: 0;
+    background: linear-gradient(to left, #f5f5f7 20%, transparent);
+    opacity: 1;
+}
+
+.modal-header-tabs::-webkit-scrollbar {
+    display: none; /* Ẩn scrollbar Chrome/Safari */
+}
+
+.modal-tab-item {
+    font-size: 13px;
+    color: #1d1d1f;
+    padding: 8px 22px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    font-weight: 500;
+    background: transparent;
+    flex-shrink: 0; /* Không cho Tab bị co lại khi danh sách dài */
+}
+
+/* Darker Backdrop */
+.modal-backdrop.show {
+    opacity: 0.85;
+    background-color: #000;
+}
+
+.modal-tab-item:hover {
+    color: #0071e3;
+}
+
+.modal-tab-item.active {
+    background: #1d1d1f !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.modal-footer-info {
+    background: #f5f5f7;
+    padding: 30px 60px;
+    display: flex;
+    gap: 40px;
+    border-top: 1px solid #d2d2d7;
+}
+
+.footer-info-item {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+}
+
+.footer-info-item i {
+    font-size: 24px;
+    color: #1d1d1f;
+}
+
+.footer-info-item h6 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.footer-info-item p {
+    font-size: 12px;
+    color: #1d1d1f;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Custom Apple Close Button */
+.btn-close-apple {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-close-apple:hover {
+    background: #f5f5f7;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.btn-close-apple i {
+    font-size: 24px;
+    color: #1d1d1f;
+    line-height: 0;
+}

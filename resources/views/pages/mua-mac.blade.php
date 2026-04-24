@@ -41,12 +41,40 @@
                         @endif
                         <h3 class="apple-card-title">{{ $p->name }}</h3>
                     </div>
-                    <div class="text-center py-4">
+                    <div class="text-center py-4 product-image-container" onclick="openMacModal('{{ $p->series }}', '{{ $p->image_url }}', '{{ $p->name }}', 'Từ {{ number_format($p->price, 0, ',', '.') }}đ', '{{ $p->id }}', '{{ $p->colors }}')">
                         <img src="{{ $p->image_url }}" alt="{{ $p->name }}" class="img-fluid" style="max-height: 200px;">
+                        <button class="explore-btn">Hãy khám phá thiết bị</button>
                     </div>
-                    <div>
-                        <p class="mb-3 fw-medium">Từ {{ number_format($p->price, 0, ',', '.') }}đ</p>
-                        <a href="{{ route('config-mac', $p->id) }}" class="btn btn-primary rounded-pill px-4 fw-medium">Mua</a>
+                    
+                    <!-- Color Swatches -->
+                    <div class="color-swatches">
+                        @if(!empty($p->colors))
+                            @foreach(explode(',', $p->colors) as $color)
+                                @php
+                                    $colorMap = [
+                                        'Silver' => '#e3e4e5',
+                                        'Space Gray' => '#3b3b3e',
+                                        'Starlight' => '#f0e4d3',
+                                        'Midnight' => '#2e3641',
+                                        'Space Black' => '#2c2c2e',
+                                        'Gold' => '#f9dcc4',
+                                        'Pink' => '#e8d2ce',
+                                        'Blue' => '#c1d8e0',
+                                    ];
+                                    $bgColor = $colorMap[trim($color)] ?? trim($color);
+                                @endphp
+                                <span class="swatch-dot" style="background-color: {{ $bgColor }};" title="{{ trim($color) }}"></span>
+                            @endforeach
+                        @else
+                            <!-- Default dots if database is empty -->
+                            <span class="swatch-dot" style="background-color: #e3e4e5;"></span>
+                            <span class="swatch-dot" style="background-color: #3b3b3e;"></span>
+                        @endif
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <p class="mb-0 fw-medium" style="flex: 1; margin-right: 15px;">Từ {{ number_format($p->price, 0, ',', '.') }}đ</p>
+                        <a href="{{ route('config-mac', $p->id) }}" class="btn btn-primary rounded-pill px-4 fw-medium flex-shrink-0">Mua</a>
                     </div>
                 </div>
                 @endforeach
@@ -349,5 +377,229 @@
             <button id="next-btn-exp" class="scroll-nav-btn next show" onclick="scrollSection('experience-mac-scroll', 500)"><i class="bi bi-chevron-right"></i></button>
         </div>
     </section>
+    <!-- Mac Comparison Modal -->
+    <div class="modal fade apple-modal" id="macCompareModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Tabs (Floating outside with Scroll Arrows & Fade) -->
+                <div class="d-flex justify-content-center align-items-center position-relative w-100">
+                    <div class="tabs-capsule-wrapper" id="tabsWrapper">
+                        <button class="scroll-arrow left" id="scrollLeftBtn" onclick="scrollTabs('left')">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        
+                        <div class="modal-header-tabs" id="macModalTabs" onscroll="updateScrollButtons()">
+                            <!-- Tabs injected by JS -->
+                        </div>
+                        
+                        <button class="scroll-arrow right" id="scrollRightBtn" onclick="scrollTabs('right')">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Close Button (Floating right of tabs) -->
+                    <button type="button" class="btn-close-apple" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                
+                <!-- Main White Body -->
+                <div class="modal-main-body">
+                    <div class="modal-body p-0">
+                        <div class="row g-0">
+                            <!-- Left: Image -->
+                            <div class="col-md-6 d-flex flex-column align-items-center justify-content-center p-5">
+                                <div id="modalProductImageContainer" class="text-center mb-4">
+                                    <img id="modalProductImage" src="" class="img-fluid" style="max-height: 380px; transition: all 0.5s ease;">
+                                </div>
+                                <div class="text-muted small mb-2" id="modalColorCount">Có 4 màu</div>
+                                <div class="color-swatches" id="modalColorSwatches"></div>
+                            </div>
+                            
+                            <!-- Right: Specs -->
+                            <div class="col-md-6 p-5">
+                                <div class="mb-4">
+                                    <span class="badge bg-light text-danger rounded-pill px-3 py-2 mb-2" id="modalBadge">MỚI</span>
+                                    <h2 class="display-6 fw-bold" id="modalProductName" style="font-size: 32px; letter-spacing: -0.01em;"></h2>
+                                    <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+                                        <p class="text-muted mb-0" id="modalProductPrice" style="font-size: 14px; flex: 1; margin-right: 15px;"></p>
+                                        <a href="#" id="modalBuyBtn" class="btn btn-primary rounded-pill px-4 py-2 fw-medium flex-shrink-0">Mua</a>
+                                    </div>
+                                </div>
+
+                                <div id="modalSpecsContainer"></div>
+
+                                <div class="mt-4 text-center">
+                                    <a href="#" class="text-primary text-decoration-none fw-medium small" id="modalLearnMore">Khám phá thêm về <span id="modalLearnMoreName"></span> <i class="bi bi-box-arrow-up-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Footer: Finance & Delivery -->
+                        <div class="modal-footer-info">
+                            <div class="footer-info-item">
+                                <i class="bi bi-wallet2"></i>
+                                <div>
+                                    <h6>Tài Chính</h6>
+                                    <p>Các cách trả góp tuyệt vời, bao gồm lựa chọn lãi suất 0%.<sup>**</sup></p>
+                                </div>
+                            </div>
+                            <div class="footer-info-item">
+                                <i class="bi bi-truck"></i>
+                                <div>
+                                    <h6>Giao hàng miễn phí ngày làm việc tiếp theo</h6>
+                                    <p>Chỉ khả dụng tại Thành Phố Hồ Chí Minh đối với một số sản phẩm Apple có sẵn nhất định được đặt hàng trước 15:00.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lấy toàn bộ danh sách sản phẩm từ CSDL để dùng trong Modal
+        const allProducts = @json($products);
+
+        const macData = {
+            'macbook-air': {
+                badge: 'MỚI',
+                specs: [
+                    { icon: 'bi-laptop', text: 'Điều tuyệt diệu của Mac ở mức giá bất ngờ. Bốn màu tuyệt đẹp và một thiết kế nhôm bền chắc.' },
+                    { icon: 'bi-cpu', text: 'Chạy xuyên các tác vụ hàng ngày và các ứng dụng nhanh như bay với chip M3 Pro' },
+                    { icon: 'bi-battery-full', text: 'Pin dùng cả ngày, thời lượng lên đến 18 giờ, theo bạn từ sáng đến đêm <sup>3</sup>' },
+                    { icon: 'bi-aspect-ratio', text: 'Màn hình Liquid Retina 13 inch tuyệt đẹp, hỗ trợ 1 tỷ màu sắc <sup>4</sup>' },
+                    { icon: 'bi-camera-video', text: 'Camera FaceTime HD 1080p mang đến video sắc nét, sống động để bạn luôn trông đỉnh nhất' },
+                    { icon: 'bi-stars', text: 'Được thiết kế cho AI, bao gồm các tính năng Apple Intelligence mạnh mẽ <sup>¶</sup>' }
+                ]
+            },
+            'macbook-pro': {
+                badge: 'MỚI',
+                specs: [
+                    { icon: 'bi-cpu', text: 'Sức mạnh vượt trội cho các quy trình làm việc chuyên nghiệp nhất với chip M3 Pro hoặc M3 Max.' },
+                    { icon: 'bi-battery-full', text: 'Thời lượng pin lên đến 22 giờ — lâu nhất từng có trên máy Mac. <sup>3</sup>' },
+                    { icon: 'bi-aspect-ratio', text: 'Màn hình Liquid Retina XDR tốt nhất thế giới trên máy tính xách tay. <sup>4</sup>' },
+                    { icon: 'bi-camera-video', text: 'Hệ thống âm thanh sáu loa và mảng ba micrô chất lượng studio cho trải nghiệm âm thanh sống động.' },
+                    { icon: 'bi-stars', text: 'Tối ưu hóa cho AI với kiến trúc Apple Intelligence tiên tiến. <sup>¶</sup>' }
+                ]
+            }
+        };
+
+        function openMacModal(series, dbImage, dbName, dbPrice, productId, dbColors) {
+            const modal = new bootstrap.Modal(document.getElementById('macCompareModal'));
+            updateModalContent(series, dbImage, dbName, dbPrice, productId, dbColors);
+            renderTabs(productId);
+            modal.show();
+        }
+
+        function renderTabs(activeProductId) {
+            const tabsContainer = document.getElementById('macModalTabs');
+            tabsContainer.innerHTML = '';
+            
+            allProducts.forEach(product => {
+                const tab = document.createElement('div');
+                // So sánh ID để set active
+                const isActive = (product.id == activeProductId);
+                tab.className = `modal-tab-item ${isActive ? 'active' : ''}`;
+                tab.innerText = product.name;
+                tab.onclick = () => {
+                    const priceFormatted = 'Từ ' + new Intl.NumberFormat('vi-VN').format(product.price) + 'đ';
+                    updateModalContent(product.series, product.image_url, product.name, priceFormatted, product.id, product.colors);
+                    renderTabs(product.id);
+                };
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function updateModalContent(series, dbImage, dbName, dbPrice, productId, dbColors) {
+            const data = macData[series] || macData['macbook-air'];
+            
+            // Cập nhật thông tin cơ bản
+            document.getElementById('modalProductImage').src = dbImage || '';
+            document.getElementById('modalProductName').innerText = dbName || '';
+            document.getElementById('modalProductPrice').innerText = dbPrice || '';
+            document.getElementById('modalBadge').innerText = data.badge;
+            document.getElementById('modalLearnMoreName').innerText = dbName || '';
+            
+            // Cập nhật link nút Mua
+            const buyBtn = document.getElementById('modalBuyBtn');
+            if (productId) {
+                buyBtn.href = `/order/${productId}`;
+            }
+
+            // Xử lý màu sắc
+            const colorsArray = dbColors ? dbColors.split(',') : [];
+            document.getElementById('modalColorCount').innerText = `Có ${colorsArray.length} màu`;
+            
+            const colorContainer = document.getElementById('modalColorSwatches');
+            colorContainer.innerHTML = colorsArray.map(colorName => {
+                // Map tên màu sang mã hex (tận dụng logic swatch-dot của bạn)
+                const colorMap = {
+                    'Silver': '#e3e4e5', 'Starlight': '#f0e4d3', 'Space Gray': '#3b3b3e', 'Midnight': '#2e3641',
+                    'Bạc': '#e3e4e5', 'Ánh Sao': '#f0e4d3', 'Xám Không Gian': '#3b3b3e', 'Xanh Đen': '#2e3641',
+                    'Gold': '#f9dcc4', 'Vàng': '#f9dcc4', 'Rose Gold': '#e8d2ce'
+                };
+                const hex = colorMap[colorName.trim()] || '#ccc';
+                return `<span class="swatch-dot" style="background-color: ${hex}; width: 12px; height: 12px;"></span>`;
+            }).join('');
+            
+            // Cập nhật thông số kỹ thuật (Specs)
+            const specsContainer = document.getElementById('modalSpecsContainer');
+            specsContainer.innerHTML = data.specs.map(spec => `
+                <div class="spec-item" style="border-bottom: 1px solid #f5f5f7; margin-bottom: 20px; padding-bottom: 15px;">
+                    <i class="bi ${spec.icon} fs-4 text-dark mt-1"></i>
+                    <div>
+                        <p class="mb-0" style="font-size: 14px; line-height: 1.5; color: #1d1d1f; font-weight: 500;">${spec.text}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Cập nhật mũi tên cuộn sau khi render xong
+            setTimeout(updateScrollButtons, 100);
+        }
+
+        function scrollTabs(direction) {
+            const container = document.getElementById('macModalTabs');
+            const scrollAmount = 250;
+            if (direction === 'left') {
+                container.scrollLeft -= scrollAmount;
+            } else {
+                container.scrollLeft += scrollAmount;
+            }
+        }
+
+        function updateScrollButtons() {
+            const container = document.getElementById('macModalTabs');
+            const wrapper = document.getElementById('tabsWrapper');
+            const leftBtn = document.getElementById('scrollLeftBtn');
+            const rightBtn = document.getElementById('scrollRightBtn');
+            
+            if (!container || !wrapper) return;
+
+            const scrollLeft = container.scrollLeft;
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            
+            // Ngưỡng 5px để tránh rung lắc (jitter)
+            if (scrollLeft > 5) {
+                leftBtn.classList.add('visible');
+                wrapper.classList.add('show-left');
+            } else {
+                leftBtn.classList.remove('visible');
+                wrapper.classList.remove('show-left');
+            }
+            
+            if (scrollLeft < maxScroll - 5) {
+                rightBtn.classList.add('visible');
+                wrapper.classList.add('show-right');
+            } else {
+                rightBtn.classList.remove('visible');
+                wrapper.classList.remove('show-right');
+            }
+        }
+
+        // Cập nhật lại khi thay đổi kích thước cửa sổ
+        window.addEventListener('resize', updateScrollButtons);
+    </script>
 </div>
 @endsection

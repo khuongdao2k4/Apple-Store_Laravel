@@ -1,0 +1,255 @@
+@extends('layouts.app', ['pageTitle' => 'mua-mac.php'])
+
+@section('content')
+<link rel="stylesheet" href="{{ asset('assets/css/apple_buy-mac-landing.css') }}?v={{ time() }}">
+
+<div class="shop-mac-landing">
+    <!-- Header Section -->
+    <header class="shop-header container pt-5 pb-4">
+        <div class="d-flex justify-content-between align-items-baseline">
+            <h1 class="display-3 fw-bold" style="letter-spacing: -0.02em;">Mua Mac</h1>
+            <a href="#" class="text-decoration-none text-primary small fw-medium">Kết Nối Với Chuyên Gia <i class="bi bi-chevron-right" style="font-size: 10px;"></i></a>
+        </div>
+    </header>
+
+    <!-- Sub-navigation -->
+    <nav class="shop-subnav border-bottom">
+        <div class="container">
+            <ul class="nav justify-content-start gap-4">
+                <li class="nav-item"><a href="#" class="nav-link text-dark fw-medium">Tất cả các phiên bản</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Hướng Dẫn Mua Sắm</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Nhiều cách để tiết kiệm</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Apple Store Tạo Nên Mọi Khác Biệt</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Phụ kiện</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Thiết lập và hỗ trợ</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-muted small">Trải Nghiệm Mac</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Section: Mọi phiên bản -->
+    <section class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-headline mb-5">Mọi phiên bản. <span class="section-subheadline">Hãy chọn mẫu bạn thích.</span></h2>
+            
+            <div class="model-scroll-container">
+                @foreach($products as $p)
+                <div class="product-card d-flex flex-column justify-content-between">
+                    <div>
+                        @if($p->sort_order <= 3)
+                            <span class="card-eyebrow text-danger">MỚI</span>
+                        @endif
+                        <h3 class="apple-card-title">{{ $p->name }}</h3>
+                    </div>
+                    <div class="text-center py-4">
+                        <img src="{{ $p->image_url }}" alt="{{ $p->name }}" class="img-fluid" style="max-height: 200px;">
+                    </div>
+                    <div>
+                        <p class="mb-3 fw-medium">Từ {{ number_format($p->price, 0, ',', '.') }}đ</p>
+                        <a href="{{ route('config-mac', $p->id) }}" class="btn btn-primary rounded-pill px-4 fw-medium">Mua</a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Hướng dẫn mua sắm -->
+    <section class="section-padding horizontal-scroll-section">
+        <div class="container">
+            <h2 class="section-headline mb-5">Hướng dẫn mua sắm. <span class="section-subheadline">Chưa thể quyết? Bắt đầu từ đây nhé.</span></h2>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <button id="prev-btn-bg" class="scroll-nav-btn prev" onclick="scrollSection('buying-guide-scroll', -500)"><i class="bi bi-chevron-left"></i></button>
+        <button id="next-btn-bg" class="scroll-nav-btn next show" onclick="scrollSection('buying-guide-scroll', 500)"><i class="bi bi-chevron-right"></i></button>
+
+        <div class="cards-scroll-container" id="buying-guide-scroll">
+            <!-- Card 1 -->
+            <div class="card-item" style="min-width: 480px;">
+                <div class="apple-card bg-light" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-compare-models-202603?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=VVlYUmhtQ01FUnVZSm9ubk84akVKQVhDbGhXa21pNVNBVURtbkZ6K0ZoSHpIR0l0TVpNQnJZb1NNY29pWWhnM1pwRE93ZVBDaGlEa25QZUpFTG9OUTY2TXlIZTdvcW0vUW90dllTQklLcUJ0VktRME9sRTEwdS8xcGRlRVdEOFc');">
+                    <div>
+                        <span class="card-eyebrow text-muted">SO SÁNH TẤT CẢ CÁC PHIÊN BẢN</span>
+                        <h4 class="apple-card-title">Máy Mac nào phù hợp với bạn?</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="card-item" style="min-width: 480px;">
+                <div class="apple-card bg-light" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-whyswitch-202603?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=YmR4ajRKeHZrUjhpcnkyZi82dWY5ejZ6dml1bW1ZbGhRWFBxbXk4WEt2OEF3Wk1qdTlJUXpYbmUrMWJwLzZvbTJTaS9RTTYzTWg5VUhTM1Ara0JyS0kwaHZaQXc5K1ZuSmFNUEtRM1VVV0E');">
+                    <div>
+                        <span class="card-eyebrow text-muted">TẠI SAO NÊN DÙNG MAC</span>
+                        <h4 class="apple-card-title">Nếu bạn yêu thích iPhone, bạn sẽ yêu Mac.</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="card-item" style="min-width: 480px;">
+                <div class="apple-card" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-apple-intelligence-202510?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=TFU2UzByZjhMakduTVVUMVptdlJxS29iYW9Qd2NDSzB6MDd4Y1RDZWNGdy9ESkVJdWpDdDRmM2xuT3VSQktwQm1td3JHMmlHM0d0VzBMMGs5ZHR4WjJqdEhGTHliaWE4M0pHcXFRWnR5Vkt2VHZPbk05RGxvVWJZbUE1M0o2dU4'); background-color: #f8f9fa; background-size: cover;">
+                    <div>
+                        <h4 class="apple-card-title"><span style="color: #0071e3">Apple Intelligence.</span><br>Sáng tạo, giao tiếp và hoàn tất công việc dễ dàng</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div class="card-item" style="min-width: 480px; margin-right: 20px;">
+                <div class="apple-card bg-light" style="background-image: url('https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/mac-card-50-earth-day-specialist-help-202605?wid=4000&hei=4167&fmt=p-jpg&qlt=95&.v=SjVIRmJ0MnM5OUFIWXIrejNMa3BYV3ZUazZxdDJpcjM2SkxEWjNERGpzU3ZFajBONGp2MlVaaUdBeDg1RHVWUC85UDFrREVCUFJWRFNDVDBTQjFJZ3VCc3FjamJwVXJjd2U3WEc3Smc2MXh2WmpXeHg2WlR4VERXR1dyV1QrbFZmbW94YnYxc1YvNXZ4emJGL0IxNFp3'); background-size: cover;">
+                    <div>
+                        <span class="card-eyebrow text-muted">CHUYÊN GIA MAC</span>
+                        <h4 class="apple-card-title">Mua hàng với tư vấn trực tiếp từ Chuyên Gia trực tuyến.</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function scrollSection(id, distance) {
+            const container = document.getElementById(id);
+            container.scrollBy({ left: distance, behavior: 'smooth' });
+        }
+
+        function updateNavButtons(scrollContainerId, prevBtnId, nextBtnId) {
+            const container = document.getElementById(scrollContainerId);
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+
+            if (!container || !prevBtn || !nextBtn) return;
+
+            // Kiểm tra vị trí cuộn
+            const scrollLeft = container.scrollLeft;
+            const maxScrollLeft = container.scrollWidth - container.clientWidth;
+
+            // Hiện/Ẩn nút Prev
+            if (scrollLeft > 20) {
+                prevBtn.classList.add('show');
+            } else {
+                prevBtn.classList.remove('show');
+            }
+
+            // Hiện/Ẩn nút Next
+            if (scrollLeft < maxScrollLeft - 20) {
+                nextBtn.classList.add('show');
+            } else {
+                nextBtn.classList.remove('show');
+            }
+        }
+
+        // Lắng nghe sự kiện cuộn
+        document.getElementById('buying-guide-scroll').addEventListener('scroll', () => {
+            updateNavButtons('buying-guide-scroll', 'prev-btn-bg', 'next-btn-bg');
+        });
+
+        // Khởi tạo trạng thái nút ban đầu
+        window.addEventListener('load', () => {
+            updateNavButtons('buying-guide-scroll', 'prev-btn-bg', 'next-btn-bg');
+        });
+    </script>
+
+    <!-- Section: Nhiều cách để tiết kiệm -->
+    <section class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-headline mb-5">Nhiều cách để tiết kiệm. <span class="section-subheadline">Tìm cách phù hợp với bạn.</span></h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="apple-card">
+                        <div>
+                            <span class="card-eyebrow text-muted">APPLE TRADE IN</span>
+                            <h4 class="apple-card-title">Nhận giá trị quy đổi từ 3.800.000đ đến 18.200.000đ khi đổi máy Mac cũ lấy máy mới.*</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="apple-card">
+                        <div>
+                            <span class="card-eyebrow text-muted">TRẢ GÓP</span>
+                            <h4 class="apple-card-title">Trả góp hàng tháng với lãi suất thấp, chỉ từ 0%.*</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="apple-card">
+                        <div>
+                            <span class="card-eyebrow text-muted">GIÁO DỤC</span>
+                            <h4 class="apple-card-title">Tiết kiệm khi mua máy Mac mới với giá ưu đãi dành cho sinh viên.*</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Apple Store tạo nên mọi khác biệt -->
+    <section class="section-padding">
+        <div class="container text-center">
+            <h2 class="section-headline mb-2">Apple Store tạo nên mọi khác biệt.</h2>
+            <p class="section-subheadline mb-5">Thêm nhiều lý do để mua sắm cùng chúng tôi.</p>
+            
+            <div class="banner-card bg-light shadow-sm">
+                <div class="banner-content">
+                    <h3 class="display-5 fw-bold mb-3">Tùy chỉnh máy Mac của bạn.</h3>
+                    <p class="text-muted lead">Chọn chip, bộ nhớ, dung lượng lưu trữ và cả màu sắc.</p>
+                </div>
+                <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_mini__c2m1x4q6m7e3_large.png" class="banner-image" alt="Custom Mac">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Thiết Lập Và Hỗ Trợ -->
+    <section class="section-padding bg-light">
+        <div class="container">
+            <h2 class="section-headline mb-5">Thiết Lập Và Hỗ Trợ. <span class="section-subheadline">Các Chuyên Gia của chúng tôi sẵn sàng giúp đỡ.</span></h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="apple-card">
+                        <span class="card-eyebrow text-muted">TRUYỀN DỮ LIỆU DỄ DÀNG</span>
+                        <h4 class="apple-card-title mb-4" style="max-width: 450px;">Máy Mac mới? Hãy xem việc di chuyển nội dung của bạn qua máy mới dễ dàng như thế nào.</h4>
+                        <div class="text-center mt-auto">
+                            <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_studio__c2m1x4q6m7e3_large.png" class="img-fluid" style="max-height: 250px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="apple-card">
+                        <span class="card-eyebrow text-muted">APPLECARE+</span>
+                        <h4 class="apple-card-title mb-4" style="max-width: 450px;">Được hưởng bảo hành lên đến 3 năm cho trường hợp hư hỏng do sự cố bất ngờ và hỗ trợ kỹ thuật bởi chuyên gia của Apple.</h4>
+                        <div class="text-center mt-auto">
+                            <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/applecare_logo__dfx1l6n2o2q6_large.png" width="120">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Một trải nghiệm rất Mac -->
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="section-headline mb-5">Một trải nghiệm rất Mac. <span class="section-subheadline">Được thiết kế để kết nối với mọi thứ của Apple.</span></h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="apple-card bg-light">
+                        <h4 class="apple-card-title">Tặng 3 tháng sử dụng Apple Music miễn phí.</h4>
+                        <p class="text-muted small">Đi kèm khi mua một số thiết bị Apple.</p>
+                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_mac_pro__c2m1x4q6m7e3_large.png" class="img-fluid mt-auto">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="apple-card bg-light">
+                        <span class="card-eyebrow text-muted">MACOS</span>
+                        <h4 class="apple-card-title">Khám phá xem macOS Tahoe có gì mới.</h4>
+                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_studio_display__c2m1x4q6m7e3_large.png" class="img-fluid mt-auto">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="apple-card bg-light">
+                        <span class="card-eyebrow text-muted">THÔNG SUỐT</span>
+                        <h4 class="apple-card-title">Mạnh mẽ khi riêng lẻ. Mạnh gấp bội khi lập đội.</h4>
+                        <img src="https://www.apple.com/v/mac/home/cc/images/overview/select/product_tile_iphone__m6e3d2m1x4q6_large.png" class="img-fluid mt-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@endsection

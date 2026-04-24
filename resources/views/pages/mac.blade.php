@@ -36,7 +36,7 @@
 				<li><a href="#"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_accessories_c3e74ad3c_2x.png"
 							alt="Phụ Kiện"><br>Phụ Kiện</a></li>
-				<li><a href=""><img
+				<li><a href="{{ route('mua-mac') }}"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_shop_mac_0f8893308.png"
 							alt="Mua sắm Mac"><br>Mua sắm Mac</a></li>
 				<li><a href=""><img

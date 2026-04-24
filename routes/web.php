@@ -17,6 +17,8 @@ Route::get('/store', [PageController::class, 'store'])->name('store');
 Route::get('/mua-iphone', [PageController::class, 'muaIphone'])->name('mua-iphone');
 Route::get('/bag', [CartController::class, 'index'])->name('bag');
 Route::get('/api/search', [PageController::class, 'search'])->name('api.search');
+Route::get('/mua-mac', [PageController::class, 'muaMac'])->name('mua-mac');
+Route::get('/config-mac/{id}', [PageController::class, 'configMac'])->name('config-mac');
 
 // Auth Flow
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

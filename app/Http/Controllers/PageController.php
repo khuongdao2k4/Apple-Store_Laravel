@@ -9,6 +9,24 @@ class PageController extends Controller
 {
     public function home() { return view('pages.home'); }
     public function mac() { return view('pages.mac'); }
+    public function muaMac() {
+        // Lấy danh sách sản phẩm đại diện cho mỗi dòng để hiển thị ở Landing Page
+        $products = Product::where('series', 'like', 'mac%')
+            ->orderBy('sort_order', 'asc')
+            ->get();
+            
+        return view('pages.mua-mac', compact('products'));
+    }
+
+    public function configMac($id) {
+        $product = Product::findOrFail($id);
+        $groupedProducts = Product::where('series', $product->series)
+            ->orderBy('sort_order', 'asc')
+            ->get()
+            ->groupBy('series');
+            
+        return view('pages.config-mac', compact('product', 'groupedProducts'));
+    }
     public function store() { return view('pages.store'); }
     public function muaIphone() { 
         // Group products by series and order by sort_order

@@ -123,16 +123,67 @@ body {
 
 /* Subnav */
 .shop-subnav {
-    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: none;
+}
+
+.shop-subnav .container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Ngăn container hiện thanh cuộn */
+}
+
+.shop-subnav .nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE/Edge */
+    gap: 40px;
+    width: 100%;
+    justify-content: center; /* Căn giữa các mục nếu màn hình đủ rộng */
+}
+
+/* Ẩn thanh cuộn trên Chrome, Safari và Opera */
+.shop-subnav .nav::-webkit-scrollbar,
+.shop-subnav .container::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
 .shop-subnav .nav-link {
-    font-size: 12px;
-    padding: 12px 0;
+    font-size: 17px; /* Cỡ chữ chuẩn Apple */
+    color: var(--apple-text-secondary);
+    padding: 18px 0 !important; /* Ép padding ngang về 0 để gạch chân khít với chữ */
+    font-weight: 400;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.3s ease;
+    border: none !important;
+}
+
+.shop-subnav .nav-link:hover {
+    color: var(--apple-text);
+}
+
+.shop-subnav .nav-link.active {
+    color: var(--apple-text);
+    font-weight: 400;
+}
+
+.shop-subnav .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Sẽ bằng đúng chiều dài chữ vì đã bỏ padding ngang */
+    height: 2px; /* Tăng độ dày gạch chân cho sắc nét */
+    background-color: var(--apple-text);
 }
 
 /* Responsive */

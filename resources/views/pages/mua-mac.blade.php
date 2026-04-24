@@ -13,22 +13,22 @@
     </header>
 
     <!-- Sub-navigation -->
-    <nav class="shop-subnav border-bottom">
+    <nav class="shop-subnav border-bottom sticky-top">
         <div class="container">
-            <ul class="nav justify-content-start gap-4">
-                <li class="nav-item"><a href="#" class="nav-link text-dark fw-medium">Tất cả các phiên bản</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Hướng Dẫn Mua Sắm</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Nhiều cách để tiết kiệm</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Apple Store Tạo Nên Mọi Khác Biệt</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Phụ kiện</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Thiết lập và hỗ trợ</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-muted small">Trải Nghiệm Mac</a></li>
+            <ul class="nav gap-4 flex-nowrap" id="shop-nav-list">
+                <li class="nav-item"><a href="#all-models" class="nav-link active">Tất cả các phiên bản</a></li>
+                <li class="nav-item"><a href="#buying-guide" class="nav-link">Hướng Dẫn Mua Sắm</a></li>
+                <li class="nav-item"><a href="#ways-to-save" class="nav-link">Nhiều cách để tiết kiệm</a></li>
+                <li class="nav-item"><a href="#apple-store-diff" class="nav-link">Apple Store Tạo Nên Mọi Khác Biệt</a></li>
+                <li class="nav-item"><a href="#accessories" class="nav-link">Phụ kiện</a></li>
+                <li class="nav-item"><a href="#setup-support" class="nav-link">Thiết lập và hỗ trợ</a></li>
+                <li class="nav-item"><a href="#mac-experience" class="nav-link">Trải Nghiệm Mac</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Section: Mọi phiên bản -->
-    <section class="section-padding bg-light">
+    <section id="all-models" class="section-padding bg-light">
         <div class="container">
             <h2 class="section-headline mb-5">Mọi phiên bản. <span class="section-subheadline">Hãy chọn mẫu bạn thích.</span></h2>
             
@@ -55,7 +55,7 @@
     </section>
 
     <!-- Section: Hướng dẫn mua sắm -->
-    <section class="section-padding horizontal-scroll-section">
+    <section id="buying-guide" class="section-padding horizontal-scroll-section">
         <div class="container">
             <h2 class="section-headline mb-5">Hướng dẫn mua sắm. <span class="section-subheadline">Chưa thể quyết? Bắt đầu từ đây nhé.</span></h2>
         </div>
@@ -144,7 +144,46 @@
             updateNavButtons('savings-scroll', 'prev-btn-savings', 'next-btn-savings');
         });
 
-        // Khởi tạo trạng thái nút ban đầu
+        // Smooth Scrolling for Nav Links
+        document.querySelectorAll('.shop-subnav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const offset = 52; // Height of subnav
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Scrollspy: Cập nhật trạng thái active khi cuộn
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.shop-subnav .nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Khởi tạo trạng thái nút ban đầu và nav active
         window.addEventListener('load', () => {
             updateNavButtons('buying-guide-scroll', 'prev-btn-bg', 'next-btn-bg');
             updateNavButtons('savings-scroll', 'prev-btn-savings', 'next-btn-savings');
@@ -152,7 +191,7 @@
     </script>
 
     <!-- Section: Nhiều cách để tiết kiệm -->
-    <section class="section-padding horizontal-scroll-section">
+    <section id="ways-to-save" class="section-padding horizontal-scroll-section">
         <div class="container">
             <h2 class="section-headline mb-5">Nhiều cách để tiết kiệm. <span class="section-subheadline">Tìm cách phù hợp với bạn.</span></h2>
         </div>
@@ -193,7 +232,7 @@
     </section>
 
     <!-- Section: Apple Store tạo nên mọi khác biệt -->
-    <section class="section-padding">
+    <section id="apple-store-diff" class="section-padding">
         <div class="container text-center">
             <h2 class="section-headline mb-2">Apple Store tạo nên mọi khác biệt.</h2>
             <p class="section-subheadline mb-5">Thêm nhiều lý do để mua sắm cùng chúng tôi.</p>
@@ -209,7 +248,7 @@
     </section>
 
     <!-- Section: Thiết Lập Và Hỗ Trợ -->
-    <section class="section-padding bg-light">
+    <section id="setup-support" class="section-padding bg-light">
         <div class="container">
             <h2 class="section-headline mb-5">Thiết Lập Và Hỗ Trợ. <span class="section-subheadline">Các Chuyên Gia của chúng tôi sẵn sàng giúp đỡ.</span></h2>
             <div class="row g-4">
@@ -236,7 +275,7 @@
     </section>
 
     <!-- Section: Một trải nghiệm rất Mac -->
-    <section class="section-padding">
+    <section id="mac-experience" class="section-padding">
         <div class="container">
             <h2 class="section-headline mb-5">Một trải nghiệm rất Mac. <span class="section-subheadline">Được thiết kế để kết nối với mọi thứ của Apple.</span></h2>
             <div class="row g-4">

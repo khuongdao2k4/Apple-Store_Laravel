@@ -502,7 +502,8 @@
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
                 // Trượt xuống một đoạn bằng chiều dài của navbar thì ẩn đi
-                if (scrollTop > navbarHeight) {
+                // Nhưng KHÔNG ẩn nếu đang mở thanh tìm kiếm (search-active)
+                if (scrollTop > navbarHeight && !navbar.classList.contains('search-active')) {
                     if (scrollTop > lastScrollTop) {
                         // Scroll down
                         navbar.classList.add('nav-hidden');
@@ -510,6 +511,8 @@
                         // Scroll up
                         navbar.classList.remove('nav-hidden');
                     }
+                } else if (navbar.classList.contains('search-active')) {
+                    navbar.classList.remove('nav-hidden');
                 } else {
                     navbar.classList.remove('nav-hidden');
                 }

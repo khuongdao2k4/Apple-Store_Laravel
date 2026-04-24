@@ -11,40 +11,37 @@
 			<ul class="categories-list">
 				<li><a href="#"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mbn_1fa302e95.png"
-							alt="iPhone 16 Pro"><br>MacBook Air</a></li>
+							alt="MacBook Neo"><br>MacBook Neo<br><span class="new-label">Mới</span></a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mba_ea12e0d5b.png"
-							alt="iPhone 16"><br>MacBook Pro</a></li>
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mba_8e00b3bdd_2x.png"
+							alt="MacBook Air"><br>MacBook Air<br><span class="new-label">Mới</span></a></li>
 				<li><a href="#"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mbp_bfa749034.png"
-							alt="iPhone 16e"><br>iMac<br><span class="new-label">Mới</span></a></li>
+							alt="MacBook Pro"><br>MacBook Pro<br><span class="new-label">Mới</span></a></li>
 				<li><a href="#"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_imac_24_832584093.png"
-							alt="iPhone 15"><br>Mac mini</a></li>
+							alt="iMac"><br>iMac</a></li>
 				<li><a href="#"><img
 							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mac_mini_bff82a643.png"
-							alt="So Sánh"><br>Mac Studio</a></li>
+							alt="Mac Mini"><br>Mac Mini</a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_pro_light__bly2b0ua4seq_large.svg"
-							alt="AirPods"><br>Mac Pro</a></li>
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_mac_studio_fc7bb80c1_2x.png"
+							alt="Mac Studio"><br>Mac Studio</a></li>
 				<li><a href="#"><img
-							src="	https://www.apple.com/v/mac/home/cc/images/chapternav/hmc_light__fq8mh4xb68mm_large.svg"
-							alt="AirTag"><br>Help Me Choose</a></li>
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_compare_cacd858a8.png"
+							alt="So sánh"><br>So sánh</a></li>
 				<li><a href="#"><img
-							src="	https://www.apple.com/v/mac/home/cc/images/chapternav/mac_compare_light__capy8s4wrbhy_large.svg"
-							alt="Phụ Kiện"><br>Compare</a></li>
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_displays_7c0628398.png"
+							alt="Màn Hình"><br>Màn Hình <br><span class="new-label">Mới</span></a></li>
 				<li><a href="#"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/displays_light__d67yrnk0qsa6_large.svg"
-							alt="iOS 18"><br>Displays</a></li>
-				<li><a href="mua-iphone"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_accessories_light__esnwbnk4bxqq_large.svg"
-							alt="Mua sắm iPhone"><br>Acessories</a></li>
-				<li><a href="mua-iphone"><img
-							src="https://www.apple.com/v/mac/home/cc/images/chapternav/mac_os_light__6mb5pqhztcie_large.svg"
-							alt="Mua sắm iPhone"><br>Sequoia</a></li>
-				<li><a href="mua-iphone"><img
-							src="	https://www.apple.com/v/mac/home/cc/images/chapternav/mac_shop_light__f0m72gc7jguq_large.svg"
-							alt="Mua sắm iPhone"><br>Shop Mac</a></li>
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_accessories_c3e74ad3c_2x.png"
+							alt="Phụ Kiện"><br>Phụ Kiện</a></li>
+				<li><a href=""><img
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_shop_mac_0f8893308.png"
+							alt="Mua sắm Mac"><br>Mua sắm Mac</a></li>
+				<li><a href=""><img
+							src="https://www.apple.com/assets-www/en_WW/mac/04_chapternav/small/nav_macos_3f8f4ed17_2x.png"
+							alt="Tahoe"><br>Tahoe</a></li>
 			</ul>
 		</div>
 		<div class="content-wrapper">

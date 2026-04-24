@@ -15,12 +15,14 @@ document.addEventListener("DOMContentLoaded", function () {
         searchIcon.addEventListener("click", function (e) {
             e.preventDefault();
             navbar.classList.add("search-active");
+            document.body.style.overflow = "hidden"; // Prevent background scroll
             setTimeout(() => searchInput && searchInput.focus(), 300);
         });
     }
 
     function closeSearch() {
         if (navbar) navbar.classList.remove("search-active");
+        document.body.style.overflow = ""; // Restore scroll
         if (searchInput) searchInput.value = "";
         if (searchResults) {
             searchResults.innerHTML = "";
@@ -49,8 +51,13 @@ document.addEventListener("DOMContentLoaded", function () {
             if (keyword.length > 0) {
                 if (quickLinks) quickLinks.style.display = "none";
                 debounceTimer = setTimeout(() => {
-                    fetch(`apple_search.php?query=${encodeURIComponent(keyword)}`)
-                        .then(response => response.json())
+                    fetch(`/api/search?query=${encodeURIComponent(keyword)}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(err => { throw new Error(err.error || 'Lỗi máy chủ'); });
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             if (data.length > 0) {
                                 let resultHTML = data.map(p => `
@@ -72,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 document.querySelectorAll(".search-item").forEach(item => {
                                     item.addEventListener("click", function () {
                                         let productId = this.getAttribute("data-id");
-                                        window.location.href = `index.php?url=order-test&id=${productId}`;
+                                        window.location.href = `/order?id=${productId}`;
                                     });
                                 });
                             } else {
@@ -86,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         .catch(error => {
                             console.error("Search Error:", error);
                             if (searchResults) {
-                                searchResults.innerHTML = "<li class='py-2 text-danger'>Lỗi kết nối máy chủ.</li>";
+                                searchResults.innerHTML = `<li class='py-2 text-danger'>${error.message}</li>`;
                                 searchResults.style.display = "block";
                             }
                         });

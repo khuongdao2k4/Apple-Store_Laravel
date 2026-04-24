@@ -166,6 +166,13 @@ div .card .card-title {
     margin: 0 auto;
 }
 
+.new-label {
+    color: #d70018; /* Apple's red for new items */
+    font-size: 10px;
+    display: block;
+    margin-top: 2px;
+}
+
 .content-wrapper {
     width: 100%;
     height: 40px;

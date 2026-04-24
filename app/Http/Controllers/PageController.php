@@ -30,4 +30,49 @@ class PageController extends Controller
     public function editProduct() { return view('pages.edit-product'); }
     public function deleteProduct() { return view('pages.delete-product'); }
     public function statistics() { return view('pages.statistics'); }
+
+    public function search(Request $request) {
+        try {
+            $query = $request->query('query', '');
+            if (empty($query)) {
+                return response()->json([]);
+            }
+
+            $products = \DB::table('products')
+                ->where('name', 'LIKE', "%{$query}%")
+                ->orderBy('name', 'asc')
+                ->limit(10)
+                ->get();
+
+            // Format results for the frontend
+            $formattedProducts = $products->map(function ($product) {
+                $imageUrl = $product->image_url;
+                if (!preg_match('/^https?:\/\//', $imageUrl)) {
+                    // Normalize path: remove public/ prefix if it exists
+                    $path = ltrim($imageUrl, '/');
+                    if (str_starts_with($path, 'public/')) {
+                        $path = substr($path, 7);
+                    }
+                    $imageUrl = asset($path);
+                }
+                
+                // Sanitize price to ensure it's a number
+                $price = $product->price;
+                if (is_string($price)) {
+                    $price = (int)preg_replace('/[^0-9]/', '', $price);
+                }
+                
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $price,
+                    'image_url' => $imageUrl
+                ];
+            });
+
+            return response()->json($formattedProducts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

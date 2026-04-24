@@ -280,6 +280,7 @@
             formData.set('storage', '{{ $firstItem->storage }}');
             formData.set('color', '{{ $firstItem->color }}');
             formData.set('image_url', '{{ $firstItem->image_url }}');
+            formData.set('applecare', '{{ $firstItem->applecare ? '1' : '0' }}');
         @endif
 
         const name = formData.get('name');

@@ -553,11 +553,11 @@
                                                     <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
                                                     <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ $item['color'] }}</div>
                                                     <div style="font-size: 14px; color: #86868b;">Bảo hành: 
-                                                    @if(!empty($item['applecare']) && $item['applecare'])
-                                                        <span style="color: #1e7e34; font-weight: 500;">✓ AppleCare+</span>
-                                                    @else
-                                                        Không có AppleCare
-                                                    @endif
+                                                    @if(isset($item['applecare']) && ($item['applecare'] === true || $item['applecare'] === 1 || $item['applecare'] === '1'))
+                                                         <span style="color: #1e7e34; font-weight: 500;">✓ AppleCare+</span>
+                                                     @else
+                                                         Không có AppleCare
+                                                     @endif
                                                 </div>
                                                 </div>
                                                 <div style="text-align: right;">

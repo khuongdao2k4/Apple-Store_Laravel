@@ -18,4 +18,8 @@ class CartItem extends Model
         'quantity',
         'applecare',
     ];
+
+    protected $casts = [
+        'applecare' => 'boolean',
+    ];
 }

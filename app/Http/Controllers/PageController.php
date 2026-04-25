@@ -11,7 +11,9 @@ class PageController extends Controller
     public function mac() { return view('pages.mac'); }
     public function muaMac() {
         // Lấy danh sách sản phẩm đại diện cho mỗi dòng để hiển thị ở Landing Page
+        // Lọc cả series bắt đầu bằng 'mac' và 'imac'
         $products = Product::where('series', 'like', 'mac%')
+            ->orWhere('series', 'like', 'imac%')
             ->orderBy('sort_order', 'asc')
             ->get();
             
@@ -30,7 +32,9 @@ class PageController extends Controller
     public function store() { return view('pages.store'); }
     public function muaIphone() { 
         // Group products by series and order by sort_order
-        $groupedProducts = Product::orderBy('sort_order', 'asc')
+        // Filter only series starting with 'iphone'
+        $groupedProducts = Product::where('series', 'like', 'iphone%')
+            ->orderBy('sort_order', 'asc')
             ->get()
             ->groupBy('series');
             

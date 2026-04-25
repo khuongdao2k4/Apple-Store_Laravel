@@ -1,5 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'home.php'])
 
+@section('title', 'Apple (Việt Nam)')
+
 @section('content')
 
 

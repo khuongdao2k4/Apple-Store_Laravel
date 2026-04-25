@@ -1,5 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'store.php'])
 
+@section('title', 'iPhone - Apple (VN)')
+
 @section('content')
 
 

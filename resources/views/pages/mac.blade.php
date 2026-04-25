@@ -1,5 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'mac.php'])
 
+@section('title', 'Mac - Apple (VN)')
+
 @section('content')
 
 

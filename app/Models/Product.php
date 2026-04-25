@@ -25,4 +25,15 @@ class Product extends Model
         'quantity',
         'sort_order',
     ];
+
+    public function getNumericPriceAttribute()
+    {
+        // Remove non-numeric characters and cast to float
+        return (float)preg_replace('/[^0-9]/', '', $this->price);
+    }
+
+    public function options()
+    {
+        return $this->hasMany(ProductOption::class)->orderBy('sort_order', 'asc');
+    }
 }

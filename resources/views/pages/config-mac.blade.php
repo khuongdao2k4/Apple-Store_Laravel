@@ -41,7 +41,7 @@
                             @foreach($groupedProducts[$product->series] as $v)
                                 <div class="variant-card @if($v->id == $product->id) active @endif" data-id="{{ $v->id }}">
                                     <div class="v-name">{{ $v->name }}</div>
-                                    <div class="v-price">Từ {{ number_format($v->price, 0, ',', '.') }}đ</div>
+                                    <div class="v-price">Từ {{ number_format($v->numeric_price, 0, ',', '.') }}đ</div>
                                 </div>
                             @endforeach
                         </div>
@@ -103,7 +103,7 @@
         <div class="container d-flex justify-content-between align-items-center">
             <div class="price-display">
                 <span class="price-label">Tổng cộng:</span>
-                <span class="price-value" id="total-price">{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                <span class="price-value" id="total-price">{{ number_format($product->numeric_price, 0, ',', '.') }}đ</span>
             </div>
             <button class="btn btn-primary add-to-bag-btn" id="add-to-bag">Thêm vào giỏ hàng</button>
         </div>

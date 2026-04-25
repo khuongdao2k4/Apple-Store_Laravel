@@ -1,5 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'mua-iphone.php'])
 
+@section('title', 'Mua iPhone - Apple (VN)')
+
 @section('content')
 
 
@@ -414,14 +416,8 @@
                 $seriesImage = $firstProduct->series_image ?? $firstProduct->image_url;
                 
                 // Find minimum price in the group
-                $minPrice = $products->min(function($p) {
-                    $val = preg_replace('/[^0-9]/', '', $p->price);
-                    return $val != '' ? (int)$val : 999999999;
-                });
-                $maxPrice = $products->max(function($p) {
-                    $val = preg_replace('/[^0-9]/', '', $p->price);
-                    return $val != '' ? (int)$val : 0;
-                });
+                $minPrice = $products->min('numeric_price');
+                $maxPrice = $products->max('numeric_price');
                 if ($minPrice == $maxPrice) {
                     $priceFormatted = "Từ " . number_format($minPrice, 0, ',', '.') . "đ";
                 } else {

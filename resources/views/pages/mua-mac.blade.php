@@ -1,5 +1,7 @@
 @extends('layouts.app', ['pageTitle' => 'mua-mac.php'])
 
+@section('title', 'Mua Mac - Apple (VN)')
+
 @section('content')
 <link rel="stylesheet" href="{{ asset('assets/css/apple_buy-mac-landing.css') }}?v={{ time() }}">
 
@@ -42,7 +44,7 @@
                         @endif
                         <h3 class="apple-card-title">{{ $p->name }}</h3>
                     </div>
-                    <div class="text-center py-4 product-image-container" onclick="openMacModal('{{ $p->series }}', '{{ $p->image_url }}', '{{ $p->name }}', 'Từ {{ number_format($p->price, 0, ',', '.') }}đ', '{{ $p->id }}', '{{ $p->colors }}')">
+                    <div class="text-center py-4 product-image-container" onclick="openMacModal('{{ $p->series }}', '{{ $p->image_url }}', '{{ $p->name }}', 'Từ {{ number_format($p->numeric_price, 0, ',', '.') }}đ', '{{ $p->id }}', '{{ $p->colors }}')">
                         <img src="{{ $p->image_url }}" alt="{{ $p->name }}" class="img-fluid" style="max-height: 200px;">
                         <button class="explore-btn">Hãy khám phá thiết bị</button>
                     </div>
@@ -74,7 +76,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <p class="mb-0 fw-medium" style="flex: 1; margin-right: 15px;">Từ {{ number_format($p->price, 0, ',', '.') }}đ</p>
+                        <p class="mb-0 fw-medium" style="flex: 1; margin-right: 15px;">Từ {{ number_format($p->numeric_price, 0, ',', '.') }}đ</p>
                         <a href="{{ route('config-mac', $p->id) }}" class="btn btn-primary rounded-pill px-4 fw-medium flex-shrink-0">Mua</a>
                     </div>
                 </div>

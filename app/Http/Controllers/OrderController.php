@@ -14,13 +14,13 @@ class OrderController extends Controller
         $id = $request->query('id');
         
         if ($series) {
-            $products = Product::where('series', $series)->orderBy('sort_order', 'asc')->get();
+            $products = Product::with('options.attribute')->where('series', $series)->orderBy('sort_order', 'asc')->get();
             if ($products->isEmpty()) {
                 return redirect()->route('home')->with('error', 'Không tìm thấy dòng sản phẩm này.');
             }
             return view('pages.order', compact('products'));
         } elseif ($id) {
-            $product = Product::find($id);
+            $product = Product::with('options.attribute')->find($id);
             if (!$product) {
                 return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại.');
             }
@@ -29,7 +29,7 @@ class OrderController extends Controller
             return view('pages.order', compact('products'));
         }
 
-        $products = Product::all();
+        $products = Product::with('options.attribute')->all();
         return view('pages.order', compact('products'));
     }
 

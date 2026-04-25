@@ -60,23 +60,9 @@
                         </div>
                     </div>
 
-                    <!-- Specifications (Mockup) -->
-                    <div class="option-section mt-5">
-                        <h6 class="option-title">Bộ nhớ (RAM).</h6>
-                        <div class="spec-grid">
-                            <div class="spec-card active"><span>8GB</span></div>
-                            <div class="spec-card"><span>16GB</span></div>
-                            <div class="spec-card"><span>24GB</span></div>
-                        </div>
-                    </div>
-
-                    <div class="option-section mt-5">
-                        <h6 class="option-title">Ổ lưu trữ (SSD).</h6>
-                        <div class="spec-grid">
-                            <div class="spec-card active"><span>256GB SSD</span></div>
-                            <div class="spec-card"><span>512GB SSD</span></div>
-                            <div class="spec-card"><span>1TB SSD</span></div>
-                        </div>
+                    <!-- Dynamic Product Options (RAM, SSD, Chip, etc.) -->
+                    <div id="dynamic-options-container">
+                        <!-- Options will be populated by JS -->
                     </div>
 
                     <!-- AppleCare+ -->

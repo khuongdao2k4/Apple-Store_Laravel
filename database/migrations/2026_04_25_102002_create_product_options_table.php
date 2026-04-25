@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('product_options', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->integer('product_id');
             $table->unsignedBigInteger('attribute_id');
             $table->string('label'); // e.g., '256GB Magic Keyboard'
             $table->decimal('price_offset', 15, 2)->default(0);

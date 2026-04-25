@@ -351,6 +351,7 @@
                      data-image="{{ asset($product->image_url) }}"
                      data-images="{{ json_encode(array_map(function($img) { return asset($img); }, $images)) }}"
                      data-colors="{{ $product->colors }}"
+                     data-options="{{ json_encode($product->options) }}"
                      onclick="selectModel(this)">
                     <div style="flex: 1; text-align: left;">
                         <strong>{{ $product->name }}</strong>
@@ -378,50 +379,16 @@
             <!-- JS will populate colors here -->
         </div>
 
-        <br>
-        <h2><strong>Dung lượng lưu trữ.</strong> <span style="font-weight: normal; color: #86868b;">Bạn cần bao nhiêu dung lượng?</span></h2>
-
-        <div id="storage-selections">
-            <div class="storage-card selected" data-price-offset="0" data-storage="128GB" onclick="selectStorage(this)">
-                <div style="flex: 1; text-align: left;">
-                    <strong>128GB¹</strong>
-                </div>
-                <div style="flex: 1; text-align: right;">
-                    <p style="text-align: right;" class="storage-price-text"></p>
-                </div>
-            </div>
-            <div class="storage-card" data-price-offset="3000000" data-storage="256GB" onclick="selectStorage(this)">
-                <div style="flex: 1; text-align: left;">
-                    <strong>256GB¹</strong>
-                </div>
-                <div style="flex: 1; text-align: right;">
-                    <p style="text-align: right;" class="storage-price-text"></p>
-                </div>
-            </div>
-            <div class="storage-card" data-price-offset="8000000" data-storage="512GB" onclick="selectStorage(this)">
-                <div style="flex: 1; text-align: left;">
-                    <strong>512GB¹</strong>
-                </div>
-                <div style="flex: 1; text-align: right;">
-                    <p style="text-align: right;" class="storage-price-text"></p>
-                </div>
-            </div>
-            <div class="storage-card" data-price-offset="13000000" data-storage="1TB" onclick="selectStorage(this)">
-                <div style="flex: 1; text-align: left;">
-                    <strong>1TB¹</strong>
-                </div>
-                <div style="flex: 1; text-align: right;">
-                    <p style="text-align: right;" class="storage-price-text"></p>
-                </div>
-            </div>
+        <div id="dynamic-options-container">
+            <!-- Dynamic options will be loaded here by JS -->
         </div>
-
+        
         <p style="font-size: 11px; color: #e30000; margin-top: 15px;">Trả góp theo tháng với phí dịch vụ thực 1.67%, sau khi thanh toán lần đầu 20%. Có thêm tùy chọn thanh toán khi hoàn tất giao dịch.</p>
 
         <div class="help-box" style="margin-top: 15px;">
             <div style="text-align: left;">
-                <strong>Bạn không chắc mình cần bao nhiêu dung lượng?</strong>
-                <p style="margin: 0;">Hiểu rõ hơn về dung lượng bạn cần.</p>
+                <strong>Bạn không chắc mình cần lựa chọn nào?</strong>
+                <p style="margin: 0;">Hiểu rõ hơn về các cấu hình phù hợp với bạn.</p>
             </div>
             <div style="font-size: 24px; color: #1d1d1f; font-weight: 300;">⊕</div>
         </div>
@@ -541,7 +508,7 @@
 @push('scripts')
 <script>
     let currentModel = null;
-    let currentStorage = null;
+    let selectedOptions = {}; // Structure: { attribute_id: { label, priceOffset } }
     let currentColor = null;
     let appleCarePrice = 0;
     
@@ -647,50 +614,6 @@
             }
         });
     }
-    
-    function selectModel(el) {
-        document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        
-        currentModel = {
-            id: el.dataset.id,
-            name: el.dataset.name,
-            price: parseInt(el.dataset.price),
-            image: el.dataset.image,
-            images: el.dataset.images ? JSON.parse(el.dataset.images) : [el.dataset.image],
-            colors: el.dataset.colors ? el.dataset.colors.split(',') : []
-        };
-        
-        document.getElementById('page-title').innerText = "Mua " + currentModel.name;
-        
-        // Initialize slider with model images
-        initSlider(currentModel.images);
-
-        // 1. Update storage prices first
-        document.querySelectorAll('.storage-card').forEach(c => {
-            const offset = parseInt(c.dataset.priceOffset);
-            const totalPrice = currentModel.price + offset;
-            const priceTextEl = c.querySelector('.storage-price-text');
-            if (priceTextEl) {
-                priceTextEl.innerHTML = `${formatCurrency(totalPrice)}<br>hoặc<br>${formatCurrency(Math.round(totalPrice/24))}/tháng<br>trong 24 tháng<sup style="font-size:9px">ᵃ</sup>`;
-            }
-        });
-
-        const selectedStorageCard = document.querySelector('.storage-card.selected') || document.querySelector('.storage-card');
-        if (selectedStorageCard) selectStorage(selectedStorageCard);
-
-        const colorContainer = document.getElementById('color-selections');
-        colorContainer.innerHTML = '';
-        currentModel.colors.forEach((c, idx) => {
-            const cleanColor = c.trim();
-            const div = document.createElement('div');
-            div.className = 'color-circle' + (idx === 0 ? ' selected' : '');
-            div.style.backgroundColor = cleanColor;
-            div.onclick = function() { selectColor(this, cleanColor); };
-            colorContainer.appendChild(div);
-            if (idx === 0) selectColor(div, cleanColor);
-        });
-    }
 
     function initSlider(images) {
         sliderImages = images;
@@ -733,6 +656,7 @@
 
     function updateSliderPosition() {
         const slider = document.getElementById('image-slider');
+        if (!slider) return;
         slider.style.transform = `translateX(-${currentSlide * 100}%)`;
         
         // Update dots
@@ -740,43 +664,153 @@
             dot.classList.toggle('active', idx === currentSlide);
         });
     }
-    
-    function selectStorage(el) {
-        document.querySelectorAll('.storage-card').forEach(c => c.classList.remove('selected'));
+
+    function selectModel(el) {
+        document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         
-        currentStorage = {
-            name: el.dataset.storage,
-            priceOffset: parseInt(el.dataset.priceOffset)
+        currentModel = {
+            id: el.dataset.id,
+            name: el.dataset.name,
+            price: parseInt(el.dataset.price),
+            image: el.dataset.image,
+            images: el.dataset.images ? JSON.parse(el.dataset.images) : [el.dataset.image],
+            colors: el.dataset.colors ? el.dataset.colors.split(',') : [],
+            options: el.dataset.options ? JSON.parse(el.dataset.options) : []
         };
         
+        document.getElementById('page-title').innerText = "Mua " + currentModel.name;
+        initSlider(currentModel.images);
+
+        // Group options by attribute
+        const groupedOptions = {};
+        currentModel.options.forEach(opt => {
+            const attrName = opt.attribute ? opt.attribute.name : 'Tùy chọn';
+            const attrId = opt.attribute_id;
+            if (!groupedOptions[attrId]) {
+                groupedOptions[attrId] = { name: attrName, items: [] };
+            }
+            groupedOptions[attrId].items.push(opt);
+        });
+
+        // Reset selected options
+        selectedOptions = {};
+
+        // Render dynamic options
+        const container = document.getElementById('dynamic-options-container');
+        container.innerHTML = '';
+        
+        Object.entries(groupedOptions).forEach(([attrId, group]) => {
+            const groupDiv = document.createElement('div');
+            groupDiv.className = 'attribute-group-section';
+            groupDiv.innerHTML = `<br><h2><strong>${group.name}.</strong> <span style="font-weight: normal; color: #86868b;">Chọn cấu hình của bạn.</span></h2>`;
+            
+            const optionsGrid = document.createElement('div');
+            optionsGrid.className = 'options-grid';
+            optionsGrid.style.display = 'flex';
+            optionsGrid.style.flexDirection = 'column';
+            optionsGrid.style.gap = '12px';
+            optionsGrid.style.marginTop = '15px';
+
+            group.items.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'storage-card' + (opt.is_default ? ' selected' : '');
+                card.style.display = 'flex';
+                card.style.justifyContent = 'space-between';
+                card.style.alignItems = 'center';
+                card.style.padding = '20px';
+                card.style.border = '1px solid #d2d2d7';
+                card.style.borderRadius = '12px';
+                card.style.cursor = 'pointer';
+                
+                const totalPrice = currentModel.price + parseFloat(opt.price_offset);
+                const monthlyPrice = Math.round(totalPrice / 24);
+
+                card.innerHTML = `
+                    <div style="flex: 1; text-align: left;"><strong>${opt.label}</strong></div>
+                    <div style="flex: 1; text-align: right;">
+                        <p style="text-align: right; margin: 0; font-size: 13px;">
+                            ${formatCurrency(totalPrice)}<br>
+                            hoặc<br>
+                            ${formatCurrency(monthlyPrice)}/tháng<br>
+                            trong 24 tháng<sup style="font-size:9px">ᵃ</sup>
+                        </p>
+                    </div>
+                `;
+
+                card.onclick = function() {
+                    // Deselect others in group
+                    optionsGrid.querySelectorAll('.storage-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectOption(attrId, opt);
+                };
+
+                optionsGrid.appendChild(card);
+                
+                if (opt.is_default) {
+                    selectedOptions[attrId] = { label: opt.label, priceOffset: parseFloat(opt.price_offset) };
+                }
+            });
+
+            groupDiv.appendChild(optionsGrid);
+            container.appendChild(groupDiv);
+
+            // If no default was set, pick the first one
+            if (!selectedOptions[attrId] && group.items.length > 0) {
+                const firstOpt = group.items[0];
+                selectedOptions[attrId] = { label: firstOpt.label, priceOffset: parseFloat(firstOpt.price_offset) };
+                optionsGrid.querySelector('.storage-card').classList.add('selected');
+            }
+        });
+
+        // Color handling
+        const colorContainer = document.getElementById('color-selections');
+        colorContainer.innerHTML = '';
+        currentModel.colors.forEach((c, idx) => {
+            const cleanColor = c.trim();
+            const div = document.createElement('div');
+            div.className = 'color-circle' + (idx === 0 ? ' selected' : '');
+            div.style.backgroundColor = cleanColor;
+            div.onclick = function() { selectColor(this, cleanColor); };
+            colorContainer.appendChild(div);
+            if (idx === 0) selectColor(div, cleanColor);
+        });
+
         updateSummary();
     }
-    
+
+    function selectOption(attrId, opt) {
+        selectedOptions[attrId] = { label: opt.label, priceOffset: parseFloat(opt.price_offset) };
+        updateSummary();
+    }
+
     function selectColor(el, color) {
         document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         currentColor = color;
-        
         const colorName = getColorName(color);
         document.getElementById('color-label').innerText = colorName ? `Màu sắc - ${colorName}` : 'Màu sắc';
-        
-        // In a real application, you might update sliderImages here based on color
-        // For now, we'll keep the model images but we could filter them if data provided
-        
         updateSummary();
     }
-    
+
     function updateSummary() {
-        if (!currentModel || !currentStorage) return;
+        if (!currentModel) return;
         
-        const finalPrice = currentModel.price + currentStorage.priceOffset + appleCarePrice;
+        let totalOffset = 0;
+        let optionLabels = [];
+        Object.values(selectedOptions).forEach(opt => {
+            totalOffset += opt.priceOffset;
+            optionLabels.push(opt.label);
+        });
+
+        const finalPrice = currentModel.price + totalOffset + appleCarePrice;
         const monthlyPrice = Math.round(finalPrice / 24);
         const downPayment = Math.round(finalPrice * 0.20);
         const taxEstimate = Math.round(finalPrice * 8 / 108);
 
         const colorName = getColorName(currentColor);
-        const fullName = `${currentModel.name} ${currentStorage.name} - ${colorName}`;
+        const optionsText = optionLabels.join(', ');
+        const fullName = `${currentModel.name} ${optionsText} - ${colorName}`;
 
         document.getElementById('summary-product-headline').innerText = fullName;
 
@@ -804,14 +838,14 @@
         
         document.getElementById('input-product-name').value = currentModel.name;
         document.getElementById('input-total-price').value = finalPrice;
-        document.getElementById('input-storage').value = currentStorage.name;
+        document.getElementById('input-storage').value = optionsText;
         document.getElementById('input-color').value = colorName;
         document.getElementById('input-image').value = currentModel.image;
 
         const bn = {
             'buynow-product-name': currentModel.name,
             'buynow-total-price': finalPrice,
-            'buynow-storage': currentStorage.name,
+            'buynow-storage': optionsText,
             'buynow-color': colorName,
             'buynow-applecare': document.getElementById('input-applecare').value,
             'buynow-image': currentModel.image,

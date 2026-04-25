@@ -21,8 +21,9 @@ class PageController extends Controller
     }
 
     public function configMac($id) {
-        $product = Product::findOrFail($id);
-        $groupedProducts = Product::where('series', $product->series)
+        $product = Product::with('options.attribute')->findOrFail($id);
+        $groupedProducts = Product::with('options.attribute')
+            ->where('series', $product->series)
             ->orderBy('sort_order', 'asc')
             ->get()
             ->groupBy('series');

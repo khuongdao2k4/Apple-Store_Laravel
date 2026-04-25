@@ -86,18 +86,41 @@ class AdminController extends Controller
 
     public function editProduct($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('options.attribute')->findOrFail($id);
+        $attributes = \App\Models\Attribute::all();
         $existingSeries = Product::select('series', 'series_title', 'series_image')
             ->get()
             ->unique('series')
             ->values();
-        return view('pages.admin.edit-product', compact('product', 'existingSeries'));
+        return view('pages.admin.edit-product', compact('product', 'existingSeries', 'attributes'));
     }
 
     public function updateProduct(Request $request)
     {
         $product = Product::findOrFail($request->id);
-        $product->update($request->all());
+        
+        // Use only fillable fields for product update
+        $product->update($request->only([
+            'name', 'series', 'series_title', 'series_image', 
+            'image_url', 'colors', 'price', 'quantity', 'sort_order'
+        ]));
+        
+        // Sync Options
+        if ($request->has('options')) {
+            $product->options()->delete();
+            foreach ($request->input('options') as $index => $optionData) {
+                if (!empty($optionData['label'])) {
+                    $product->options()->create([
+                        'attribute_id' => $optionData['attribute_id'],
+                        'label' => $optionData['label'],
+                        'price_offset' => $optionData['price_offset'] ?? 0,
+                        'is_default' => $optionData['is_default'] == '1',
+                        'sort_order' => $index + 1
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('admin.products')->with('success', 'Sản phẩm đã được cập nhật thành công!');
     }
 

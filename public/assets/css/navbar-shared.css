@@ -1,17 +1,18 @@
 /* --- SHARED CSS FOR NAVBAR & SUBMENU --- */
 body {
-    padding-top: 44px !important; /* Adjusted to match real navbar height */
+    padding-top: 44px !important;
+    /* Adjusted to match real navbar height */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .navbar {
     background: #f8f8f8 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: fixed;
     width: 100%;
     top: 0;
     left: 0;
-    z-index: 2000; /* Tăng cao để không bị che khuất */
+    z-index: 2000;
+    /* Tăng cao để không bị che khuất */
     height: 44px;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -21,9 +22,9 @@ body {
 }
 
 /* Đảm bảo chuỗi container truyền đúng height xuống nav-item */
-.navbar > .container-fluid,
-.navbar > .container-fluid > .navbar-collapse,
-.navbar > .container-fluid > .navbar-collapse > .navbar-nav {
+.navbar>.container-fluid,
+.navbar>.container-fluid>.navbar-collapse,
+.navbar>.container-fluid>.navbar-collapse>.navbar-nav {
     height: 100%;
 }
 
@@ -56,7 +57,8 @@ body {
     position: relative;
     display: flex !important;
     align-items: center !important;
-    height: 100% !important; /* luôn phủ hết chiều cao navbar */
+    height: 100% !important;
+    /* luôn phủ hết chiều cao navbar */
 }
 
 /* Submenu Containers */
@@ -66,12 +68,14 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 2000; /* Đồng bộ với navbar */
+    z-index: 2000;
+    /* Đồng bộ với navbar */
     background: rgba(0, 0, 0, 0);
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    pointer-events: none; /* Ẩn: không nhận chuột */
+    pointer-events: none;
+    /* Ẩn: không nhận chuột */
 }
 
 .nav-item:hover .submenu-container,
@@ -79,7 +83,8 @@ body {
     visibility: visible;
     opacity: 1;
     background: rgba(0, 0, 0, 0.6);
-    pointer-events: none; /* Màn đen không chặn chuột để bắt được sự kiện rời đi */
+    pointer-events: none;
+    /* Màn đen không chặn chuột để bắt được sự kiện rời đi */
 }
 
 .submenu {
@@ -138,7 +143,8 @@ body {
 }
 
 .li-row {
-    font-size: 14px; /* Phóng to nhẹ từ 12px để dễ đọc hơn nhưng vẫn chuẩn menu Apple */
+    font-size: 14px;
+    /* Phóng to nhẹ từ 12px để dễ đọc hơn nhưng vẫn chuẩn menu Apple */
     color: #1d1d1f;
 }
 
@@ -163,7 +169,8 @@ body {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(20px); /* Tăng độ nhòe chuẩn Apple */
+    backdrop-filter: blur(20px);
+    /* Tăng độ nhòe chuẩn Apple */
     z-index: 998;
     visibility: hidden;
     opacity: 0;
@@ -188,7 +195,8 @@ body {
 }
 
 .search-inner-wrapper {
-    max-width: 700px; /* Thu hẹp lại để tập trung vào giữa màn hình */
+    max-width: 700px;
+    /* Thu hẹp lại để tập trung vào giữa màn hình */
     margin: 0 auto;
     width: 90%;
 }
@@ -221,7 +229,8 @@ body {
     width: 100%;
     border: none;
     outline: none;
-    font-size: 32px; /* Phóng to font tiêu đề tìm kiếm */
+    font-size: 32px;
+    /* Phóng to font tiêu đề tìm kiếm */
     font-weight: 500;
     padding: 0 45px;
     color: #1d1d1f;
@@ -250,7 +259,7 @@ body {
 }
 
 /* Search Content & Results */
-.quick-links h6, 
+.quick-links h6,
 #search-results-title {
     font-size: 13px;
     color: #86868b;

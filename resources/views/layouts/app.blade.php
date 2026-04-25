@@ -494,29 +494,21 @@
     <script src="{{ asset('assets/js/search-handler.js') }}?v={{ time() }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let lastScrollTop = 0;
             const navbar = document.querySelector('.navbar');
             const navbarHeight = navbar.offsetHeight;
 
             window.addEventListener('scroll', function() {
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
-                // Trượt xuống một đoạn bằng chiều dài của navbar thì ẩn đi
-                // Nhưng KHÔNG ẩn nếu đang mở thanh tìm kiếm (search-active)
-                if (scrollTop > navbarHeight && !navbar.classList.contains('search-active')) {
-                    if (scrollTop > lastScrollTop) {
-                        // Scroll down
+                // Ẩn navbar khi cuộn xuống quá chiều cao của nó
+                // Và chỉ hiện lại khi cuộn về đúng vị trí đầu trang nơi nó bắt đầu ẩn
+                if (scrollTop > navbarHeight) {
+                    if (!navbar.classList.contains('search-active')) {
                         navbar.classList.add('nav-hidden');
-                    } else {
-                        // Scroll up
-                        navbar.classList.remove('nav-hidden');
                     }
-                } else if (navbar.classList.contains('search-active')) {
-                    navbar.classList.remove('nav-hidden');
                 } else {
                     navbar.classList.remove('nav-hidden');
                 }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
             });
         });
     </script>

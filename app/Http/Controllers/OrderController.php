@@ -18,19 +18,33 @@ class OrderController extends Controller
             if ($products->isEmpty()) {
                 return redirect()->route('home')->with('error', 'Không tìm thấy dòng sản phẩm này.');
             }
-            return view('pages.order', compact('products'));
+            
+            $firstProduct = $products->first();
+            $seriesTitle = $firstProduct->series_title ?? $firstProduct->series;
+            $category = (str_contains(strtolower($series), 'iphone')) ? 'iphone' : 'mac';
+            
+            return view('pages.order', compact('products', 'seriesTitle', 'category'));
         } elseif ($id) {
             $product = Product::with('options.attribute')->find($id);
             if (!$product) {
                 return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại.');
             }
-            // Fallback for single product id viewing if needed
-            $products = collect([$product]);
-            return view('pages.order', compact('products'));
+            // Load all products in the same series
+            $products = Product::with('options.attribute')
+                ->where('series', $product->series)
+                ->orderBy('sort_order', 'asc')
+                ->get();
+                
+            $seriesTitle = $product->series_title ?? $product->series;
+            $category = (str_contains(strtolower($product->series), 'iphone')) ? 'iphone' : 'mac';
+            
+            return view('pages.order', compact('products', 'seriesTitle', 'category'));
         }
 
         $products = Product::with('options.attribute')->all();
-        return view('pages.order', compact('products'));
+        $seriesTitle = 'Sản phẩm';
+        $category = 'general';
+        return view('pages.order', compact('products', 'seriesTitle', 'category'));
     }
 
     public function checkout(Request $request) {

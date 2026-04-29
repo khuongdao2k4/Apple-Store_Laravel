@@ -54,6 +54,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: flex-end;
 }
 
 .offer-button {
@@ -96,7 +97,7 @@
 }
 
 .rf-bfe-column-right {
-    width: 35%;
+    width: 30%;
     padding-left: 20px;
     max-height: 800px;
     overflow-y: scroll;

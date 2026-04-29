@@ -21,14 +21,7 @@ class PageController extends Controller
     }
 
     public function configMac($id) {
-        $product = Product::with('options.attribute')->findOrFail($id);
-        $groupedProducts = Product::with('options.attribute')
-            ->where('series', $product->series)
-            ->orderBy('sort_order', 'asc')
-            ->get()
-            ->groupBy('series');
-            
-        return view('pages.config-mac', compact('product', 'groupedProducts'));
+        return redirect()->route('order', ['id' => $id]);
     }
     public function store() { return view('pages.store'); }
     public function muaIphone() { 

@@ -4,80 +4,54 @@
 
 {{-- Sticky Header Bar --}}
 <div id="sticky-header" class="sticky-header-bar" style="display: none;">
-    <div class="sticky-header-content">
-        <div class="sticky-header-left">
-            <span id="sticky-product-name" style="font-size: 20px; font-weight: 600;">iPhone 16e</span>
-        </div>
-        <div class="sticky-header-right">
-            <div style="text-align: right;">
-                <div id="sticky-price-row" style="font-size: 14px; font-weight: 400; color: #1d1d1f;">
-                    Tổng cộng <span id="sticky-total-price">16.999.000đ</span> hoặc <span id="sticky-monthly-price">708.292đ</span>/tháng cho 24 tháng<sup>Δ</sup>
-                </div>
-                <div style="font-size: 12px; color: #1d1d1f; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-top: 2px;">
-                    <svg viewBox="0 0 25 18" class="as-svgicon as-svgicon-shipping" role="img" aria-hidden="true" width="16" height="16" style="fill: currentColor;">
-                        <path d="M19.5,6.5h-1.042C18.172,6.177,17.86,5.908,17.5,5.74V4.5c0-0.552-0.448-1-1-1h-11c-0.552,0-1,0.448-1,1v9c0,0.552,0.448,1,1,1h0.101 c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2h5.202c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2H21.5c0.552,0,1-0.448,1-1 v-5C22.5,8.015,21.157,6.5,19.5,6.5z M6.5,15.5c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S7.327,15.5,6.5,15.5z M16,4.5v9h-1.042c-0.203-1.135-1.194-2-2.399-2c-0.019,0-0.038,0.002-0.057,0.003V4.5H16z M18.5,15.5 c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S19.327,15.5,18.5,15.5z M21.5,13.5h-0.601 c-0.203-1.135-1.194-2-2.399-2c-0.36,0-0.672,0.128-0.923,0.34V7.5h1.923c1.103,0,2,0.897,2,2V13.5z"></path>
-                    </svg>
-                    <span>3-5 ngày làm việc</span>
-                </div>
+    <div class="sticky-header-content" style="flex-direction: column; align-items: stretch; padding: 0;">
+        <div class="sticky-row-top" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 80px 6px;">
+            <div class="sticky-header-left">
+                <span id="sticky-product-name" style="font-size: 21px; font-weight: 700; color: #1d1d1f; letter-spacing: -0.01em;">{{ $seriesTitle ?? 'Sản phẩm' }}</span>
+            </div>
+            <div class="sticky-header-right" style="font-size: 15px; color: #1d1d1f; font-weight: 400; letter-spacing: -0.01em; display: flex; align-items: center; gap: 4px;">
+                <span>Tổng cộng</span><span id="sticky-total-price" style="font-weight: 600;">0đ</span><span>hoặc</span><span id="sticky-monthly-price" style="font-weight: 600;">0đ</span><span>/tháng cho 24 tháng<sup>Δ</sup></span>
             </div>
         </div>
-    </div>
-</div>
-
-
-<div class="deals-container">
-    <div class="deal-info">
-        <strong style="font-size:13px;">Carrier Deals at Apple</strong><br>
-        <a href="#" class="see-all">See all deals ➕</a>
-    </div>
-    <div class="deal-item">
-        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/desktop-bfe-iphone-step1-bugatti-banner-att?wid=24&hei=24&fmt=png-alpha&.v=1658193314821"
-            alt="Carrier 1">
-        <span>Save up to $1000 after trade-in.</span>
-    </div>
-    <div class="deal-item">
-        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/desktop-bfe-iphone-step1-bugatti-banner-lightyear?wid=24&hei=24&fmt=png-alpha&.v=1724793407797"
-            alt="Carrier 2">
-        <span>Save up to $1000. No trade-in needed.</span>
-    </div>
-    <div class="deal-item">
-        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/desktop-bfe-iphone-step1-bugatti-banner-tmobile?wid=24&hei=24&fmt=png-alpha&.v=1658193314615"
-            alt="Carrier 3">
-        <span>Save up to $1000 after trade-in.</span>
-    </div>
-    <div class="deal-item">
-        <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/desktop-bfe-iphone-step1-bugatti-banner-verizon?wid=24&hei=24&fmt=png-alpha&.v=1725054383893"
-            alt="Carrier 4">
-        <span>Save up to $1000 after trade-in.</span>
+        <div style="height: 1px; background-color: #d2d2d7; width: 100%;"></div>
+        <div class="sticky-row-bottom" style="display: flex; justify-content: flex-end; align-items: center; padding: 8px 80px 12px;">
+            <div style="font-size: 13px; color: #1d1d1f; display: flex; align-items: center; gap: 8px;">
+                <span>Giao đến: <a href="#" style="color: #0066cc; text-decoration: none;">P. Sài Gòn</a></span>
+                <svg viewBox="0 0 25 18" class="as-svgicon as-svgicon-shipping" role="img" aria-hidden="true" width="16" height="16" style="fill: #1d1d1f;">
+                    <path d="M19.5,6.5h-1.042C18.172,6.177,17.86,5.908,17.5,5.74V4.5c0-0.552-0.448-1-1-1h-11c-0.552,0-1,0.448-1,1v9c0,0.552,0.448,1,1,1h0.101 c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2h5.202c0.203,1.135,1.194,2,2.399,2s2.196-0.865,2.399-2H21.5c0.552,0,1-0.448,1-1 v-5C22.5,8.015,21.157,6.5,19.5,6.5z M6.5,15.5c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S7.327,15.5,6.5,15.5z M16,4.5v9h-1.042c-0.203-1.135-1.194-2-2.399-2c-0.019,0-0.038,0.002-0.057,0.003V4.5H16z M18.5,15.5 c-0.827,0-1.5-0.673-1.5-1.5s0.673-1.5,1.5-1.5s1.5,0.673,1.5,1.5S19.327,15.5,18.5,15.5z M21.5,13.5h-0.601 c-0.203-1.135-1.194-2-2.399-2c-0.36,0-0.672,0.128-0.923,0.34V7.5h1.923c1.103,0,2,0.897,2,2V13.5z"></path>
+                </svg>
+                <span id="sticky-delivery-date">...</span> (Miễn Phí)
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="purchase-container">
     <div>
         @php
-            $seriesTitle = $products->first()->series ?? 'iPhone';
+            $seriesTitleDisplay = $seriesTitle ?? 'Sản phẩm';
             $minPrice = $products->min(function($p) {
-                $val = preg_replace('/[^0-9]/', '', $p->price);
-                return $val != '' ? (int)$val : 999999999;
+                return $p->numeric_price;
             });
             $minPriceFormatted = number_format($minPrice, 0, ',', '.') . 'đ';
         @endphp
-        <h1 style="font-size: 48px; font-weight: bold;" id="page-title">Mua {{ $seriesTitle }}</h1>
-        <p style="font-size: 17px;" id="page-price-subtitle">Từ {{ $minPriceFormatted }} hoặc {{ number_format($minPrice/24, 0, ',', '.') }}đ/tháng trong 24 tháng*</p>
+        <h1 style="font-size: 48px; font-weight: bold;" id="page-title">Mua {{ $seriesTitleDisplay }}</h1>
+        <p style="font-size: 17px; margin-bottom: 4px;" id="page-price-subtitle">Từ {{ $minPriceFormatted }} hoặc {{ number_format($minPrice/24, 0, ',', '.') }}đ/tháng trong 24 tháng*</p>
+        <p style="font-size: 12px; color: #1d1d1f; margin-bottom: 12px;">Trả góp theo tháng với phí dịch vụ thực 1.67%, sau khi thanh toán lần đầu 20%.</p>
         <div class="apple-intelligence">
             <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-selector-icon-apple-intelligence-202409?wid=17&hei=21&fmt=p-jpg&qlt=95&.v=1724970464935"
                 alt="Apple Intelligence">
-            <span>Apple Intelligence<sup>8</sup></span>
+            <span>Apple Intelligence<sup>8</sup> <a href="#" style="text-decoration: none; color: #0066cc;">Tìm hiểu thêm ⊕</a></span>
         </div>
     </div>
     <div class="offer-buttons">
-        <button class="offer-button" style="width:270px;">Get $40–$630 for your trade-in. ➕</button>
-        <button class="offer-button">Get 3% Daily Cash back with Apple Card. ➕</button>
+        <button class="offer-button">Nhận từ 800.000đ–17.600.000đ khi thu cũ đổi mới. ⊕</button>
+        <button class="offer-button" style="width: fit-content;">Có tài trợ ⊕</button>
     </div>
 </div>
 
 <div class="rf-bfe-main">
-    {{-- Left Column: Product image + Trade In + AppleCare --}}
+    {{-- Left Column --}}
     <div class="rf-bfe-column-left">
         <div class="main-image-container">
             <button class="slider-nav slider-prev" onclick="moveSlider(-1)">&#10094;</button>
@@ -87,773 +61,494 @@
                 </div>
             </div>
             <button class="slider-nav slider-next" onclick="moveSlider(1)">&#10095;</button>
-            <div class="slider-dots" id="slider-dots">
-            </div>
+            <div class="slider-dots" id="slider-dots"></div>
         </div>
-        <h3><strong>Apple Trade In.</strong> <span style="font-weight: normal; color: #86868b;">Nhận 800.000đ–17.600.000đ điểm tín dụng để sử dụng khi mua iPhone mới.<sup>§</sup></span></h3>
 
-        {{-- Trade-in option cards --}}
-        <div style="display:flex; gap:12px; margin-top:12px; margin-bottom:0;">
-            <div id="trade-chon-card" onclick="selectTradeOption('chon')"
-                style="flex:1; border:1px solid #d2d2d7; border-radius:12px; padding:20px 16px; cursor:pointer; background:#fff; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:80px;">
-                <span style="font-size:15px; font-weight:600; color:#1d1d1f;">Chọn iPhone</span>
-                <span style="font-size:12px; color:#86868b; margin-top:4px;">Trả lời một số câu hỏi để nhận được giá trị ước tính của bạn.</span>
+        <h3 id="trade-in-section-title" style="margin-top: 40px; font-size: 24px; font-weight: 700;"><strong>Apple Trade In.</strong> <span style="font-weight: normal; color: #86868b;">Nhận 800.000đ–17.600.000đ điểm tín dụng để sử dụng khi mua <span id="trade-in-product-name">{{ $seriesTitleDisplay }}</span> mới.<sup>§</sup></span></h3>
+
+        <div style="display:flex; gap:15px; margin-top:12px;">
+            <div id="trade-chon-card" class="trade-card" onclick="toggleTradeIn(true)">
+                <strong>Thêm yêu cầu đổi cũ lấy mới</strong>
+                <p>Trả lời một số câu hỏi để nhận được giá trị ước tính của bạn.</p>
             </div>
-            <div id="trade-no-card" onclick="selectTradeOption('no')"
-                style="flex:1; border:2px solid #0071e3; border-radius:12px; padding:20px 16px; cursor:pointer; background:#fff; transition:all 0.2s; display:flex; align-items:center; justify-content:center; text-align:center; min-height:80px;">
-                <span style="font-size:15px; font-weight:600; color:#1d1d1f;">Không đổi cũ lấy mới</span>
+            <div id="trade-no-card" class="trade-card selected" onclick="toggleTradeIn(false)">
+                <strong>Không đổi cũ lấy mới</strong>
             </div>
         </div>
 
-        {{-- Trade-in form (hidden by default) --}}
-        <div id="trade-form" style="display:none; margin-top:20px; border:1px solid #d2d2d7; border-radius:12px; padding:24px; background:#fff;">
-            <div style="display:flex; gap:32px;">
-                {{-- Left: Form fields --}}
-                <div style="flex:1;">
-                    {{-- Model selection --}}
-                    <p style="font-size:15px; font-weight:600; color:#1d1d1f; margin:0 0 10px;"><strong>Bạn sử dụng phiên bản nào?</strong></p>
-                    <div style="position:relative; margin-bottom:20px;">
-                        <label style="position:absolute; top:8px; left:14px; font-size:11px; color:#86868b; z-index:1;">Chọn phiên bản sản phẩm</label>
-                        <select id="trade-model-select" onchange="updateTradeStorage()"
-                            style="width:100%; border:1px solid #d2d2d7; border-radius:10px; padding:26px 40px 10px 14px; font-size:15px; color:#1d1d1f; appearance:none; -webkit-appearance:none; background:#fff; cursor:pointer; font-family:inherit;">
-                            <option value="">Chọn</option>
-                            <option value="16ProMax">iPhone 16 Pro Max - Lên tới 17.600.000đ</option>
-                            <option value="16Pro">iPhone 16 Pro - Lên tới 16.000.000đ</option>
-                            <option value="16Plus">iPhone 16 Plus - Lên tới 14.100.000đ</option>
-                            <option value="16">iPhone 16 - Lên tới 11.400.000đ</option>
-                            <option value="16e">iPhone 16e - Lên tới 8.600.000đ</option>
-                            <option value="15ProMax">iPhone 15 Pro Max - Lên tới 15.100.000đ</option>
-                            <option value="15Pro">iPhone 15 Pro - Lên tới 11.900.000đ</option>
-                            <option value="15Plus">iPhone 15 Plus - Lên tới 9.600.000đ</option>
-                            <option value="15">iPhone 15 - Lên tới 9.200.000đ</option>
-                            <option value="14ProMax">iPhone 14 Pro Max - Lên tới 11.200.000đ</option>
-                            <option value="14Pro">iPhone 14 Pro - Lên tới 9.700.000đ</option>
-                            <option value="14Plus">iPhone 14 Plus - Lên tới 7.000.000đ</option>
-                            <option value="14">iPhone 14 - Lên tới 6.400.000đ</option>
-                            <option value="13ProMax">iPhone 13 Pro Max - Lên tới 8.100.000đ</option>
-                            <option value="13Pro">iPhone 13 Pro - Lên tới 6.800.000đ</option>
-                            <option value="13">iPhone 13 - Lên tới 4.900.000đ</option>
-                        </select>
-                        <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); pointer-events:none; color:#86868b; font-size:14px;">&#8964;</span>
-                    </div>
-
-                    {{-- Storage selection --}}
-                    <p style="font-size:15px; font-weight:600; color:#1d1d1f; margin:0 0 10px;"><strong>Dung lượng bao nhiêu?</strong></p>
-                    <div style="position:relative; margin-bottom:20px;">
-                        <label style="position:absolute; top:8px; left:14px; font-size:11px; color:#86868b; z-index:1;">Chọn dung lượng sản phẩm</label>
-                        <select id="trade-storage-select"
-                            style="width:100%; border:1px solid #d2d2d7; border-radius:10px; padding:26px 40px 10px 14px; font-size:15px; color:#1d1d1f; appearance:none; -webkit-appearance:none; background:#fff; cursor:pointer; font-family:inherit;">
-                            <option value="">Chọn</option>
-                            <option value="256">256GB</option>
-                            <option value="512">512GB</option>
-                            <option value="1tb">1TB</option>
-                        </select>
-                        <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); pointer-events:none; color:#86868b; font-size:14px;">&#8964;</span>
-                    </div>
-
-                    {{-- Condition --}}
-                    <p style="font-size:15px; font-weight:600; color:#1d1d1f; margin:0 0 10px;"><strong>Tình trạng iPhone của bạn có tốt không?</strong></p>
-                    <div style="display:flex; gap:12px;">
-                        <button id="cond-yes" onclick="selectCondition('yes')"
-                            style="flex:1; border:1px solid #d2d2d7; border-radius:10px; padding:18px; font-size:15px; font-weight:600; color:#1d1d1f; background:#fff; cursor:pointer; transition:all 0.2s; font-family:inherit;">Đúng</button>
-                        <button id="cond-no" onclick="selectCondition('no')"
-                            style="flex:1; border:1px solid #d2d2d7; border-radius:10px; padding:18px; font-size:15px; font-weight:600; color:#1d1d1f; background:#fff; cursor:pointer; transition:all 0.2s; font-family:inherit;">Sai</button>
-                    </div>
-                </div>
-
-                {{-- Right: Helper info --}}
-                <div style="width:220px; flex-shrink:0; padding-top:50px">
-                    <p id="trade-hint-model" style="font-size:12px; color:#86868b; line-height:1.5; margin:0 0 20px;">Trên iPhone, hãy vào mục Cài đặt > Tên của bạn. Cuộn xuống để xem phiên bản.</p>
-                    <p id="trade-hint-storage" style="font-size:12px; color:#86868b; line-height:1.5; margin:0 0 20px;">Trên iPhone, hãy vào mục Cài đặt > Cài đặt chung > Giới thiệu. Trên các điện thoại thông minh khác, hãy vào mục Cài đặt > Dung lượng.</p>
-                    <div id="trade-hint-cond" style="display:none;">
-                        <p style="font-size:12px; color:#86868b; margin:0 0 6px;">Trả lời có nếu tất cả các điều sau là đúng:</p>
-                        <ul style="font-size:12px; color:#0071e3; margin:0; padding-left:16px; line-height:1.7;">
-                            <li>Máy bật và hoạt động bình thường</li>
-                            <li>Tất cả các nút đều hoạt động bình thường</li>
-                            <li>Camera hoạt động bình thường và tất cả ống kính đều không bị hư hỏng</li>
-                            <li style="color:#86868b;">Thân máy không bị lõm hoặc trầy xước</li>
-                            <li style="color:#86868b;">Màn hình cảm ứng và mặt kính sau không bị hư hỏng</li>
-                            <li style="color:#86868b;">Màn hình không bị biến dạng, sọc, có chấm đen hoặc trắng</li>
-                            <li style="color:#86868b;">Pin vẫn hoạt động bình thường</li>
-                        </ul>
-                    </div>
-                </div>
+        <div id="trade-in-form" class="trade-in-form" style="display: none;">
+            <p style="font-size: 14px; margin-bottom: 12px; color: #1d1d1f;">Nhập số sê-ri iPhone để kiểm tra giá trị trao đổi.</p>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" placeholder="Số sê-ri" id="trade-serial-input">
+                <button type="button">Xác minh</button>
             </div>
+            <p style="font-size: 12px; color: #86868b; margin-top: 15px;">Trên iPhone, hãy vào mục Cài đặt > Cài đặt chung > Giới thiệu.</p>
         </div>
 
-        <script>
-        function selectTradeOption(choice) {
-            var chonCard = document.getElementById('trade-chon-card');
-            var noCard = document.getElementById('trade-no-card');
-            var form = document.getElementById('trade-form');
-            if (choice === 'chon') {
-                chonCard.style.border = '2px solid #0071e3';
-                noCard.style.border = '1px solid #d2d2d7';
-                form.style.display = 'block';
-            } else {
-                noCard.style.border = '2px solid #0071e3';
-                chonCard.style.border = '1px solid #d2d2d7';
-                form.style.display = 'none';
-            }
-        }
-        function selectCondition(choice) {
-            var yes = document.getElementById('cond-yes');
-            var no = document.getElementById('cond-no');
-            var hint = document.getElementById('trade-hint-cond');
-            if (choice === 'yes') {
-                yes.style.border = '2px solid #0071e3';
-                yes.style.background = '#f5faff';
-                no.style.border = '1px solid #d2d2d7';
-                no.style.background = '#fff';
-            } else {
-                no.style.border = '2px solid #0071e3';
-                no.style.background = '#f5faff';
-                yes.style.border = '1px solid #d2d2d7';
-                yes.style.background = '#fff';
-            }
-            hint.style.display = 'block';
-        }
-        function updateTradeStorage() {
-            var model = document.getElementById('trade-model-select').value;
-            var storageSelect = document.getElementById('trade-storage-select');
-            storageSelect.innerHTML = '<option value="">Chọn</option>';
-            if (!model) return;
-            var options = [];
-            // Pro Max / Pro models have 256, 512, 1TB
-            if (model.includes('ProMax') || model.includes('Pro')) {
-                options = ['256GB','512GB','1TB'];
-            } else if (model.includes('Plus') || model === '16' || model === '15' || model === '14' || model === '13') {
-                options = ['128GB','256GB','512GB'];
-            } else {
-                options = ['128GB','256GB'];
-            }
-            options.forEach(function(opt) {
-                var el = document.createElement('option');
-                el.value = opt; el.textContent = opt;
-                storageSelect.appendChild(el);
-            });
-        }
-        </script>
-
-        <h3 style="margin-top: 50px;"><strong>Gói bảo hành AppleCare+.</strong> <span style="font-weight: normal; color: #86868b;">Bảo vệ iPhone mới của bạn.</span></h3>
-        <div class="applecare-options" id="applecare-options" style="display: flex; gap: 15px; margin-top: 10px; padding-bottom: 50px; padding-top: 10px;">
-            <div class="applecare-card" id="applecare-yes-card" onclick="openApplecareModal()" style="flex: 1; border: 1px solid #d2d2d7; border-radius: 12px; padding: 25px 20px; text-align: left; display: flex; flex-direction: column; justify-content: flex-start; cursor: pointer; background-color: #ffffff; transition: border-color 0.2s;">
-                <div style="font-size: 17px; font-weight: 600; color: #1d1d1f; display: flex; align-items: center; gap: 5px;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" style="height: 16px; opacity: 0.6; filter: invert(0.5) sepia(1) saturate(5) hue-rotate(315deg);" alt="Apple"> AppleCare+
+        <h3 style="margin-top: 50px; font-size: 24px; font-weight: 700;"><strong>Gói bảo hành AppleCare+.</strong> <span style="font-weight: normal; color: #86868b;">Bảo vệ <span id="applecare-product-name">{{ $seriesTitleDisplay }}</span> mới của bạn.</span></h3>
+        <div class="applecare-options" style="display: flex; gap: 15px; margin-top: 10px;">
+            <div class="applecare-card" id="applecare-yes-card" onclick="openApplecareModal()">
+                <div class="applecare-header">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus-201508?wid=326&hei=332&fmt=png-alpha" style="height: 24px; object-fit: contain;" alt="Apple"> AppleCare+
                 </div>
-                <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 15px 0;">
-                <ul style="font-size: 12px; font-weight: 400; color: #86868b; margin: 0; padding-left: 20px; list-style-type: disc; display: flex; flex-direction: column; gap: 10px;">
+                <p style="font-size: 14px; color: #1d1d1f; margin-bottom: 10px;">5.499.000đ hoặc 224.000đ/tháng cho 24 tháng<sup>◊</sup></p>
+                <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 10px 0;">
+                <ul class="applecare-benefits">
                     <li>Nay đã có dịch vụ sửa chữa không hạn chế cho trường hợp hư hỏng do sự cố bất ngờ.*</li>
-                    <li>Dịch vụ sửa chữa được Apple chứng nhận sử dụng linh kiện Apple chính hãng</li>
-                    <li>Dịch Vụ Thay Thế Cấp Tốc — Chúng tôi sẽ gửi cho bạn một thiết bị thay thế để bạn không phải chờ sửa chữa±</li>
-                    <li>Ưu tiên tiếp cận các chuyên gia Apple</li>
+                    <li>Dịch vụ sửa chữa được Apple chứng nhận sử dụng linh kiện Apple chính hãng.</li>
+                    <li>Dịch vụ Thay Thế Cấp Tốc — Chúng tôi sẽ gửi cho bạn một thiết bị thay thế để bạn không phải chờ sửa chữa.</li>
+                    <li>Ưu tiên tiếp cận các chuyên gia Apple.</li>
                 </ul>
             </div>
-            <div class="applecare-card" id="applecare-no-card" onclick="selectApplecare('no')" style="flex: 1; border: 1px solid #d2d2d7; border-radius: 12px; padding: 25px 20px; text-align: left; display: flex; flex-direction: column; justify-content: flex-start; background-color: #ffffff; cursor: pointer; transition: border-color 0.2s;">
-                <span style="font-size: 17px; font-weight: 600; color: #86868b;">Không có bảo hành AppleCare+</span>
+            <div class="applecare-card selected" id="applecare-no-card" onclick="selectApplecare('no')">
+                <strong>Không có bảo hành AppleCare+</strong>
             </div>
         </div>
-
-        {{-- AppleCare+ Modal --}}
-        <div id="applecare-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; overflow-y:auto;">
-            <div style="background:#fff; max-width:45vw; margin:40px auto; border-radius:20px; padding:36px 40px 32px 40px; position:relative; box-shadow:0 30px 80px rgba(0,0,0,0.25); font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue',Arial,sans-serif;">
-                {{-- Close button --}}
-                <button onclick="closeApplecareModal()" style="position:absolute; top:18px; right:18px; background:#e8e8ed; border:none; border-radius:50%; width:30px; height:30px; font-size:16px; cursor:pointer; color:#6e6e73; display:flex; align-items:center; justify-content:center; font-weight:500; line-height:1;">&times;</button>
-
-                {{-- Header --}}
-                <div style="text-align:center; margin-bottom:28px;">
-                    <div style="width:64px; height:64px; background:linear-gradient(145deg,#e8002d,#bf001b); border-radius:16px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(232,0,45,0.4);">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" style="height:34px; filter:brightness(0) invert(1);" alt="AppleCare+">
-                    </div>
-                    <p style="font-size:12px; font-weight:600; color:#e30000; letter-spacing:0.3px; margin:0 0 10px;">AppleCare+</p>
-                    <h2 style="font-size:32px; font-weight:700; color:#1d1d1f; margin:0 0 8px; letter-spacing:-0.5px;">AppleCare+</h2>
-                    <p style="font-size:14px; color:#1d1d1f; margin:0; font-weight:400;">5.499.000đ hoặc 224.000đ/tháng cho 24 tháng<sup style="font-size:10px;">^</sup></p>
-                </div>
-
-                {{-- Body --}}
-                <div style="font-size:15px; color:#1d1d1f; line-height:1.65; font-weight:400;">
-                    <p style="margin:0 0 16px;">Mỗi sản phẩm iPhone đều được bảo hành sửa chữa phần cứng một năm qua <a href="#" style="color:#0071e3; text-decoration:none;">bảo hành giới hạn</a> và hỗ trợ kỹ thuật miễn phí lên đến <a href="#" style="color:#0071e3; text-decoration:none;">90 ngày</a>. AppleCare+ cho iPhone kéo dài thời gian bảo hành lên hai năm kể từ ngày bạn mua AppleCare+, bao gồm bảo hành không giới hạn số lần cho các trường hợp hư hỏng do sự cố bất ngờ. Mỗi lần bảo hành chịu phí dịch vụ 799.000đ đối với trường hợp hư hỏng màn hình hoặc kính mặt sau, hoặc 2.649.000đ đối với trường hợp hư hỏng do sự cố bất ngờ khác. Để biết thông tin đầy đủ, vui lòng tham khảo các <a href="#" style="color:#0071e3; text-decoration:none;">điều khoản</a>.</p>
-                    <p style="margin:0 0 20px;"><a href="https://www.apple.com/vn/support/products/iphone/" target="_blank" style="color:#0071e3; text-decoration:none; font-size:15px;">Tìm hiểu thêm về AppleCare+ ↗</a></p>
-
-                    <hr style="border:0; border-top:1px solid #d2d2d7; margin:0 0 16px;">
-
-                    <p style="font-size:11px; color:#86868b; margin:0 0 8px;"><sup>A</sup> Ước tính. Mức phí có thể thay đổi theo thời gian.</p>
-                    <p style="font-size:11px; color:#86868b; margin:0 0 8px;">Chương trình Trả Góp Hàng Tháng Với MoMo do (các) đối tác tín dụng cung cấp qua ứng dụng MoMo của Công Ty Cổ Phần Dịch Vụ Di Động Trực Tuyến ("MoMo") chứ không phải Apple. Chỉ cư dân Việt Nam đủ điều kiện mới có thể mua sản phẩm đủ điều kiện qua chương trình này.</p>
-                    <p style="font-size:11px; color:#86868b; margin:0;">Tất cả sản phẩm được mua qua hình thức Trả Góp Hàng Tháng Với MoMo đều cần có tài khoản vi điện tử từ MoMo và phải được (các) đối tác tín dụng của MoMo phê duyệt. Nếu bạn có câu hỏi về điều kiện tín dụng, vui lòng liên hệ với MoMo để nhận câu trả lời từ (các) đối tác tín dụng của MoMo.</p>
-                </div>
-
-                {{-- Footer button --}}
-                <button onclick="closeApplecareModal()" style="display:block; width:100%; margin-top:24px; padding:15px; background:#0071e3; color:#fff; border:none; border-radius:30px; font-size:17px; font-weight:600; cursor:pointer; transition:background 0.2s; font-family:inherit; letter-spacing:0;">Chọn AppleCare+</button>
-            </div>
-        </div>
-
-        <script>
-        var applecareSelected = null; // 'yes' or 'no'
-
-        function openApplecareModal() {
-            document.getElementById('applecare-modal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeApplecareModal() {
-            document.getElementById('applecare-modal').style.display = 'none';
-            document.body.style.overflow = '';
-            selectApplecare('yes');
-        }
-
-        function selectApplecare(choice) {
-            applecareSelected = choice;
-            var yesCard = document.getElementById('applecare-yes-card');
-            var noCard = document.getElementById('applecare-no-card');
-            if (choice === 'yes') {
-                yesCard.style.border = '2px solid #0071e3';
-                yesCard.style.backgroundColor = '#f5faff';
-                noCard.style.border = '1px solid #d2d2d7';
-                noCard.style.backgroundColor = '#ffffff';
-            } else {
-                noCard.style.border = '2px solid #0071e3';
-                noCard.style.backgroundColor = '#f5faff';
-                yesCard.style.border = '1px solid #d2d2d7';
-                yesCard.style.backgroundColor = '#ffffff';
-            }
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('applecare-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeApplecareModal();
-        });
-        </script>
     </div>
 
-    {{-- Right Column: Model, Color, Storage --}}
+    {{-- Right Column --}}
     <div class="rf-bfe-column-right">
-        <h2><strong>Phiên bản.</strong> <span style="font-weight: normal; color: #86868b;">Mẫu nào phù hợp nhất với bạn?</span></h2>
-
+        <h2><strong>Phiên bản.</strong> <span style="font-weight: normal; color: #86868b;">Mẫu nào phù hợp nhất?</span></h2>
         <div id="model-selections">
             @foreach($products as $index => $product)
-                @php
-                    $priceVal = (int)preg_replace('/[^0-9]/', '', $product->price);
-                    if(empty($priceVal)) $priceVal = 0;
-                    
-                    // For demonstration, if there's only 1 image, we'll create a few variations
-                    // In a real app, this would come from a relationship like $product->images
-                    $images = [$product->image_url];
-                    // Faking multiple images for demonstration if only one exists
-                    if (count($images) == 1) {
-                        $images[] = $product->image_url; // same image for now
-                        $images[] = $product->image_url;
-                    }
-                @endphp
+                @php $priceVal = $product->numeric_price; @endphp
                 <div class="model-card {{ $index == 0 ? 'selected' : '' }}" 
-                     data-id="{{ $product->id }}" 
-                     data-name="{{ $product->name }}" 
-                     data-price="{{ $priceVal }}" 
-                     data-image="{{ asset($product->image_url) }}"
-                     data-images="{{ json_encode(array_map(function($img) { return asset($img); }, $images)) }}"
-                     data-colors="{{ $product->colors }}"
-                     data-options="{{ json_encode($product->options) }}"
+                     data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $priceVal }}" 
+                     data-image="{{ asset($product->image_url) }}" data-images="{{ json_encode([asset($product->image_url), asset($product->image_url)]) }}"
+                     data-colors="{{ $product->colors }}" data-options="{{ json_encode($product->options) }}"
                      onclick="selectModel(this)">
-                    <div style="flex: 1; text-align: left;">
-                        <strong>{{ $product->name }}</strong>
-                    </div>
+                    <div style="flex: 1; text-align: left;"><strong>{{ $product->name }}</strong></div>
                     <div style="flex: 1; text-align: right;">
-                        <p style="text-align: right;">Từ {{ number_format($priceVal, 0, ',', '.') }}đ<br>hoặc<br>{{ number_format($priceVal / 24, 0, ',', '.') }}đ/tháng<br>trong 24 tháng</p>
+                        <p style="text-align: right;">Từ {{ number_format($priceVal, 0, ',', '.') }}đ<br>hoặc {{ number_format($priceVal / 24, 0, ',', '.') }}đ/tháng</p>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <div class="help-box">
-            <div style="text-align: left;">
-                <strong>Bạn cần trợ giúp chọn một phiên bản?</strong>
-                <p style="margin: 0;">Khám phá sự khác biệt về kích thước màn hình và thời lượng pin.</p>
-            </div>
-            <div style="font-size: 24px; color: #1d1d1f; font-weight: 300;">⊕</div>
-        </div>
-
         <br>
-        <h2><strong>Màu.</strong> <span style="font-weight: normal; color: #86868b;">Chọn màu bạn yêu thích.</span></h2>
-        <br>
+        <h2><strong>Màu.</strong> <span style="font-weight: normal; color: #86868b;">Chọn màu yêu thích.</span></h2>
         <b style="font-size: 17px; font-weight: 600; color: #1d1d1f;" id="color-label">Màu sắc</b>
-        <div class="color-options" id="color-selections" style="padding: 15px 0;">
-            <!-- JS will populate colors here -->
+        <div class="color-options" id="color-selections" style="padding: 15px 0;"></div>
+
+        <div id="dynamic-options-container"></div>
+
+        <div class="help-info-box">
+            <h4>Chương trình đổi cũ lấy mới hoạt động như thế nào? <span style="color: #86868b;">⊕</span></h4>
+            <p>Tìm hiểu cách để tiết kiệm cho giao dịch này thông qua chương trình trao đổi. Hoặc tái chế thiết bị miễn phí.</p>
         </div>
 
-        <div id="dynamic-options-container">
-            <!-- Dynamic options will be loaded here by JS -->
+        <div class="help-info-box">
+            <h4>AppleCare+ hoạt động như thế nào? <span style="color: #86868b;">⊕</span></h4>
+            <p>Bảo hành cho sự cố bị rơi hay đổ nước và hơn thế nữa cho iPhone của bạn. Xem dịch vụ đi kèm.</p>
         </div>
-        
-        <p style="font-size: 11px; color: #e30000; margin-top: 15px;">Trả góp theo tháng với phí dịch vụ thực 1.67%, sau khi thanh toán lần đầu 20%. Có thêm tùy chọn thanh toán khi hoàn tất giao dịch.</p>
-
-        <div class="help-box" style="margin-top: 15px;">
-            <div style="text-align: left;">
-                <strong>Bạn không chắc mình cần lựa chọn nào?</strong>
-                <p style="margin: 0;">Hiểu rõ hơn về các cấu hình phù hợp với bạn.</p>
-            </div>
-            <div style="font-size: 24px; color: #1d1d1f; font-weight: 300;">⊕</div>
-        </div>
-        
     </div>
 </div>
 
-{{-- ===== Apple-style Checkout Summary (below two-column layout) ===== --}}
-<div style="background: #f5f5f7; border-top: 1px solid #d2d2d7; padding: 60px 100px; margin-top: 0;">
-    <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start;">
-
-        {{-- Left: Big headline + product image --}}
-        <div style="flex: 0 0 340px;">
-            <h2 style="font-size: 40px; font-weight: 700; color: #1d1d1f; line-height: 1.1; margin: 0 0 8px;">
-                <span id="checkout-product-name-title">iPhone</span><br>
-                <span style="font-weight: 700;">mới của bạn.</span>
+{{-- Checkout Summary --}}
+<div style="background: #f5f5f7; border-top: 1px solid #d2d2d7; padding: 30px 0;">
+    <div class="container" style="max-width: 1300px; display: flex; gap: 80px; align-items: flex-start;">
+        {{-- Left: Headline --}}
+        <div style="flex: 1;">
+            <h2 style="font-size: 36px; font-weight: 700; line-height: 1.1; margin-bottom: 40px; color: #1d1d1f;">
+                <span id="summary-product-name-large">Sản phẩm</span> mới của bạn.<br>
+                <span style="color: #86868b;">Theo cách bạn muốn.</span>
             </h2>
-            <p style="font-size: 21px; color: #86868b; font-weight: 400; margin: 0 0 30px;">Theo cách bạn muốn.</p>
-            <div style="background: #ffffff; border-radius: 24px; padding: 20px; display: flex; justify-content: center; align-items: center; width: 300px; height: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
-                <img id="checkout-product-image" src="{{ asset($products->first()->image_url ?? 'images/default.jpg') }}"
-                     alt="Product" style="max-width: 100%; max-height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply;">
+            <img id="checkout-product-image" src="{{ asset($products->first()->image_url) }}" style="width: 100%; max-width: 450px; object-fit: contain; border-radius: 18px; mix-blend-mode: multiply;">
+        </div>
+
+        {{-- Middle: Details --}}
+        <div style="flex: 1;">
+            <div style="margin-bottom: 20px;">
+                <h3 id="summary-product-headline" style="font-size: 24px; font-weight: 500; margin-bottom: 12px; color: #1d1d1f; line-height: 1.3;">Đang tải...</h3>
+                
+                <div style="margin-bottom: 25px;">
+                    <div style="font-size: 21px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">Tổng cộng <span id="summary-total-price">0đ</span></div>
+                    <div style="font-size: 17px; color: #1d1d1f;">hoặc</div>
+                    <div style="font-size: 21px; font-weight: 600; color: #1d1d1f; margin-top: 4px;">
+                        <span id="summary-monthly-price">0đ</span>/tháng cho 24 tháng<sup>Δ</sup>
+                    </div>
+                    <div id="summary-installment-detail" style="font-size: 14px; color: #1d1d1f; margin-top: 6px;">
+                        Ở mức phí dịch vụ 1.67%, sau khi thanh toán lần đầu 20% là <span id="summary-initial-payment">0đ</span>
+                    </div>
+                </div>
+
+                <div id="summary-applecare-status" style="display: none; font-size: 17px; color: #1d1d1f; margin-bottom: 12px;">
+                    Đi kèm AppleCare+
+                </div>
+
+                <div style="font-size: 17px; color: #1d1d1f; margin-bottom: 15px;">
+                    Bao gồm thuế GTGT khoảng <span id="summary-vat-price">0đ</span>.<sup>Δ</sup>
+                </div>
+
+                <a href="#" style="color: #0066cc; text-decoration: none; font-size: 17px; display: flex; align-items: center; gap: 5px; margin-bottom: 30px;">
+                    Khám phá thêm các lựa chọn trả góp hàng tháng <span style="font-size: 20px; font-weight: 300;">⊕</span>
+                </a>
+
+                <hr style="border: 0; border-top: 1.2px solid #86868b; margin: 0 0 25px 0;">
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin-bottom: 6px;">Vẫn chưa thể quyết định?</h4>
+                    <p style="font-size: 17px; color: #1d1d1f; line-height: 1.4; margin-bottom: 12px;">
+                        Bạn có thể nhấn "Lưu để xem lại sau" để dễ dàng quay lại xem sản phẩm.
+                    </p>
+                    <a href="#" style="color: #0066cc; text-decoration: none; font-size: 17px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 16L9 11.5L4 16V4C4 3.44772 4.44772 3 5 3H13C13.5523 3 14 3.44772 14 4V16Z" stroke="#0066cc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Lưu để xem lại sau
+                    </a>
+                </div>
+
+                <hr style="border: 0; border-top: 1.2px solid #86868b; margin: 0 0 25px 0;">
+
+                <p style="font-size: 17px; color: #1d1d1f; line-height: 1.4;">
+                    Chi tiết giao hàng cho khu vực của bạn sẽ được hiển thị trong phần Thanh Toán.
+                </p>
             </div>
         </div>
 
-        {{-- Middle: Pricing details --}}
-        <div style="flex: 1; min-width: 0;">
-            <p id="summary-product-headline" style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin: 0 0 10px;">iPhone</p>
-
-            <p style="font-size: 15px; color: #1d1d1f; margin: 0 0 2px;">
-                Tổng cộng <strong id="summary-total-price" style="font-size: 15px;">0đ</strong>
-            </p>
-            <p style="font-size: 15px; color: #1d1d1f; margin: 4px 0;">hoặc</p>
-            <p style="font-size: 21px; font-weight: 700; color: #1d1d1f; margin: 0 0 4px; line-height: 1.2;">
-                <span id="summary-monthly-price">0đ</span>/tháng cho 24 tháng<sup style="font-size:12px; font-weight:400;">^</sup>
-            </p>
-            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
-                Ở mức phí dịch vụ 1,67%, sau khi thanh toán lần đầu 20% là <span id="summary-down-payment">0đ</span>
-            </p>
-            <p style="font-size: 11px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
-                Bao gồm thuế GTGT khoảng <span id="summary-tax">0đ</span>.<sup style="font-size:9px;">^</sup>
-            </p>
-            <p style="font-size: 13px; color: #6e6e73; margin: 0 0 16px;">
-                <a href="#" style="color: #6e6e73; text-decoration: none;">Khám phá thêm các lựa chọn trả góp hàng tháng ⊕</a>
-            </p>
-
-            <div id="summary-applecare-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 14px; color: #1d1d1f; border-top: 1px solid #d2d2d7; padding-top: 12px;">
-                <span>AppleCare+</span>
-                <span>5.499.000đ</span>
+        {{-- Right: CTA --}}
+        <div style="flex: 0 0 340px;">
+            <div style="display: flex; flex-direction: column; gap: 30px;">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M24 10H20V6C20 4.89543 19.1046 4 18 4H4C2.89543 4 2 4.89543 2 6V22C2 23.1046 2.89543 24 4 24H6C6 25.6569 7.34315 27 9 27C10.6569 27 12 25.6569 12 24H20C20 25.6569 21.3431 27 23 27C24.6569 27 26 25.6569 26 24H28C29.1046 24 30 23.1046 30 22V16L24 10Z" stroke="#1d1d1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="9" cy="24" r="3" stroke="#1d1d1f" stroke-width="1.5"/>
+                        <circle cx="23" cy="24" r="3" stroke="#1d1d1f" stroke-width="1.5"/>
+                        <path d="M24 10V16H30" stroke="#1d1d1f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div style="font-size: 16px; color: #1d1d1f; line-height: 1.4;">
+                        Đặt hàng hôm nay. Giao hàng đến <a href="#" style="color: #0066cc; text-decoration: underline;">P. Sài Gòn</a><br>
+                        <strong>{{ date('d/m/Y', strtotime('+7 days')) }} – {{ date('d/m/Y', strtotime('+9 days')) }} — Miễn Phí</strong>
+                    </div>
+                </div>
+                
+                <form id="add-to-cart-form">
+                    @csrf
+                    <input type="hidden" id="input-product-name">
+                    <input type="hidden" id="input-total-price">
+                    <input type="hidden" id="input-storage">
+                    <input type="hidden" id="input-color">
+                    <input type="hidden" id="input-applecare" value="0">
+                    <input type="hidden" id="input-image">
+                    <button type="button" class="buy-button" onclick="addToCart()" style="width: 100%; background-color: #0071e3; color: #fff; font-size: 17px; font-weight: 400; padding: 18px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s;">
+                        Thêm vào giỏ hàng
+                    </button>
+                </form>
             </div>
+        </div>
+    </div>
+</div>
 
-            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 0 0 16px;">
+{{-- What's in the Box Section --}}
+<div style="background: #fff; padding: 120px 0; border-top: 1px solid #d2d2d7; text-align: center;">
+    <div class="container" style="max-width: 980px;">
+        <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 70px; color: #1d1d1f; letter-spacing: -0.015em;">Trong hộp có gì</h2>
+        
+        <div style="background-color: #f5f5f7; border-radius: 18px; padding: 100px 20px; margin-bottom: 25px; display: flex; justify-content: center; align-items: center;">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                <img id="box-product-img" src="{{ asset($products->first()->image_url) }}" style="height: 380px; object-fit: contain; mix-blend-mode: multiply;">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-witb-cable-202509?wid=400&hei=800&fmt=png-alpha" style="height: 380px; object-fit: contain;">
+            </div>
+        </div>
 
-            <p style="font-size: 13px; font-weight: 400; color: #6e6e73; margin: 0 0 4px;">Vận chưa thể quyết định?</p>
-            <p style="font-size: 13px; color: #6e6e73; margin: 0 0 6px; line-height: 1.4;">
-                Bạn có thể nhấn "Lưu để xem lại sau" để dễ dàng quay lại xem sản phẩm.
+        <div style="display: flex; justify-content: center; margin-bottom: 100px;">
+            <div style="flex: 1; text-align: center;">
+                <p id="box-product-name" style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0;">{{ $seriesTitleDisplay }}</p>
+            </div>
+            <div style="flex: 1; text-align: center;">
+                <p style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0;">Cáp Sạc USB‑C</p>
+            </div>
+        </div>
+
+        <div style="max-width: 780px; margin: 0 auto; text-align: center; border-top: 1px solid #d2d2d7; padding-top: 40px; margin-bottom: 100px;">
+            <h4 style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin-bottom: 15px;">Các mục tiêu về môi trường của chúng tôi.</h4>
+            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 0 auto;">
+                Là một phần trong nỗ lực của chúng tôi nhằm đạt được <a href="#" style="color: #0066cc; text-decoration: none;">trạng thái trung hòa carbon vào năm 2030</a>, {{ $seriesTitleDisplay }} không đi kèm bộ tiếp hợp nguồn hay Tai Nghe EarPods. Trong hộp có một cáp sạc nhanh USB-C hỗ trợ sạc nhanh và tương thích với bộ tiếp hợp nguồn USB-C cũng như cổng máy tính.
             </p>
-            <p style="font-size: 13px; margin: 0 0 16px;">
-                <a href="#" style="color: #6e6e73; text-decoration: none;">☐ Lưu để xem lại sau</a>
-            </p>
-
-            <hr style="border: 0; border-top: 1px solid #d2d2d7; margin: 0 0 16px;">
-
-            <p style="font-size: 13px; color: #6e6e73; margin: 0; line-height: 1.5;">
-                Chi tiết giao hàng cho khu vực của bạn sẽ được hiển thị trong phần Thanh Toán.
+            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 15px auto 0;">
+                Chúng tôi khuyến khích bạn sử dụng bất kỳ bộ tiếp hợp nguồn USB-C nào tương thích. Bạn cũng có thể mua bộ tiếp hợp nguồn hoặc tai nghe mới của Apple nếu cần.
             </p>
         </div>
 
-        {{-- Right: Shipping + Button --}}
-        <div style="flex: 0 0 200px;">
-            <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px;">
-                <span style="font-size: 18px; margin-top: 2px;">🚚</span>
-                <div>
-                    <p style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin: 0 0 2px;">Vận chuyển:</p>
-                    <p style="font-size: 13px; color: #6e6e73; margin: 0 0 2px;">3–5 ngày làm việc</p>
-                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Vận Chuyển Miễn Phí</a><br>
-                    <a href="#" style="font-size: 13px; color: #0071e3; text-decoration: none;">Nhận thông tin về ngày giao hàng ⓘ</a>
+        @if(str_contains(strtolower($seriesTitleDisplay), 'iphone'))
+        <div style="margin-top: 120px;">
+            <h2 style="font-size: 48px; font-weight: 700; color: #1d1d1f; margin-bottom: 80px; letter-spacing: -0.015em;">iPhone mới đến với nhiều lợi ích cộng thêm.</h2>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: center;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-tv?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple TV</h3>
+                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để xem các bộ phim và series gốc "đáng cày".*</p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-music?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Music</h3>
+                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để thưởng thức tất cả các bài hát bạn yêu thích, hoàn toàn không có quảng cáo.<sup>◊</sup></p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-arcade?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Arcade</h3>
+                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để chơi game cực vui, không gián đoạn.<sup>+</sup></p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-fitness?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Fitness+</h3>
+                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để tập luyện, từ HIIT cho đến Thiền.<sup>^</sup></p>
                 </div>
             </div>
-
-            <form id="add-to-cart-form">
-                <input type="hidden" id="input-product-name" value="">
-                <input type="hidden" id="input-total-price" value="">
-                <input type="hidden" id="input-storage" value="">
-                <input type="hidden" id="input-color" value="">
-                <input type="hidden" id="input-applecare" value="0">
-                <input type="hidden" id="input-image" value="">
-
-                <button type="button" onclick="addToCart()"
-                    style="width: 100%; padding: 14px 20px; border-radius: 980px; background-color: #0071e3; color: white; font-size: 17px; font-weight: 600; border: none; cursor: pointer; transition: background-color 0.2s; margin-bottom: 10px;"
-                    onmouseover="this.style.backgroundColor='#0077ed'"
-                    onmouseout="this.style.backgroundColor='#0071e3'">
-                    Thêm vào giỏ hàng
-                </button>
-            </form>
-
-            {{-- Mua ngay button --}}
-            <form action="{{ route('checkout') }}" method="GET" style="margin-top: 10px;">
-                <input type="hidden" name="product" id="buynow-product-name" value="">
-                <input type="hidden" name="price" id="buynow-total-price" value="">
-                <input type="hidden" name="storage" id="buynow-storage" value="">
-                <input type="hidden" name="color" id="buynow-color" value="">
-                <input type="hidden" name="applecare" id="buynow-applecare" value="0">
-                <input type="hidden" name="image_url" id="buynow-image" value="">
-                <input type="hidden" name="buy_now" value="1">
-                <button type="submit"
-                    style="width: 100%; padding: 14px 20px; border-radius: 980px; background-color: transparent; color: #0071e3; font-size: 17px; font-weight: 600; border: 1.5px solid #0071e3; cursor: pointer; transition: all 0.2s;"
-                    onmouseover="this.style.backgroundColor='#0071e3'; this.style.color='white';"
-                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0071e3';">
-                    Mua ngay
-                </button>
-            </form>
         </div>
-
+        @endif
     </div>
 </div>
 
 @push('scripts')
 <script>
-    let currentModel = null;
-    let selectedOptions = {}; // Structure: { attribute_id: { label, priceOffset } }
-    let currentColor = null;
-    let appleCarePrice = 0;
+    let currentModel = null, selectedOptions = {}, currentColor = null, appleCarePrice = 0, currentSlide = 0, sliderImages = [];
+    function formatCurrency(n) { return new Intl.NumberFormat('vi-VN').format(n) + 'đ'; }
+    function toggleTradeIn(show) {
+        document.getElementById('trade-in-form').style.display = show ? 'block' : 'none';
+        document.getElementById('trade-chon-card').classList.toggle('selected', show);
+        document.getElementById('trade-no-card').classList.toggle('selected', !show);
+    }
     
-    // Slider state
-    let currentSlide = 0;
-    let sliderImages = [];
-
-    function formatCurrency(amount) {
-        return new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
+    function selectApplecare(c) {
+        appleCarePrice = c === 'yes' ? 5499000 : 0;
+        document.getElementById('applecare-yes-card').classList.toggle('selected', c === 'yes');
+        document.getElementById('applecare-no-card').classList.toggle('selected', c === 'no');
+        document.getElementById('input-applecare').value = c === 'yes' ? '1' : '0';
+        updateSummary();
     }
-
-    function hexToRgb(hex) {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
+    
+    function openApplecareModal() {
+        document.getElementById('applecare-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
-
-    function getColorName(hex) {
-        if (!hex) return 'Mặc định';
-        hex = hex.toLowerCase().trim();
-        
-        const namedColors = [
-            { hex: '#000000', name: 'Đen' },
-            { hex: '#ffffff', name: 'Trắng' },
-            { hex: '#ff0000', name: 'Đỏ' },
-            { hex: '#0000ff', name: 'Xanh Dương' },
-            { hex: '#00ff00', name: 'Xanh Lá' },
-            { hex: '#ffff00', name: 'Vàng' },
-            { hex: '#800080', name: 'Tím' },
-            { hex: '#ffc0cb', name: 'Hồng' },
-            { hex: '#808080', name: 'Xám' },
-            { hex: '#00ffff', name: 'Xanh Ngọc' },
-            { hex: '#ffa500', name: 'Cam' },
-            { hex: '#464644', name: 'Titan Đen' },
-            { hex: '#f9f6ef', name: 'Titan Trắng' },
-            { hex: '#2e3641', name: 'Titan Xanh' },
-            { hex: '#8f8a84', name: 'Titan Tự Nhiên' },
-            { hex: '#b5b3a9', name: 'Titan Tự Nhiên' },
-            { hex: '#4b0082', name: 'Chàm' },
-            { hex: '#ee82ee', name: 'Tím Nhạt' },
-            { hex: '#00ced1', name: 'Xanh Lơ' },
-            { hex: '#1e90ff', name: 'Xanh Biển' },
-            { hex: '#32cd32', name: 'Xanh Lục' },
-            { hex: '#a52a2a', name: 'Nâu' }
-        ];
-
-        const exact = namedColors.find(c => c.hex === hex);
-        if (exact) return exact.name;
-
-        const targetRgb = hexToRgb(hex);
-        if (!targetRgb) return 'Tuỳ chọn';
-
-        let minDistance = Infinity;
-        let nearestName = 'Tuỳ chọn';
-
-        for (const color of namedColors) {
-            const rgb = hexToRgb(color.hex);
-            if (!rgb) continue;
-
-            const dr = targetRgb.r - rgb.r;
-            const dg = targetRgb.g - rgb.g;
-            const db = targetRgb.b - rgb.b;
-            const distance = Math.sqrt(dr * dr + dg * dg + db * db);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestName = color.name;
-            }
+    
+    function closeApplecareModal() {
+        document.getElementById('applecare-modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    
+    function addAppleCare() {
+        selectApplecare('yes');
+        closeApplecareModal();
+    }
+    
+    function showInfo(type) {
+        let title = '', text = '';
+        if (type.toLowerCase().includes('ram') || type.toLowerCase().includes('bộ nhớ')) {
+            title = 'Về Bộ Nhớ (RAM)';
+            text = 'Bộ nhớ càng lớn, bạn càng có thể chạy nhiều ứng dụng cùng lúc với hiệu suất cao hơn.';
+        } else if (type.toLowerCase().includes('ssd') || type.toLowerCase().includes('ổ cứng') || type.toLowerCase().includes('dung lượng')) {
+            title = 'Về Dung Lượng Lưu Trữ';
+            text = 'Dung lượng lưu trữ là dung lượng để bạn lưu tài liệu, ảnh, nhạc, video và các tệp khác.';
+        } else {
+            title = 'Thông tin về ' + type;
+            text = 'Lựa chọn này giúp bạn tùy chỉnh thiết bị phù hợp nhất với nhu cầu sử dụng.';
         }
-
-        return nearestName;
+        Swal.fire({
+            title: title,
+            text: text,
+            confirmButtonText: 'Đã hiểu',
+            confirmButtonColor: '#0071e3',
+            customClass: { popup: 'apple-alert-popup' }
+        });
     }
-
+    
     function init() {
-        const firstModel = document.querySelector('.model-card');
-        if(firstModel) {
-            selectModel(firstModel);
-        }
-        
-        const originalApplecareSelect = window.selectApplecare;
-        window.selectApplecare = function(choice) {
-            originalApplecareSelect(choice);
-            appleCarePrice = (choice === 'yes') ? 5499000 : 0;
-            document.getElementById('summary-applecare-row').style.display = (choice === 'yes') ? 'flex' : 'none';
-            document.getElementById('input-applecare').value = (choice === 'yes') ? '1' : '0';
-            updateSummary();
-        }
-
-        // Scroll listener for sticky header
-        window.addEventListener('scroll', function() {
-            const stickyHeader = document.getElementById('sticky-header');
-            const triggerEl = document.getElementById('page-price-subtitle');
-            if (triggerEl && stickyHeader) {
-                const triggerPos = triggerEl.getBoundingClientRect().bottom + window.scrollY;
-                if (window.scrollY > triggerPos) {
-                    stickyHeader.style.display = 'flex';
-                } else {
-                    stickyHeader.style.display = 'none';
-                }
-            }
+        const first = document.querySelector('.model-card');
+        if(first) selectModel(first);
+        window.addEventListener('scroll', () => {
+            const h = document.getElementById('sticky-header'), t = document.getElementById('page-price-subtitle');
+            if(t && h) h.style.display = window.scrollY > (t.getBoundingClientRect().bottom + window.scrollY) ? 'flex' : 'none';
         });
     }
-
-    function initSlider(images) {
-        sliderImages = images;
-        currentSlide = 0;
-        
-        const sliderContainer = document.getElementById('image-slider');
-        const dotsContainer = document.getElementById('slider-dots');
-        
-        sliderContainer.innerHTML = '';
-        dotsContainer.innerHTML = '';
-        
-        sliderImages.forEach((imgSrc, idx) => {
-            // Add slide
-            const slide = document.createElement('div');
-            slide.className = 'image-slide';
-            slide.innerHTML = `<img src="${imgSrc}" alt="Slide ${idx + 1}">`;
-            sliderContainer.appendChild(slide);
-            
-            // Add dot
-            const dot = document.createElement('div');
-            dot.className = 'slider-dot' + (idx === 0 ? ' active' : '');
-            dot.onclick = () => goToSlide(idx);
-            dotsContainer.appendChild(dot);
-        });
-        
-        updateSliderPosition();
-    }
-
-    function moveSlider(direction) {
-        currentSlide += direction;
-        if (currentSlide >= sliderImages.length) currentSlide = 0;
-        if (currentSlide < 0) currentSlide = sliderImages.length - 1;
-        updateSliderPosition();
-    }
-
-    function goToSlide(index) {
-        currentSlide = index;
-        updateSliderPosition();
-    }
-
-    function updateSliderPosition() {
-        const slider = document.getElementById('image-slider');
-        if (!slider) return;
-        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Update dots
-        document.querySelectorAll('.slider-dot').forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === currentSlide);
-        });
-    }
-
     function selectModel(el) {
         document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         
+        let rawOptions = [];
+        try { rawOptions = JSON.parse(el.dataset.options || '[]'); } catch(e) { rawOptions = []; }
+        
+        let rawImages = [];
+        try { rawImages = JSON.parse(el.dataset.images || '[]'); } catch(e) { rawImages = []; }
+
         currentModel = {
-            id: el.dataset.id,
-            name: el.dataset.name,
-            price: parseInt(el.dataset.price),
-            image: el.dataset.image,
-            images: el.dataset.images ? JSON.parse(el.dataset.images) : [el.dataset.image],
-            colors: el.dataset.colors ? el.dataset.colors.split(',') : [],
-            options: el.dataset.options ? JSON.parse(el.dataset.options) : []
+            id: el.dataset.id, 
+            name: el.dataset.name, 
+            price: parseInt(el.dataset.price) || 0,
+            image: el.dataset.image, 
+            images: rawImages,
+            colors: (el.dataset.colors || "").split(',').filter(c => c.trim() !== ""), 
+            options: rawOptions
         };
-        
-        document.getElementById('page-title').innerText = "Mua " + currentModel.name;
-        initSlider(currentModel.images);
 
-        // Group options by attribute
-        const groupedOptions = {};
-        currentModel.options.forEach(opt => {
-            const attrName = opt.attribute ? opt.attribute.name : 'Tùy chọn';
-            const attrId = opt.attribute_id;
-            if (!groupedOptions[attrId]) {
-                groupedOptions[attrId] = { name: attrName, items: [] };
-            }
-            groupedOptions[attrId].items.push(opt);
+        const mainImg = document.getElementById('main-product-image');
+        if(mainImg) mainImg.src = currentModel.image;
+        const boxImg = document.getElementById('box-product-img');
+        if(boxImg) boxImg.src = currentModel.image;
+        
+        // Update Page Title and Price Subtitle
+        const pageTitle = document.getElementById('page-title');
+        if(pageTitle) pageTitle.innerText = `Mua ${currentModel.name}`;
+        const pagePriceSub = document.getElementById('page-price-subtitle');
+        if(pagePriceSub) pagePriceSub.innerText = `Từ ${formatCurrency(currentModel.price)} hoặc ${formatCurrency(Math.round(currentModel.price/24))}/tháng trong 24 tháng*`;
+        
+        // Update other mentions of the product name
+        const idsToUpdate = ['sticky-product-name', 'trade-in-product-name', 'applecare-product-name', 'box-product-name', 'summary-product-name-large', 'summary-product-headline'];
+        idsToUpdate.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerText = currentModel.name;
         });
-
-        // Reset selected options
-        selectedOptions = {};
-
-        // Render dynamic options
-        const container = document.getElementById('dynamic-options-container');
-        container.innerHTML = '';
         
-        Object.entries(groupedOptions).forEach(([attrId, group]) => {
-            const groupDiv = document.createElement('div');
-            groupDiv.className = 'attribute-group-section';
-            groupDiv.innerHTML = `<br><h2><strong>${group.name}.</strong> <span style="font-weight: normal; color: #86868b;">Chọn cấu hình của bạn.</span></h2>`;
+        // Dynamic options
+        const container = document.getElementById('dynamic-options-container');
+        if(container) {
+            container.innerHTML = '';
+            const groups = {};
+            (currentModel.options || []).forEach(o => {
+                const id = o.attribute_id, name = o.attribute ? o.attribute.name : 'Tùy chọn';
+                if(!groups[id]) groups[id] = {name, items:[]};
+                groups[id].items.push(o);
+            });
             
-            const optionsGrid = document.createElement('div');
-            optionsGrid.className = 'options-grid';
-            optionsGrid.style.display = 'flex';
-            optionsGrid.style.flexDirection = 'column';
-            optionsGrid.style.gap = '12px';
-            optionsGrid.style.marginTop = '15px';
-
-            group.items.forEach(opt => {
-                const card = document.createElement('div');
-                card.className = 'storage-card' + (opt.is_default ? ' selected' : '');
-                card.style.display = 'flex';
-                card.style.justifyContent = 'space-between';
-                card.style.alignItems = 'center';
-                card.style.padding = '20px';
-                card.style.border = '1px solid #d2d2d7';
-                card.style.borderRadius = '12px';
-                card.style.cursor = 'pointer';
-                
-                const totalPrice = currentModel.price + parseFloat(opt.price_offset);
-                const monthlyPrice = Math.round(totalPrice / 24);
-
-                card.innerHTML = `
-                    <div style="flex: 1; text-align: left;"><strong>${opt.label}</strong></div>
-                    <div style="flex: 1; text-align: right;">
-                        <p style="text-align: right; margin: 0; font-size: 13px;">
-                            ${formatCurrency(totalPrice)}<br>
-                            hoặc<br>
-                            ${formatCurrency(monthlyPrice)}/tháng<br>
-                            trong 24 tháng<sup style="font-size:9px">ᵃ</sup>
-                        </p>
+            Object.entries(groups).forEach(([id, g]) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <br>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h2><strong>${g.name}.</strong> <span style="font-weight:normal;color:#86868b;">Chọn cấu hình của bạn.</span></h2>
+                        <button type="button" onclick="showInfo('${g.name}')" style="background: none; border: none; padding: 0; cursor: pointer;">
+                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
+                                <circle cx="12.5" cy="12.5" r="11.5" stroke="#86868b" stroke-width="1.5"/>
+                                <text x="12.5" y="17.5" font-family="Arial" font-size="14" text-anchor="middle" fill="#86868b">?</text>
+                            </svg>
+                        </button>
                     </div>
                 `;
-
-                card.onclick = function() {
-                    // Deselect others in group
-                    optionsGrid.querySelectorAll('.storage-card').forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    selectOption(attrId, opt);
-                };
-
-                optionsGrid.appendChild(card);
-                
-                if (opt.is_default) {
-                    selectedOptions[attrId] = { label: opt.label, priceOffset: parseFloat(opt.price_offset) };
-                }
+                g.items.forEach(o => {
+                    const card = document.createElement('div');
+                    card.className = 'storage-card' + (o.is_default?' selected':'');
+                    card.style = 'padding:20px; border:1px solid #d2d2d7; border-radius:12px; cursor:pointer; margin-top:10px; display:flex; justify-content:space-between;';
+                    card.innerHTML = `<div><strong>${o.label}</strong></div><div>${formatCurrency(currentModel.price + parseFloat(o.price_offset))}</div>`;
+                    card.onclick = () => { div.querySelectorAll('.storage-card').forEach(x=>x.classList.remove('selected')); card.classList.add('selected'); selectedOptions[id] = {label:o.label, offset:parseFloat(o.price_offset)}; updateSummary(); };
+                    div.appendChild(card);
+                    if(o.is_default) selectedOptions[id] = {label:o.label, offset:parseFloat(o.price_offset)};
+                });
+                container.appendChild(div);
             });
-
-            groupDiv.appendChild(optionsGrid);
-            container.appendChild(groupDiv);
-
-            // If no default was set, pick the first one
-            if (!selectedOptions[attrId] && group.items.length > 0) {
-                const firstOpt = group.items[0];
-                selectedOptions[attrId] = { label: firstOpt.label, priceOffset: parseFloat(firstOpt.price_offset) };
-                optionsGrid.querySelector('.storage-card').classList.add('selected');
-            }
-        });
-
-        // Color handling
-        const colorContainer = document.getElementById('color-selections');
-        colorContainer.innerHTML = '';
-        currentModel.colors.forEach((c, idx) => {
-            const cleanColor = c.trim();
-            const div = document.createElement('div');
-            div.className = 'color-circle' + (idx === 0 ? ' selected' : '');
-            div.style.backgroundColor = cleanColor;
-            div.onclick = function() { selectColor(this, cleanColor); };
-            colorContainer.appendChild(div);
-            if (idx === 0) selectColor(div, cleanColor);
-        });
-
+        }
+        
+        // Colors
+        const cc = document.getElementById('color-selections'); 
+        if(cc) {
+            cc.innerHTML = '';
+            (currentModel.colors || []).forEach((c, i) => {
+                const d = document.createElement('div'); d.className = 'color-circle' + (i===0?' selected':'');
+                d.style.backgroundColor = c.trim(); d.onclick = () => { cc.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('selected')); d.classList.add('selected'); currentColor = c.trim(); updateSummary(); };
+                cc.appendChild(d); if(i===0) currentColor = c.trim();
+            });
+        }
         updateSummary();
     }
-
-    function selectOption(attrId, opt) {
-        selectedOptions[attrId] = { label: opt.label, priceOffset: parseFloat(opt.price_offset) };
-        updateSummary();
-    }
-
-    function selectColor(el, color) {
-        document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        currentColor = color;
-        const colorName = getColorName(color);
-        document.getElementById('color-label').innerText = colorName ? `Màu sắc - ${colorName}` : 'Màu sắc';
-        updateSummary();
-    }
-
+    
     function updateSummary() {
-        if (!currentModel) return;
+        if(!currentModel) return;
         
-        let totalOffset = 0;
-        let optionLabels = [];
-        Object.values(selectedOptions).forEach(opt => {
-            totalOffset += opt.priceOffset;
-            optionLabels.push(opt.label);
-        });
+        // Thuật toán nhận diện tên màu sắc thông minh (Simplified ntc.js)
+        const getColorName = (hex) => {
+            hex = hex.trim().toLowerCase();
+            if(hex.length === 4) hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+            
+            const names = [
+                ["000000", "Đen"], ["ffffff", "Trắng"], ["f5f5f0", "Trắng Ánh Sao"], ["e3e4e5", "Bạc"],
+                ["2c2c2e", "Đen Không Gian"], ["d1d1d1", "Titan Tự Nhiên"], ["e5e5e5", "Titan Trắng"],
+                ["4b4b4b", "Titan Đen"], ["7d7d7d", "Titan Xanh"], ["f2d1c1", "Hồng"], ["ff0000", "Đỏ"],
+                ["c0c0c0", "Bạc"], ["ffd700", "Vàng"], ["3c3c3c", "Xám Không Gian"], ["5c61f0", "Xanh Lưu Ly"],
+                ["b2d4c6", "Lục Lam (Teal)"], ["00ffcc", "Xanh Ngọc"], ["bf00ff", "Tím Nhạt"], ["c29b83", "Titan Sa Mạc"],
+                ["808080", "Xám"], ["0000ff", "Xanh Biển"], ["00ff00", "Xanh Lá"], ["ffff00", "Vàng"],
+                ["ffa500", "Cam"], ["ffc0cb", "Hồng"], ["800080", "Tím"], ["a52a2a", "Nâu"], ["00ffff", "Xanh Da Trời"]
+            ];
 
-        const finalPrice = currentModel.price + totalOffset + appleCarePrice;
-        const monthlyPrice = Math.round(finalPrice / 24);
-        const downPayment = Math.round(finalPrice * 0.20);
-        const taxEstimate = Math.round(finalPrice * 8 / 108);
+            let r = parseInt(hex.substring(1, 3), 16), g = parseInt(hex.substring(3, 5), 16), b = parseInt(hex.substring(5, 7), 16);
+            let minDiff = Infinity, bestName = "Màu sắc";
 
-        const colorName = getColorName(currentColor);
-        const optionsText = optionLabels.join(', ');
-        const fullName = `${currentModel.name} ${optionsText} - ${colorName}`;
-
-        document.getElementById('summary-product-headline').innerText = fullName;
-
-        // Update Sticky Header
-        const stickyName = document.getElementById('sticky-product-name');
-        if (stickyName) stickyName.innerText = currentModel.name;
-        
-        const stickyTotal = document.getElementById('sticky-total-price');
-        if (stickyTotal) stickyTotal.innerText = formatCurrency(finalPrice);
-        
-        const stickyMonthly = document.getElementById('sticky-monthly-price');
-        if (stickyMonthly) stickyMonthly.innerText = formatCurrency(monthlyPrice);
-
-        const titleEl = document.getElementById('checkout-product-name-title');
-        if (titleEl) titleEl.innerText = currentModel.name;
-
-        const checkoutImg = document.getElementById('checkout-product-image');
-        if (checkoutImg) checkoutImg.src = currentModel.image;
-
-        document.getElementById('summary-total-price').innerText = formatCurrency(finalPrice);
-        document.getElementById('summary-monthly-price').innerText = formatCurrency(monthlyPrice);
-
-        document.getElementById('summary-down-payment').innerText = formatCurrency(downPayment);
-        document.getElementById('summary-tax').innerText = formatCurrency(taxEstimate);
-        
-        document.getElementById('input-product-name').value = currentModel.name;
-        document.getElementById('input-total-price').value = finalPrice;
-        document.getElementById('input-storage').value = optionsText;
-        document.getElementById('input-color').value = colorName;
-        document.getElementById('input-image').value = currentModel.image;
-
-        const bn = {
-            'buynow-product-name': currentModel.name,
-            'buynow-total-price': finalPrice,
-            'buynow-storage': optionsText,
-            'buynow-color': colorName,
-            'buynow-applecare': document.getElementById('input-applecare').value,
-            'buynow-image': currentModel.image,
+            names.forEach(n => {
+                let nr = parseInt(n[0].substring(0, 2), 16), ng = parseInt(n[0].substring(2, 4), 16), nb = parseInt(n[0].substring(4, 6), 16);
+                let diff = Math.pow(r - nr, 2) + Math.pow(g - ng, 2) + Math.pow(b - nb, 2);
+                if(diff < minDiff) { minDiff = diff; bestName = n[1]; }
+            });
+            return bestName;
         };
-        Object.entries(bn).forEach(([id, val]) => {
-            const el = document.getElementById(id);
-            if (el) el.value = val;
-        });
+
+        const colorName = getColorName(currentColor || "#ffffff");
+
+        // Update the color label below the "Màu" heading
+        const colorLabel = document.getElementById('color-label');
+        if (colorLabel) {
+            colorLabel.innerText = colorName;
+        }
+
+        let offset = 0, lbls = [];
+        Object.values(selectedOptions).forEach(o => { offset += o.offset; lbls.push(o.label); });
+        const total = currentModel.price + offset + appleCarePrice;
+        
+        // Update labels
+        const nameLarge = document.getElementById('summary-product-name-large');
+        if(nameLarge) nameLarge.innerText = currentModel.name;
+        
+        const headline = document.getElementById('summary-product-headline');
+        if(headline) headline.innerText = `${currentModel.name} ${lbls.join(', ')} - ${colorName}`;
+        
+        // Update prices
+        const totalPriceEl = document.getElementById('summary-total-price');
+        if(totalPriceEl) totalPriceEl.innerText = formatCurrency(total);
+        const monthlyPriceEl = document.getElementById('summary-monthly-price');
+        if(monthlyPriceEl) monthlyPriceEl.innerText = formatCurrency(Math.round(total/24));
+        document.getElementById('sticky-total-price').innerText = formatCurrency(total);
+        document.getElementById('sticky-monthly-price').innerText = formatCurrency(Math.round(total/24));
+        const stickyProductName = document.getElementById('sticky-product-name');
+        if(stickyProductName) stickyProductName.innerText = currentModel.name;
+
+        // Calculate delivery dates
+        const now = new Date();
+        const start = new Date();
+        start.setDate(now.getDate() + 1);
+        const end = new Date();
+        end.setDate(now.getDate() + 3);
+        
+        const formatDate = (date) => {
+            const d = String(date.getDate()).padStart(2, '0');
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const y = date.getFullYear();
+            return `${d}/${m}/${y}`;
+        };
+        
+        const deliveryDateStr = `${formatDate(start)} – ${formatDate(end)}`;
+        const deliveryDateEl = document.getElementById('sticky-delivery-date');
+        if(deliveryDateEl) deliveryDateEl.innerText = deliveryDateStr;
+        
+        // Calculate initial payment (20%)
+        const initialPayment = Math.round(total * 0.2);
+        document.getElementById('summary-initial-payment').innerText = formatCurrency(initialPayment);
+        
+        // Calculate VAT (approx 10%)
+        const vat = Math.round((total / 1.1) * 0.1);
+        document.getElementById('summary-vat-price').innerText = formatCurrency(vat);
+        
+        // AppleCare status visibility
+        document.getElementById('summary-applecare-status').style.display = appleCarePrice > 0 ? 'block' : 'none';
+        
+        document.getElementById('checkout-product-image').src = currentModel.image;
+        
+        // Update hidden inputs
+        document.getElementById('input-product-name').value = currentModel.name;
+        document.getElementById('input-total-price').value = total;
+        document.getElementById('input-storage').value = lbls.join(', ');
+        document.getElementById('input-color').value = currentColor;
+        document.getElementById('input-image').value = currentModel.image;
     }
     
     function addToCart() {
@@ -866,56 +561,34 @@
             applecare: document.getElementById('input-applecare').value,
             image_url: document.getElementById('input-image').value
         };
-
-        fetch('{{ route('cart-add') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.status === 401) {
-                window.location.href = '{{ route('login') }}';
-                throw new Error('Unauthorized');
-            }
-            return response.json();
-        })
-        .then(result => {
-            if (result && result.success) {
-                Swal.fire({
-                    title: 'Đã thêm vào giỏ hàng!',
-                    text: 'Sản phẩm đã được thêm thành công.',
-                    icon: 'success',
-                    showCancelButton: true,
-                    confirmButtonColor: '#0071e3',
-                    cancelButtonColor: '#86868b',
-                    confirmButtonText: 'Xem giỏ hàng',
-                    cancelButtonText: 'Mua tiếp',
-                    customClass: {
-                        popup: 'apple-alert-popup',
-                        confirmButton: 'apple-alert-confirm',
-                        cancelButton: 'apple-alert-cancel'
-                    }
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        window.location.href = '{{ route('bag') }}';
-                    }
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        fetch('{{ route('cart-add') }}', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) })
+        .then(r => r.json()).then(res => { if(res.success) Swal.fire('Thành công', 'Đã thêm vào giỏ hàng', 'success'); });
     }
-
     document.addEventListener('DOMContentLoaded', init);
 </script>
-
-<style>
-    .apple-alert-popup { border-radius: 20px !important; padding: 20px !important; }
-    .apple-alert-confirm { border-radius: 12px !important; padding: 10px 24px !important; font-weight: 600 !important; }
-    .apple-alert-cancel { border-radius: 12px !important; padding: 10px 24px !important; font-weight: 600 !important; }
-</style>
-
 @endpush
+<div class="apple-modal-overlay" id="applecare-modal">
+    <div class="apple-modal">
+        <button class="apple-modal-close" onclick="closeApplecareModal()">&times;</button>
+        <div style="text-align: center;">
+            <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus-201508?wid=326&hei=332&fmt=png-alpha" style="height: 80px; margin-bottom: 20px; object-fit: contain;" alt="AppleCare+">
+            <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">AppleCare+</h2>
+            <p style="font-size: 17px; color: #1d1d1f; margin-bottom: 30px;">5.499.000đ hoặc 224.000đ/tháng cho 24 tháng<sup>◊</sup></p>
+            <button class="modal-add-button" onclick="addAppleCare()">Thêm</button>
+        </div>
+        <div style="text-align: left; line-height: 1.6;">
+            <p style="font-size: 14px; margin-bottom: 20px;">
+                Mỗi sản phẩm iPhone đều được bảo hành sửa chữa phần cứng một năm qua <a href="#" style="color: #0066cc; text-decoration: none;">bảo hành giới hạn</a> và hỗ trợ kỹ thuật miễn phí lên đến <a href="#" style="color: #0066cc; text-decoration: none;">90 ngày</a>. AppleCare+ cho iPhone kéo dài thời gian bảo hành lên hai năm kể từ ngày bạn mua AppleCare+, bao gồm bảo hành không giới hạn số lần cho các trường hợp hư hỏng do sự cố bất ngờ. Mỗi lần bảo hành chịu phí dịch vụ 799.000đ đối với trường hợp hư hỏng màn hình hoặc kính mặt sau, hoặc 2.649.000đ đối với trường hợp hư hỏng do sự cố bất ngờ khác. Để biết thông tin đầy đủ, vui lòng tham khảo các <a href="#" style="color: #0066cc; text-decoration: none;">điều khoản</a>.
+            </p>
+            <a href="#" style="color: #0066cc; text-decoration: none; font-size: 14px; display: block; margin-bottom: 40px;">Tìm hiểu thêm về AppleCare+ ↗</a>
+            
+            <div style="font-size: 11px; color: #86868b; line-height: 1.4;">
+                <p>Δ Ước tính. Mức phí có thể thay đổi theo thời gian.</p>
+                <p>Chương trình Trả Góp Hàng Tháng Với MoMo do (các) đối tác tín dụng cung cấp qua ứng dụng MoMo của Công Ty Cổ Phần Dịch Vụ Di Động Trực Tuyến (“MoMo”) chứ không phải Apple. Chỉ cư dân Việt Nam đủ điều kiện mới có thể mua sản phẩm đủ điều kiện qua chương trình này.</p>
+                <p>Tất cả sản phẩm được mua qua hình thức Trả Góp Hàng Tháng Với MoMo đều cần có tài khoản ví điện tử MoMo và phải được (các) đối tác tín dụng của MoMo phê duyệt. Nếu bạn có câu hỏi về điều kiện tín dụng của mình, vui lòng liên hệ với MoMo để nhận câu trả lời từ (các) đối tác tín dụng của MoMo. Ngoài ra, vui lòng tham khảo ứng dụng MoMo hoặc (các) đối tác tín dụng của MoMo để biết điều kiện, phí và phụ phí.</p>
+                <p>Apple có toàn quyền quyết định sản phẩm nào đủ điều kiện hưởng ưu đãi trả góp vào bất cứ lúc nào. Mọi thay đổi về việc lựa chọn sản phẩm, kỳ hạn trả góp và phí dịch vụ đều sẽ làm thay đổi ưu đãi trả góp hàng tháng. Phí dịch vụ quy định trên trang web là một con số ước tính.</p>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

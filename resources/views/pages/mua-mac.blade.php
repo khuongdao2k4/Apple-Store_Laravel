@@ -77,7 +77,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <p class="mb-0 fw-medium" style="flex: 1; margin-right: 15px;">Từ {{ number_format($p->numeric_price, 0, ',', '.') }}đ</p>
-                        <a href="{{ route('config-mac', $p->id) }}" class="btn btn-primary rounded-pill px-4 fw-medium flex-shrink-0">Mua</a>
+                        <a href="{{ route('order', ['series' => $p->series]) }}" class="btn btn-primary rounded-pill px-4 fw-medium flex-shrink-0">Mua</a>
                     </div>
                 </div>
                 @endforeach
@@ -506,7 +506,7 @@
                 tab.className = `modal-tab-item ${isActive ? 'active' : ''}`;
                 tab.innerText = product.name;
                 tab.onclick = () => {
-                    const priceFormatted = 'Từ ' + new Intl.NumberFormat('vi-VN').format(product.price) + 'đ';
+                    const priceFormatted = 'Từ ' + new Intl.NumberFormat('vi-VN').format(product.numeric_price) + 'đ';
                     updateModalContent(product.series, product.image_url, product.name, priceFormatted, product.id, product.colors);
                     renderTabs(product.id);
                 };
@@ -526,8 +526,8 @@
             
             // Cập nhật link nút Mua
             const buyBtn = document.getElementById('modalBuyBtn');
-            if (productId) {
-                buyBtn.href = `/order/${productId}`;
+            if (series) {
+                buyBtn.href = `/order?series=${series}`;
             }
 
             // Xử lý màu sắc

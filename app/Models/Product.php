@@ -26,6 +26,8 @@ class Product extends Model
         'sort_order',
     ];
 
+    protected $appends = ['numeric_price'];
+
     public function getNumericPriceAttribute()
     {
         // Remove non-numeric characters and cast to float

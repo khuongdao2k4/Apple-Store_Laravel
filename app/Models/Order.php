@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\ResolvesColors;
+
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, ResolvesColors;
 
     protected $table = 'orders';
     protected $primaryKey = 'id_order';

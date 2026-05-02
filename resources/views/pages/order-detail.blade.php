@@ -168,7 +168,7 @@
             <input style="border-radius: 20px; text-align: center;" type="text" name="storage"
                 value="<?= htmlspecialchars($productStorage) ?>" required readonly>
             <input style="border-radius: 20px; text-align: center;" type="text" name="color"
-                value="<?= htmlspecialchars($productColor) ?>" required readonly>
+                value="<?= htmlspecialchars(\App\Helpers\ColorHelper::resolve($productColor)) ?>" required readonly>
             <input style="border-radius: 20px; text-align: center;" type="text" name="price"
                 value="<?= htmlspecialchars($productPrice) ?>" required readonly>
             <input style="border-radius: 20px; text-align: center;" type="hidden" name="image_url"

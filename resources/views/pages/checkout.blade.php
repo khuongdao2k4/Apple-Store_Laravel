@@ -230,9 +230,11 @@
                         <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}">
                         <div class="product-details">
                             <h3 style="font-size: 15px;">{{ $item->product_name }} (x{{ $item->quantity }})</h3>
-                            <p>{{ $item->storage }} | {{ $item->color }}</p>
-                            @if($item->applecare)
-                                <p style="font-size: 12px; color: #1e7e34; font-weight: 500; margin-top: 3px;">✓ AppleCare+</p>
+                            <p>{{ $item->storage }} | {{ \App\Helpers\ColorHelper::resolve($item->color) }}</p>
+                            @if($item->applecare === true || $item->applecare === 1 || $item->applecare === '1' || $item->applecare === 'true')
+                                <p style="font-size: 12px; color: #1e7e34; font-weight: 500; margin-top: 3px;">✓ Có AppleCare+</p>
+                            @else
+                                <p style="font-size: 12px; color: #86868b; margin-top: 3px;">Không có AppleCare+</p>
                             @endif
                             <p style="font-weight: bold; color: black; margin-top: 5px;">{{ number_format($priceVal * $item->quantity, 0, ',', '.') }}đ</p>
                         </div>

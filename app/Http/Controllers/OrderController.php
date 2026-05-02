@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\CartItem;
+use App\Helpers\ColorHelper;
 
 class OrderController extends Controller
 {
@@ -73,6 +74,7 @@ class OrderController extends Controller
 
         $totalPrice = 0;
         foreach ($cartItems as $item) {
+            $item->color = ColorHelper::resolve($item->color);
             $priceVal = floatval(str_replace(['$', ','], '', $item->price));
             $totalPrice += $priceVal * $item->quantity;
         }
@@ -105,7 +107,7 @@ class OrderController extends Controller
                         'product_name' => $request->input('product'),
                         'image_url' => $request->input('image_url'),
                         'storage' => $request->input('storage'),
-                        'color' => $request->input('color'),
+                        'color' => ColorHelper::resolve($request->input('color')),
                         'price' => $priceVal,
                         'quantity' => 1,
                         'applecare' => $request->input('applecare') == '1',
@@ -119,7 +121,7 @@ class OrderController extends Controller
                     'items' => $itemData,
                     'image_url' => $request->input('image_url'),
                     'storage' => $request->input('storage'),
-                    'color' => $request->input('color'),
+                    'color' => ColorHelper::resolve($request->input('color')),
                     'price' => $priceVal,
                     'phone' => $request->input('phone'),
                     'address' => $request->input('address'),
@@ -141,13 +143,13 @@ class OrderController extends Controller
                     $productNames[] = $item->product_name . " (x" . $item->quantity . ")";
                     
                     if (!in_array($item->storage, $storages)) $storages[] = $item->storage;
-                    if (!in_array($item->color, $colors)) $colors[] = $item->color;
+                    if (!in_array($item->color, $colors)) $colors[] = ColorHelper::resolve($item->color);
 
                     $itemData[] = [
                         'product_name' => $item->product_name,
                         'image_url' => $item->image_url,
                         'storage' => $item->storage,
-                        'color' => $item->color,
+                        'color' => ColorHelper::resolve($item->color),
                         'price' => $itemPriceVal,
                         'quantity' => $item->quantity,
                         'applecare' => (bool)$item->applecare,

@@ -219,7 +219,7 @@
                     </svg>
                     <div style="font-size: 16px; color: #1d1d1f; line-height: 1.4;">
                         Đặt hàng hôm nay. Giao hàng đến <a href="#" style="color: #0066cc; text-decoration: underline;">P. Sài Gòn</a><br>
-                        <strong>{{ date('d/m/Y', strtotime('+7 days')) }} – {{ date('d/m/Y', strtotime('+9 days')) }} — Miễn Phí</strong>
+                        <strong><span id="summary-delivery-date">...</span> — Miễn Phí</strong>
                     </div>
                 </div>
                 
@@ -231,9 +231,15 @@
                     <input type="hidden" id="input-color">
                     <input type="hidden" id="input-applecare" value="0">
                     <input type="hidden" id="input-image">
-                    <button type="button" class="buy-button" onclick="addToCart()" style="width: 100%; background-color: #0071e3; color: #fff; font-size: 17px; font-weight: 400; padding: 18px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s;">
-                        Thêm vào giỏ hàng
-                    </button>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button type="button" class="buy-now-button" onclick="buyNow()" style="width: 100%; background-color: #0071e3; color: #fff; font-size: 17px; font-weight: 500; padding: 18px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.3s ease;">
+                            Mua hàng
+                        </button>
+                        <button type="button" class="add-to-bag-button" onclick="addToCart()" style="width: 100%; background-color: transparent; color: #0071e3; font-size: 17px; font-weight: 400; padding: 18px; border-radius: 12px; border: 1px solid #0071e3; cursor: pointer; transition: all 0.3s ease;">
+                            Thêm vào giỏ hàng
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -529,6 +535,8 @@
         const deliveryDateStr = `${formatDate(start)} – ${formatDate(end)}`;
         const deliveryDateEl = document.getElementById('sticky-delivery-date');
         if(deliveryDateEl) deliveryDateEl.innerText = deliveryDateStr;
+        const summaryDeliveryDateEl = document.getElementById('summary-delivery-date');
+        if(summaryDeliveryDateEl) summaryDeliveryDateEl.innerText = deliveryDateStr;
         
         // Calculate initial payment (20%)
         const initialPayment = Math.round(total * 0.2);
@@ -547,11 +555,11 @@
         document.getElementById('input-product-name').value = currentModel.name;
         document.getElementById('input-total-price').value = total;
         document.getElementById('input-storage').value = lbls.join(', ');
-        document.getElementById('input-color').value = currentColor;
+        document.getElementById('input-color').value = colorName;
         document.getElementById('input-image').value = currentModel.image;
     }
     
-    function addToCart() {
+    function addToCart(showSuccessAlert = true) {
         const data = {
             _token: '{{ csrf_token() }}',
             product_name: document.getElementById('input-product-name').value,
@@ -561,8 +569,82 @@
             applecare: document.getElementById('input-applecare').value,
             image_url: document.getElementById('input-image').value
         };
-        fetch('{{ route('cart-add') }}', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) })
-        .then(r => r.json()).then(res => { if(res.success) Swal.fire('Thành công', 'Đã thêm vào giỏ hàng', 'success'); });
+
+        if(!data.product_name) {
+            Swal.fire('Lỗi', 'Vui lòng chọn cấu hình sản phẩm trước.', 'error');
+            return;
+        }
+
+        return fetch('{{ route('cart-add') }}', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, 
+            body: JSON.stringify(data) 
+        })
+        .then(r => {
+            if(r.status === 401) throw new Error('AUTH_REQUIRED');
+            return r.json();
+        })
+        .then(res => { 
+            if(res.success) {
+                if (showSuccessAlert) {
+                    Swal.fire({
+                        title: 'Đã thêm vào túi',
+                        text: res.message,
+                        icon: 'success',
+                        confirmButtonText: 'Xem giỏ hàng',
+                        showCancelButton: true,
+                        cancelButtonText: 'Tiếp tục mua sắm',
+                        confirmButtonColor: '#0071e3'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '{{ route('bag') }}';
+                        }
+                    });
+                }
+                return true;
+            } else {
+                Swal.fire('Thất bại', res.message || 'Có lỗi xảy ra', 'error');
+                return false;
+            }
+        })
+        .catch(err => {
+            if(err.message === 'AUTH_REQUIRED') {
+                Swal.fire({
+                    title: 'Cần đăng nhập',
+                    text: 'Vui lòng đăng nhập để thực hiện chức năng này.',
+                    icon: 'warning',
+                    confirmButtonText: 'Đăng nhập ngay',
+                    confirmButtonColor: '#0071e3'
+                }).then(() => {
+                    window.location.href = '{{ route('login') }}';
+                });
+            } else {
+                console.error(err);
+                Swal.fire('Lỗi', 'Không thể kết nối đến máy chủ', 'error');
+            }
+            return false;
+        });
+    }
+
+    function buyNow() {
+        const data = {
+            product: document.getElementById('input-product-name').value,
+            price: document.getElementById('input-total-price').value,
+            storage: document.getElementById('input-storage').value,
+            color: document.getElementById('input-color').value,
+            applecare: document.getElementById('input-applecare').value,
+            image_url: document.getElementById('input-image').value
+        };
+
+        if(!data.product) {
+            Swal.fire('Lỗi', 'Vui lòng chọn cấu hình sản phẩm trước.', 'error');
+            return;
+        }
+
+        // Chuyển hướng trực tiếp sang checkout với các tham số (Direct Buy)
+        // Luồng này sẽ không lưu vào bảng cart_items mà xử lý đơn hàng tức thì
+        const params = new URLSearchParams(data).toString();
+        window.location.href = `{{ route('checkout') }}?${params}`;
     }
     document.addEventListener('DOMContentLoaded', init);
 </script>

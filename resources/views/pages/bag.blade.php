@@ -406,7 +406,7 @@
                             </div>
                             <div class="item-details">
                                 <div class="item-row-1">
-                                    <div class="item-title">{{ $item->product_name }} {{ $item->storage }} {{ $item->color }}</div>
+                                    <div class="item-title">{{ $item->product_name }} {{ $item->storage }} {{ $item->getColorName() }}</div>
                                     <div class="item-quantity">
                                         <select class="qty-select" onchange="updateQty({{ $item->id }}, this.value)">
                                             @for ($i = 1; $i <= 10; $i++)
@@ -551,7 +551,7 @@
                                             <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
                                                 <div style="flex: 1; padding-right: 20px;">
                                                     <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
-                                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ $item['color'] }}</div>
+                                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ \App\Helpers\ColorHelper::resolve($item['color']) }}</div>
                                                     <div style="font-size: 14px; color: #86868b;">Bảo hành: 
                                                     @if(isset($item['applecare']) && ($item['applecare'] === true || $item['applecare'] === 1 || $item['applecare'] === '1'))
                                                          <span style="color: #1e7e34; font-weight: 500;">✓ AppleCare+</span>
@@ -598,7 +598,7 @@
                                         <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
                                             <div style="flex: 1; padding-right: 20px;">
                                                 <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $order->product }}</div>
-                                                <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $order->storage }} | {{ $order->color }}</div>
+                                                <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $order->storage }} | {{ $order->getColorName() }}</div>
                                                 <div style="font-size: 14px; color: #86868b;">Bảo hành: Không có AppleCare</div>
                                             </div>
                                             <div style="text-align: right;">

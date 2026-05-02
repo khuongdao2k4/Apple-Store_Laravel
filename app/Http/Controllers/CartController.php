@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Helpers\ColorHelper;
 
 class CartController extends Controller
 {
@@ -18,6 +19,16 @@ class CartController extends Controller
         $cartItems = CartItem::where('email', $email)->paginate(5, ['*'], 'bag_page');
         $orders = Order::where('email', $email)->latest()->paginate(5, ['*'], 'order_page');
 
+        $cartItems->getCollection()->transform(function($item) {
+            $item->color = ColorHelper::resolve($item->color);
+            return $item;
+        });
+
+        $orders->getCollection()->transform(function($order) {
+            $order->color = ColorHelper::resolve($order->color);
+            return $order;
+        });
+
         return view('pages.bag', compact('cartItems', 'orders'));
     }
 
@@ -29,7 +40,7 @@ class CartController extends Controller
         $email = strtolower(session('email'));
         $productName = $request->input('product_name');
         $storage = $request->input('storage');
-        $color = $request->input('color');
+        $color = ColorHelper::resolve($request->input('color'));
 
         $applecare = $request->input('applecare') == '1' ? true : false;
 

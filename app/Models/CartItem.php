@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Traits\ResolvesColors;
 
 class CartItem extends Model
 {
+    use HasFactory, ResolvesColors;
     protected $table = 'cart_items';
 
     protected $fillable = [

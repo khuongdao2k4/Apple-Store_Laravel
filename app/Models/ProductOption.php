@@ -13,6 +13,7 @@ class ProductOption extends Model
         'product_id',
         'attribute_id',
         'label',
+        'sub_label',
         'price_offset',
         'description',
         'is_default',

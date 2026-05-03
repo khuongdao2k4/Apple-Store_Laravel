@@ -89,9 +89,11 @@
                         <table class="table table-borderless align-middle" id="options-table">
                             <thead>
                                 <tr style="color: #86868b; font-size: 14px;">
-                                    <th style="width: 25%;">Loại cấu hình</th>
-                                    <th style="width: 35%;">Nhãn hiển thị (Label)</th>
-                                    <th style="width: 25%;">Giá cộng thêm (đ)</th>
+                                    <th style="width: 15%;">Loại cấu hình</th>
+                                    <th style="width: 10%;">Nhãn phụ (Mới, CPU...)</th>
+                                    <th style="width: 20%;">Nhãn hiển thị (Label)</th>
+                                    <th style="width: 25%;">Mô tả chi tiết</th>
+                                    <th style="width: 15%;">Giá cộng thêm (đ)</th>
                                     <th style="width: 10%; text-align: center;">Mặc định</th>
                                     <th style="width: 5%;"></th>
                                 </tr>
@@ -288,15 +290,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         tr.innerHTML = `
             <td>
-                <select name="options[${index}][attribute_id]" class="form-select" style="border-radius: 10px;">
+                <select name="options[${index}][attribute_id]" class="form-select" style="border-radius: 10px; font-size: 13px;">
                     ${attrOptions}
                 </select>
             </td>
             <td>
-                <input type="text" name="options[${index}][label]" class="form-control" value="${data ? data.label : ''}" placeholder="Vd: 256GB SSD" style="border-radius: 10px;" required>
+                <input type="text" name="options[${index}][sub_label]" class="form-control" value="${data ? (data.sub_label || '') : ''}" placeholder="Vd: Mới" style="border-radius: 10px; font-size: 13px;">
             </td>
             <td>
-                <input type="number" name="options[${index}][price_offset]" class="form-control" value="${data ? parseInt(data.price_offset) : 0}" style="border-radius: 10px;" required>
+                <input type="text" name="options[${index}][label]" class="form-control" value="${data ? data.label : ''}" placeholder="Vd: 256GB SSD" style="border-radius: 10px; font-size: 13px;" required>
+            </td>
+            <td>
+                <textarea name="options[${index}][description]" class="form-control" placeholder="Mô tả chi tiết..." style="border-radius: 10px; font-size: 13px; height: 38px;">${data ? (data.description || '') : ''}</textarea>
+            </td>
+            <td>
+                <input type="number" name="options[${index}][price_offset]" class="form-control" value="${data ? parseInt(data.price_offset) : 0}" style="border-radius: 10px; font-size: 13px;" required>
             </td>
             <td style="text-align: center;">
                 <input type="radio" name="options_default_${index}" class="form-check-input option-default-radio" ${data && data.is_default ? 'checked' : ''} onchange="handleDefaultChange(this, ${index})">
@@ -310,19 +318,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     window.handleDefaultChange = function(radio, idx) {
-        // Uncheck all other hidden inputs in the same group (this is tricky with dynamic naming)
-        // Actually, just find all hidden is_default inputs and set to 0
-        optionsTbody.querySelectorAll('input[type="hidden"][name*="[is_default]"]').forEach(input => {
-            input.value = '0';
+        // Find the attribute ID of this row
+        const row = radio.closest('tr');
+        const attrSelect = row.querySelector('select');
+        const attrId = attrSelect.value;
+
+        // Reset all defaults for the same attribute group? 
+        // For simplicity, let's just make it per attribute ID
+        optionsTbody.querySelectorAll('tr').forEach(r => {
+            const s = r.querySelector('select');
+            if(s && s.value === attrId) {
+                const h = r.querySelector('input[type="hidden"][name*="[is_default]"]');
+                const rad = r.querySelector('.option-default-radio');
+                if(h) h.value = '0';
+                if(rad && rad !== radio) rad.checked = false;
+            }
         });
-        // Set this one to 1
+
         const hiddenInput = radio.closest('td').querySelector('input[type="hidden"]');
         hiddenInput.value = '1';
-        
-        // Since it's radio, we should ensure only one is selected across the WHOLE table if it's the same attribute?
-        // But for simplicity, let's just make it per attribute group if possible.
-        // For now, let's just make it globally unique for the product (one default configuration) or one per attribute group?
-        // Usually it's one per attribute group.
     };
 
     btnAddOption.addEventListener('click', () => addOptionRow());
@@ -333,12 +347,12 @@ document.addEventListener('DOMContentLoaded', function() {
             addOptionRow({
                 attribute_id: '{{ $opt->attribute_id }}',
                 label: '{{ $opt->label }}',
+                sub_label: '{{ $opt->sub_label }}',
+                description: `{!! addslashes($opt->description) !!}`,
                 price_offset: '{{ $opt->price_offset }}',
                 is_default: {{ $opt->is_default ? 'true' : 'false' }}
             });
         @endforeach
-    @else
-        // No options, maybe add one default?
     @endif
 });
 </script>

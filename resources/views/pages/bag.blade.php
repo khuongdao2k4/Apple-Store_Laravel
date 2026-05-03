@@ -205,7 +205,7 @@
         margin-bottom: 12px;
     }
     .service-title {
-        font-size: 14px;
+        font-size: 16px; /* Increased from 14px */
         font-weight: 600;
     }
     .service-title-icon {
@@ -217,7 +217,7 @@
         background: none;
         border: none;
         color: #0071e3;
-        font-size: 14px;
+        font-size: 16px; /* Increased to match title */
         cursor: pointer;
         padding: 0;
     }
@@ -225,16 +225,17 @@
         text-decoration: underline;
     }
     .service-details {
-        font-size: 12px;
+        font-size: 14px; /* Increased from 12px */
         color: #1d1d1f;
         padding-left: 15px;
         margin: 0 0 8px 0;
+        line-height: 1.5; /* Added line-height for better readability */
     }
     .service-details li {
         margin-bottom: 4px;
     }
     .service-link {
-        font-size: 12px;
+        font-size: 14px; /* Increased from 12px */
         color: #0071e3;
         text-decoration: none;
     }
@@ -406,7 +407,9 @@
                             </div>
                             <div class="item-details">
                                 <div class="item-row-1">
-                                    <div class="item-title">{{ $item->product_name }} {{ $item->storage }} {{ $item->getColorName() }}</div>
+                                    <div class="item-title-container" style="flex: 1; padding-right: 20px;">
+                                        <div class="item-title" style="padding-right: 0; margin-bottom: 4px;">{{ $item->product_name }}</div>
+                                    </div>
                                     <div class="item-quantity">
                                         <select class="qty-select" onchange="updateQty({{ $item->id }}, this.value)">
                                             @for ($i = 1; $i <= 10; $i++)
@@ -416,6 +419,41 @@
                                     </div>
                                     <div class="item-price">{{ number_format($itemTotal, 0, ',', '.') }}đ</div>
                                 </div>
+                                
+                                @php
+                                    $options = explode(',', $item->storage);
+                                @endphp
+                                <ul style="list-style: none; padding: 0; margin: 0 0 10px 0; font-size: 14px; color: #1d1d1f; line-height: 1.6;">
+                                    @foreach($options as $opt)
+                                        @php
+                                            $optLabel = trim($opt);
+                                        @endphp
+                                        @if($optLabel !== '')
+                                            @php
+                                                $optPriceStr = 'Miễn phí';
+                                                $productModel = \App\Models\Product::where('name', $item->product_name)->first();
+                                                if ($productModel) {
+                                                    $optionModel = \App\Models\ProductOption::where('product_id', $productModel->id)
+                                                                    ->where('label', $optLabel)
+                                                                    ->first();
+                                                    if ($optionModel && $optionModel->price_offset > 0) {
+                                                        $optPriceStr = '+ ' . number_format($optionModel->price_offset, 0, ',', '.') . 'đ';
+                                                    }
+                                                }
+                                            @endphp
+                                            <li style="margin-bottom: 4px; display: flex; justify-content: space-between;">
+                                                <span>{{ $optLabel }}</span>
+                                                <span style="color: #86868b; font-size: 13px;">{{ $optPriceStr }}</span>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    @if($item->getColorName())
+                                        <li style="margin-bottom: 4px; display: flex; justify-content: space-between;">
+                                            <span>Màu {{ $item->getColorName() }}</span>
+                                            <span style="color: #86868b; font-size: 13px;">Miễn phí</span>
+                                        </li>
+                                    @endif
+                                </ul>
                                 <div class="item-row-2">
                                     <div class="item-installment-text">Thanh toán phí dịch vụ 1.67% trong 24 tháng sau khi thanh toán lần đầu 20% là {{ number_format($downPayment, 0, ',', '.') }}đ.</div>
                                     <div class="item-installment-price">{{ number_format($itemMonthly, 0, ',', '.') }}đ/tháng*</div>
@@ -550,8 +588,41 @@
                                             </div>
                                             <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
                                                 <div style="flex: 1; padding-right: 20px;">
-                                                    <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
-                                                    <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $item['storage'] }} | {{ \App\Helpers\ColorHelper::resolve($item['color']) }}</div>
+                                                    <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">{{ $item['product_name'] }} <span style="font-size: 14px; font-weight: normal; color: #86868b;">(x{{ $item['quantity'] ?? 1 }})</span></div>
+                                                    @php
+                                                        $pastOptions = explode(',', $item['storage']);
+                                                    @endphp
+                                                    <ul style="list-style: none; padding: 0; margin: 0 0 8px 0; font-size: 14px; color: #1d1d1f; line-height: 1.5;">
+                                                        @foreach($pastOptions as $opt)
+                                                            @php
+                                                                $optLabel = trim($opt);
+                                                            @endphp
+                                                            @if($optLabel !== '')
+                                                                @php
+                                                                    $optPriceStr = 'Miễn phí';
+                                                                    $productModel = \App\Models\Product::where('name', $item['product_name'])->first();
+                                                                    if ($productModel) {
+                                                                        $optionModel = \App\Models\ProductOption::where('product_id', $productModel->id)
+                                                                                        ->where('label', $optLabel)
+                                                                                        ->first();
+                                                                        if ($optionModel && $optionModel->price_offset > 0) {
+                                                                            $optPriceStr = '+ ' . number_format($optionModel->price_offset, 0, ',', '.') . 'đ';
+                                                                        }
+                                                                    }
+                                                                @endphp
+                                                                <li style="margin-bottom: 4px; display: flex; justify-content: space-between; padding-right: 20px;">
+                                                                    <span>{{ $optLabel }}</span>
+                                                                    <span style="color: #86868b; font-size: 13px;">{{ $optPriceStr }}</span>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                        @if(isset($item['color']))
+                                                            <li style="margin-bottom: 4px; display: flex; justify-content: space-between; padding-right: 20px;">
+                                                                <span>Màu {{ \App\Helpers\ColorHelper::resolve($item['color']) }}</span>
+                                                                <span style="color: #86868b; font-size: 13px;">Miễn phí</span>
+                                                            </li>
+                                                        @endif
+                                                    </ul>
                                                     <div style="font-size: 14px; color: #86868b;">Bảo hành: 
                                                     @if(isset($item['applecare']) && ($item['applecare'] === true || $item['applecare'] === 1 || $item['applecare'] === '1'))
                                                          <span style="color: #1e7e34; font-weight: 500;">✓ AppleCare+</span>
@@ -597,8 +668,41 @@
                                         </div>
                                         <div class="item-details" style="display: flex; justify-content: space-between; align-items: center; padding-left: 20px;">
                                             <div style="flex: 1; padding-right: 20px;">
-                                                <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">{{ $order->product }}</div>
-                                                <div style="font-size: 14px; color: #1d1d1f; margin-bottom: 2px;">{{ $order->storage }} | {{ $order->getColorName() }}</div>
+                                                <div class="item-title" style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">{{ $order->product }}</div>
+                                                @php
+                                                    $legacyOptions = explode(',', $order->storage);
+                                                @endphp
+                                                <ul style="list-style: none; padding: 0; margin: 0 0 8px 0; font-size: 14px; color: #1d1d1f; line-height: 1.5;">
+                                                    @foreach($legacyOptions as $opt)
+                                                        @php
+                                                            $optLabel = trim($opt);
+                                                        @endphp
+                                                        @if($optLabel !== '')
+                                                            @php
+                                                                $optPriceStr = 'Miễn phí';
+                                                                $productModel = \App\Models\Product::where('name', $order->product)->first();
+                                                                if ($productModel) {
+                                                                    $optionModel = \App\Models\ProductOption::where('product_id', $productModel->id)
+                                                                                    ->where('label', $optLabel)
+                                                                                    ->first();
+                                                                    if ($optionModel && $optionModel->price_offset > 0) {
+                                                                        $optPriceStr = '+ ' . number_format($optionModel->price_offset, 0, ',', '.') . 'đ';
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            <li style="margin-bottom: 4px; display: flex; justify-content: space-between; padding-right: 20px;">
+                                                                <span>{{ $optLabel }}</span>
+                                                                <span style="color: #86868b; font-size: 13px;">{{ $optPriceStr }}</span>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                    @if($order->getColorName())
+                                                        <li style="margin-bottom: 4px; display: flex; justify-content: space-between; padding-right: 20px;">
+                                                            <span>Màu {{ $order->getColorName() }}</span>
+                                                            <span style="color: #86868b; font-size: 13px;">Miễn phí</span>
+                                                        </li>
+                                                    @endif
+                                                </ul>
                                                 <div style="font-size: 14px; color: #86868b;">Bảo hành: Không có AppleCare</div>
                                             </div>
                                             <div style="text-align: right;">

@@ -87,7 +87,17 @@ class AdminController extends Controller
     public function editProduct($id)
     {
         $product = Product::with('options.attribute')->findOrFail($id);
-        $attributes = \App\Models\Attribute::all();
+        
+        // Filter attributes based on product series
+        $category = 'iphone';
+        if (str_contains(strtolower($product->series), 'mac')) {
+            $category = 'mac';
+        }
+        
+        $attributes = \App\Models\Attribute::where(function($q) use ($category) {
+            $q->where('category', $category)->orWhereNull('category');
+        })->get();
+
         $existingSeries = Product::select('series', 'series_title', 'series_image')
             ->get()
             ->unique('series')
@@ -113,8 +123,10 @@ class AdminController extends Controller
                     $product->options()->create([
                         'attribute_id' => $optionData['attribute_id'],
                         'label' => $optionData['label'],
+                        'sub_label' => $optionData['sub_label'] ?? null,
                         'price_offset' => $optionData['price_offset'] ?? 0,
-                        'is_default' => $optionData['is_default'] == '1',
+                        'description' => $optionData['description'] ?? null,
+                        'is_default' => ($optionData['is_default'] ?? '0') == '1',
                         'sort_order' => $index + 1
                     ]);
                 }

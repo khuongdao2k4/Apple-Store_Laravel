@@ -1,6 +1,360 @@
 @extends('layouts.app', ['pageTitle' => 'order.php'])
 
 @section('content')
+<style>
+    .option-group-container {
+        margin-top: 40px;
+    }
+    .option-group-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #1d1d1f;
+    }
+    .option-group-title span {
+        font-weight: 400;
+        color: #86868b;
+    }
+    .premium-option-card {
+        padding: 20px;
+        border: 1.5px solid #d2d2d7;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        transition: all 0.2s ease-in-out;
+        background: #fff;
+    }
+    .premium-option-card:hover {
+        border-color: #86868b;
+    }
+    .premium-option-card.selected {
+        border-color: #0071e3;
+        border-width: 2px;
+        padding: 19.5px; /* Offset for border width */
+    }
+    .option-content {
+        flex: 1;
+        padding-right: 15px;
+    }
+    .option-sub-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #bf4800;
+        margin-bottom: 4px;
+    }
+    .option-label {
+        font-size: 19px;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+    .option-description {
+        font-size: 14px;
+        color: #1d1d1f;
+        line-height: 1.4;
+    }
+    .option-price-container {
+        text-align: right;
+        min-width: 140px;
+        font-size: 14px;
+        color: #1d1d1f;
+        line-height: 1.3;
+    }
+    .option-price-monthly {
+        color: #1d1d1f;
+    }
+    .option-price-note {
+        font-size: 12px;
+        color: #1d1d1f;
+    }
+
+    /* Installment info footer */
+    .installment-info-footer {
+        font-size: 14px;
+        color: #1d1d1f;
+        margin-top: 20px;
+        line-height: 1.4;
+    }
+    .help-box {
+        background: #f5f5f7;
+        border-radius: 15px;
+        padding: 24px;
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .help-box-content h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .help-box-content p {
+        font-size: 14px;
+        color: #1d1d1f;
+        margin: 0;
+    }
+    .help-box-icon {
+        font-size: 20px;
+        color: #86868b;
+    }
+
+    /* Customization (Tùy biến) styles */
+    .custom-summary-card {
+        background: #f5f5f7;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 16px;
+        border: 1px solid #d2d2d7;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+    .custom-summary-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    .custom-summary-header i {
+        font-size: 24px;
+        color: #1d1d1f;
+    }
+    .custom-summary-title {
+        font-size: 19px;
+        font-weight: 600;
+        color: #1d1d1f;
+    }
+    .custom-summary-desc {
+        font-size: 14px;
+        color: #1d1d1f;
+        margin-bottom: 16px;
+        line-height: 1.4;
+    }
+    .custom-current-label {
+        font-size: 14px;
+        color: #1d1d1f;
+        margin-bottom: 2px;
+    }
+    .custom-current-value {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 16px;
+    }
+    .custom-summary-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 16px;
+        border-top: 1px solid #d2d2d7;
+    }
+    .custom-available-text {
+        font-size: 14px;
+        color: #1d1d1f;
+    }
+    .btn-custom-edit {
+        background: #fff;
+        border: 1.2px solid #1d1d1f;
+        border-radius: 999px;
+        padding: 8px 24px;
+        font-size: 17px;
+        font-weight: 400;
+        color: #1d1d1f;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s;
+        line-height: 1;
+    }
+    .btn-custom-edit:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0071e3;
+    }
+    .btn-custom-edit:hover {
+        background: #f5f5f7;
+    }
+
+    .custom-options-dropdown {
+        display: none;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #d2d2d7;
+    }
+    .custom-options-dropdown.show {
+        display: block;
+    }
+    .custom-dropdown-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .custom-dropdown-title {
+        font-size: 21px;
+        font-weight: 600;
+        color: #1d1d1f;
+    }
+    .btn-close-dropdown {
+        background: #fff;
+        border: 1px solid #1d1d1f;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #1d1d1f;
+        font-size: 18px;
+    }
+    .btn-close-dropdown:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0071e3;
+    }
+
+    .nested-option-card {
+        padding: 24px;
+        border: 1.5px solid #d2d2d7;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        transition: all 0.2s;
+    }
+    .nested-option-card.selected {
+        border-color: #0071e3;
+        border-width: 2px;
+        padding: 23.5px;
+    }
+    .nested-option-label {
+        font-size: 17px;
+        font-weight: 600;
+        color: #1d1d1f;
+    }
+    .nested-option-price {
+        font-size: 14px;
+        color: #1d1d1f;
+    }
+
+    /* Selection Sequence Styles */
+    .option-section {
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    .option-section.disabled {
+        opacity: 0.5; /* Increased opacity so they are visible */
+        pointer-events: none;
+        filter: grayscale(0.8);
+    }
+    .option-section.disabled::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 10;
+    }
+
+    /* Summary List Styles */
+    .summary-config-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px 0;
+    }
+    .summary-config-item {
+        font-size: 15px;
+        color: #1d1d1f;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+        line-height: 1.4;
+    }
+    .summary-config-item::before {
+        content: "•";
+        margin-right: 10px;
+        color: #86868b;
+    }
+    .summary-config-category {
+        font-weight: 600;
+        margin-right: 5px;
+    }
+    .rf-bfe-main {
+        display: flex;
+        align-items: flex-start;
+        margin: 0 80px 80px 80px; /* Increased side margins to 80px */
+        padding: 0;
+        user-select: none; /* Globally prevent text cursor on selection area */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+    .rf-bfe-column-left {
+        flex: 0 0 70%;
+        position: sticky !important;
+        top: 120px;
+        align-self: flex-start;
+        padding-right: 80px;
+    }
+    .rf-bfe-column-right {
+        flex: 0 0 30%;
+        padding-bottom: 100px;
+    }
+    .model-card {
+        border: 2px solid #d2d2d7;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none; /* Prevent text selection cursor */
+    }
+    .model-card:hover {
+        border-color: #86868b;
+    }
+    .model-card.selected {
+        border-color: #0071e3;
+        border-width: 2px;
+        padding: 23px;
+    }
+    .model-info-left {
+        flex: 1;
+        text-align: left;
+    }
+    .model-label {
+        font-size: 19px;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 8px;
+    }
+    .model-sub-label {
+        font-size: 14px;
+        color: #1d1d1f;
+        line-height: 1.4;
+    }
+    .model-info-right {
+        text-align: right;
+        font-size: 14px;
+        color: #1d1d1f;
+        line-height: 1.3;
+        min-width: 150px;
+    }
+    .model-card, .model-card *,
+    .premium-option-card, .premium-option-card *,
+    .nested-option-card, .nested-option-card *,
+    .custom-summary-card, .custom-summary-card *,
+    .color-circle {
+        cursor: pointer !important;
+    }
+</style>
 
 {{-- Sticky Header Bar --}}
 <div id="sticky-header" class="sticky-header-bar" style="display: none;">
@@ -108,27 +462,37 @@
 
     {{-- Right Column --}}
     <div class="rf-bfe-column-right">
-        <h2><strong>Phiên bản.</strong> <span style="font-weight: normal; color: #86868b;">Mẫu nào phù hợp nhất?</span></h2>
-        <div id="model-selections">
-            @foreach($products as $index => $product)
-                @php $priceVal = $product->numeric_price; @endphp
-                <div class="model-card {{ $index == 0 ? 'selected' : '' }}" 
-                     data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $priceVal }}" 
-                     data-image="{{ asset($product->image_url) }}" data-images="{{ json_encode([asset($product->image_url), asset($product->image_url)]) }}"
-                     data-colors="{{ $product->colors }}" data-options="{{ json_encode($product->options) }}"
-                     onclick="selectModel(this)">
-                    <div style="flex: 1; text-align: left;"><strong>{{ $product->name }}</strong></div>
-                    <div style="flex: 1; text-align: right;">
-                        <p style="text-align: right;">Từ {{ number_format($priceVal, 0, ',', '.') }}đ<br>hoặc {{ number_format($priceVal / 24, 0, ',', '.') }}đ/tháng</p>
+        <div class="option-section" id="section-model">
+            <h2><strong>Phiên bản.</strong> <span style="font-weight: normal; color: #86868b;">Mẫu nào phù hợp nhất?</span></h2>
+            <div id="model-selections">
+                @foreach($products as $index => $product)
+                    @php $priceVal = $product->numeric_price; @endphp
+                    <div class="model-card {{ $index == 0 ? 'selected' : '' }}" 
+                         data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $priceVal }}" 
+                         data-image="{{ asset($product->image_url) }}" 
+                         data-images='@json([asset($product->image_url), asset($product->image_url)])'
+                         data-colors='{{ $product->colors }}' 
+                         data-options='@json($product->options)'
+                         onclick="selectModel(this)">
+                        <div class="model-info-left">
+                            <div class="model-label">{{ $product->name }}</div>
+                            <div class="model-sub-label">{{ $product->sub_label ?? 'Có chip M5, M5 Pro hoặc M5 Max.' }}</div>
+                        </div>
+                        <div class="model-info-right">
+                            <div>Từ {{ number_format($priceVal, 0, ',', '.') }}đ</div>
+                            <div style="margin-top: 4px;">hoặc {{ number_format($priceVal / 24, 0, ',', '.') }}đ/tháng</div>
+                            <div style="color: #86868b; font-size: 12px;">trong 24 tháng*</div>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
 
-        <br>
-        <h2><strong>Màu.</strong> <span style="font-weight: normal; color: #86868b;">Chọn màu yêu thích.</span></h2>
-        <b style="font-size: 17px; font-weight: 600; color: #1d1d1f;" id="color-label">Màu sắc</b>
-        <div class="color-options" id="color-selections" style="padding: 15px 0;"></div>
+        <div class="option-section disabled" id="section-color" style="margin-top: 40px;">
+            <h2><strong>Màu.</strong> <span style="font-weight: normal; color: #86868b;">Chọn màu yêu thích.</span></h2>
+            <b style="font-size: 17px; font-weight: 600; color: #1d1d1f;" id="color-label">Màu sắc</b>
+            <div class="color-options" id="color-selections" style="padding: 15px 0;"></div>
+        </div>
 
         <div id="dynamic-options-container"></div>
 
@@ -144,8 +508,54 @@
     </div>
 </div>
 
+{{-- What's in the Box Section --}}
+<div style="background: #fff; padding: 40px 0; border-top: 1px solid #d2d2d7; text-align: center;">
+    <div class="container" style="max-width: 980px;">
+        <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 70px; color: #1d1d1f; letter-spacing: -0.015em;">Trong hộp có gì</h2>
+        
+        <div style="background-color: #f5f5f7; border-radius: 28px; padding: 60px 40px; margin-bottom: 40px; display: flex; justify-content: space-around; align-items: flex-end; gap: 20px;">
+            {{-- Item 1: Product --}}
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                <div style="height: 320px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img id="box-product-img" src="{{ asset($products->first()->image_url) }}" style="max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
+                </div>
+                <p id="box-product-name" style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0; text-align: center;">{{ $seriesTitleDisplay }}</p>
+            </div>
+
+            {{-- Item 2: Cable --}}
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                <div style="height: 320px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-witb-cable-202509?wid=400&hei=800&fmt=png-alpha" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+                <p style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0; text-align: center;">Cáp Sạc USB‑C</p>
+            </div>
+
+            {{-- Item 3: Adapter (Mac only) --}}
+            @if(str_contains(strtolower($seriesTitleDisplay), 'mac'))
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 30px;">
+                <div style="height: 320px; display: flex; align-items: flex-end; justify-content: center;">
+                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/macbook-neo-witb-adapter-202603_GEO_VN?wid=2176&hei=3136&fmt=p-jpg&qlt=95&.v=R2g1bDVDM0hPNnF6UVdMWWpFSlo1RXBQTmZPYkFBZzJyZC9PdDZ1RU55Mk51Qy9JMkYzcmQ2a3NmaUM4dlZLZzlvVnZxV2NUNlU3eTllalVnUFN1ZFFTTWdLL2xrUmxCSzFHMVo3SzVGQytoS29wTkEvZG5Zc0lIWERMQ3F0aVY" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+                <p style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0; text-align: center;">Bộ Tiếp Hợp Nguồn USB‑C 30W</p>
+            </div>
+            @endif
+        </div>
+
+        <div style="max-width: 780px; margin: 0 auto; text-align: center; border-top: 1px solid #d2d2d7; padding-top: 40px; margin-bottom: 40px;">
+            <h4 style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin-bottom: 15px;">Các mục tiêu về môi trường của chúng tôi.</h4>
+            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 0 auto;">
+                Là một phần trong nỗ lực của chúng tôi nhằm đạt được <a href="#" style="color: #0066cc; text-decoration: none;">trạng thái trung hòa carbon vào năm 2030</a>, {{ $seriesTitleDisplay }} không đi kèm bộ tiếp hợp nguồn hay Tai Nghe EarPods. Trong hộp có một cáp sạc nhanh USB-C hỗ trợ sạc nhanh và tương thích với bộ tiếp hợp nguồn USB-C cũng như cổng máy tính.
+            </p>
+            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 15px auto 0;">
+                Chúng tôi khuyến khích bạn sử dụng bất kỳ bộ tiếp hợp nguồn USB-C nào tương thích. Bạn cũng có thể mua bộ tiếp hợp nguồn hoặc tai nghe mới của Apple nếu cần.
+            </p>
+        </div>
+
+    </div>
+</div>
+
 {{-- Checkout Summary --}}
-<div style="background: #f5f5f7; border-top: 1px solid #d2d2d7; padding: 30px 0;">
+<div style="background: #f5f5f7; border-top: 1px solid #d2d2d7; padding: 60px 0;">
     <div class="container" style="max-width: 1300px; display: flex; gap: 80px; align-items: flex-start;">
         {{-- Left: Headline --}}
         <div style="flex: 1;">
@@ -157,9 +567,13 @@
         </div>
 
         {{-- Middle: Details --}}
-        <div style="flex: 1;">
+        <div style="flex: 1.5;">
             <div style="margin-bottom: 20px;">
-                <h3 id="summary-product-headline" style="font-size: 24px; font-weight: 500; margin-bottom: 12px; color: #1d1d1f; line-height: 1.3;">Đang tải...</h3>
+                <h3 id="summary-product-headline" style="font-size: 24px; font-weight: 600; margin-bottom: 20px; color: #1d1d1f; line-height: 1.2;">Sản phẩm của bạn</h3>
+                
+                <div id="summary-config-details" class="summary-config-list">
+                    <!-- Structured list items will be injected here -->
+                </div>
                 
                 <div style="margin-bottom: 25px;">
                     <div style="font-size: 21px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">Tổng cộng <span id="summary-total-price">0đ</span></div>
@@ -246,73 +660,71 @@
     </div>
 </div>
 
-{{-- What's in the Box Section --}}
-<div style="background: #fff; padding: 120px 0; border-top: 1px solid #d2d2d7; text-align: center;">
+@if(str_contains(strtolower($seriesTitleDisplay), 'mac'))
+{{-- Mac Benefits Section --}}
+<div style="background: #fff; padding: 100px 0; border-top: 1px solid #d2d2d7; text-align: center;">
     <div class="container" style="max-width: 980px;">
-        <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 70px; color: #1d1d1f; letter-spacing: -0.015em;">Trong hộp có gì</h2>
-        
-        <div style="background-color: #f5f5f7; border-radius: 18px; padding: 100px 20px; margin-bottom: 25px; display: flex; justify-content: center; align-items: center;">
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                <img id="box-product-img" src="{{ asset($products->first()->image_url) }}" style="height: 380px; object-fit: contain; mix-blend-mode: multiply;">
+        <h2 style="font-size: 48px; font-weight: 700; color: #1d1d1f; margin-bottom: 80px; letter-spacing: -0.015em; line-height: 1.1;">Mac mới đến với nhiều lợi<br>ích cộng thêm.</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-tv?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple TV</h3>
+                <p style="font-size: 14px; color: #1d1d1f; line-height: 1.4; max-width: 240px;">3 tháng miễn phí để xem các bộ phim và series gốc "đáng cày".<sup>§</sup></p>
             </div>
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-witb-cable-202509?wid=400&hei=800&fmt=png-alpha" style="height: 380px; object-fit: contain;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-music?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Music</h3>
+                <p style="font-size: 14px; color: #1d1d1f; line-height: 1.4; max-width: 240px;">3 tháng miễn phí để thưởng thức tất cả các bài hát bạn yêu thích, hoàn toàn không có quảng cáo.<sup>§</sup></p>
             </div>
-        </div>
-
-        <div style="display: flex; justify-content: center; margin-bottom: 100px;">
-            <div style="flex: 1; text-align: center;">
-                <p id="box-product-name" style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0;">{{ $seriesTitleDisplay }}</p>
-            </div>
-            <div style="flex: 1; text-align: center;">
-                <p style="font-size: 14px; font-weight: 400; color: #1d1d1f; margin: 0;">Cáp Sạc USB‑C</p>
-            </div>
-        </div>
-
-        <div style="max-width: 780px; margin: 0 auto; text-align: center; border-top: 1px solid #d2d2d7; padding-top: 40px; margin-bottom: 100px;">
-            <h4 style="font-size: 17px; font-weight: 600; color: #1d1d1f; margin-bottom: 15px;">Các mục tiêu về môi trường của chúng tôi.</h4>
-            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 0 auto;">
-                Là một phần trong nỗ lực của chúng tôi nhằm đạt được <a href="#" style="color: #0066cc; text-decoration: none;">trạng thái trung hòa carbon vào năm 2030</a>, {{ $seriesTitleDisplay }} không đi kèm bộ tiếp hợp nguồn hay Tai Nghe EarPods. Trong hộp có một cáp sạc nhanh USB-C hỗ trợ sạc nhanh và tương thích với bộ tiếp hợp nguồn USB-C cũng như cổng máy tính.
-            </p>
-            <p style="font-size: 14px; color: #86868b; line-height: 1.6; max-width: 700px; margin: 15px auto 0;">
-                Chúng tôi khuyến khích bạn sử dụng bất kỳ bộ tiếp hợp nguồn USB-C nào tương thích. Bạn cũng có thể mua bộ tiếp hợp nguồn hoặc tai nghe mới của Apple nếu cần.
-            </p>
-        </div>
-
-        @if(str_contains(strtolower($seriesTitleDisplay), 'iphone'))
-        <div style="margin-top: 120px;">
-            <h2 style="font-size: 48px; font-weight: 700; color: #1d1d1f; margin-bottom: 80px; letter-spacing: -0.015em;">iPhone mới đến với nhiều lợi ích cộng thêm.</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: center;">
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-tv?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
-                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple TV</h3>
-                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để xem các bộ phim và series gốc "đáng cày".*</p>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-music?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
-                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Music</h3>
-                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để thưởng thức tất cả các bài hát bạn yêu thích, hoàn toàn không có quảng cáo.<sup>◊</sup></p>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-arcade?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
-                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Arcade</h3>
-                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để chơi game cực vui, không gián đoạn.<sup>+</sup></p>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-fitness?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
-                    <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Fitness+</h3>
-                    <p style="font-size: 12px; color: #1d1d1f; line-height: 1.4; max-width: 200px;">3 tháng miễn phí để tập luyện, từ HIIT cho đến Thiền.<sup>^</sup></p>
-                </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/services-arcade?wid=98&hei=98&fmt=jpeg&qlt=90" style="width: 48px; height: 48px; margin-bottom: 20px; border-radius: 10px;">
+                <h3 style="font-size: 19px; font-weight: 600; color: #1d1d1f; margin-bottom: 8px;">Apple Arcade</h3>
+                <p style="font-size: 14px; color: #1d1d1f; line-height: 1.4; max-width: 240px;">3 tháng miễn phí để chơi game cực vui, không gián đoạn.<sup>§</sup></p>
             </div>
         </div>
-        @endif
     </div>
 </div>
+
+{{-- Education Section --}}
+<div style="background: #f5f5f7; padding: 100px 0; border-top: 1px solid #d2d2d7; text-align: center;">
+    <div class="container" style="max-width: 980px;">
+        <h2 style="font-size: 40px; font-weight: 700; color: #1d1d1f; margin-bottom: 24px; letter-spacing: -0.015em;">Sinh viên và giáo viên – tiết kiệm khi mua Mac mới.</h2>
+        <p style="font-size: 19px; color: #1d1d1f; margin-bottom: 20px; font-weight: 400;">Nhận mức giá đặc biệt trong Cửa Hàng Dành Cho Ngành Giáo Dục.</p>
+        <a href="#" style="color: #0066cc; text-decoration: none; font-size: 19px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+            Mua ngay <span style="font-size: 24px;">›</span>
+        </a>
+    </div>
+</div>
+@endif
 
 @push('scripts')
 <script>
     let currentModel = null, selectedOptions = {}, currentColor = null, appleCarePrice = 0, currentSlide = 0, sliderImages = [];
     function formatCurrency(n) { return new Intl.NumberFormat('vi-VN').format(n) + 'đ'; }
+    
+    // Custom slow smooth scroll function
+    function slowScrollTo(targetY, duration = 800) {
+        const startY = window.pageYOffset;
+        const diff = targetY - startY;
+        let startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percent = Math.min(progress / duration, 1);
+            
+            // Easing function: easeOutCubic
+            const ease = 1 - Math.pow(1 - percent, 3);
+            
+            window.scrollTo(0, startY + diff * ease);
+
+            if (progress < duration) {
+                window.requestAnimationFrame(step);
+            }
+        }
+        window.requestAnimationFrame(step);
+    }
+
     function toggleTradeIn(show) {
         document.getElementById('trade-in-form').style.display = show ? 'block' : 'none';
         document.getElementById('trade-chon-card').classList.toggle('selected', show);
@@ -365,12 +777,47 @@
     
     function init() {
         const first = document.querySelector('.model-card');
-        if(first) selectModel(first);
+        if(first) {
+            // Delay slightly to ensure all elements are ready
+            setTimeout(() => selectModel(first), 100);
+        }
         window.addEventListener('scroll', () => {
             const h = document.getElementById('sticky-header'), t = document.getElementById('page-price-subtitle');
             if(t && h) h.style.display = window.scrollY > (t.getBoundingClientRect().bottom + window.scrollY) ? 'flex' : 'none';
         });
     }
+
+    document.addEventListener('DOMContentLoaded', init);
+    function toggleCustomEdit(btn) {
+        const summaryCard = btn.closest('.custom-summary-card');
+        const dropdown = summaryCard.querySelector('.custom-options-dropdown');
+        const footer = summaryCard.querySelector('.custom-summary-footer');
+        const isShowing = dropdown.classList.contains('show');
+
+        // Close all other dropdowns first
+        document.querySelectorAll('.custom-options-dropdown.show').forEach(el => {
+            if (el !== dropdown) {
+                el.classList.remove('show');
+                const otherCard = el.closest('.custom-summary-card');
+                if (otherCard) {
+                    otherCard.querySelector('.custom-summary-footer').style.display = 'flex';
+                    const otherBtn = otherCard.querySelector('.btn-custom-edit');
+                    if (otherBtn) otherBtn.innerHTML = `Chỉnh sửa <i class="bi bi-chevron-down"></i>`;
+                }
+            }
+        });
+
+        if (isShowing) {
+            dropdown.classList.remove('show');
+            if (footer) footer.style.display = 'flex';
+            btn.innerHTML = `Chỉnh sửa <i class="bi bi-chevron-down"></i>`;
+        } else {
+            dropdown.classList.add('show');
+            if (footer) footer.style.display = 'none';
+            btn.innerHTML = `Đóng <i class="bi bi-chevron-up"></i>`;
+        }
+    }
+
     function selectModel(el) {
         document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
@@ -381,13 +828,23 @@
         let rawImages = [];
         try { rawImages = JSON.parse(el.dataset.images || '[]'); } catch(e) { rawImages = []; }
 
+        let rawColors = [];
+        try {
+            const colorData = el.dataset.colors || "";
+            if (colorData.trim().startsWith('[')) {
+                rawColors = JSON.parse(colorData);
+            } else {
+                rawColors = colorData.split(',').map(c => c.trim()).filter(c => c !== "");
+            }
+        } catch(e) { rawColors = []; }
+
         currentModel = {
             id: el.dataset.id, 
             name: el.dataset.name, 
             price: parseInt(el.dataset.price) || 0,
             image: el.dataset.image, 
             images: rawImages,
-            colors: (el.dataset.colors || "").split(',').filter(c => c.trim() !== ""), 
+            colors: rawColors, 
             options: rawOptions
         };
 
@@ -396,13 +853,11 @@
         const boxImg = document.getElementById('box-product-img');
         if(boxImg) boxImg.src = currentModel.image;
         
-        // Update Page Title and Price Subtitle
         const pageTitle = document.getElementById('page-title');
         if(pageTitle) pageTitle.innerText = `Mua ${currentModel.name}`;
         const pagePriceSub = document.getElementById('page-price-subtitle');
         if(pagePriceSub) pagePriceSub.innerText = `Từ ${formatCurrency(currentModel.price)} hoặc ${formatCurrency(Math.round(currentModel.price/24))}/tháng trong 24 tháng*`;
         
-        // Update other mentions of the product name
         const idsToUpdate = ['sticky-product-name', 'trade-in-product-name', 'applecare-product-name', 'box-product-name', 'summary-product-name-large', 'summary-product-headline'];
         idsToUpdate.forEach(id => {
             const el = document.getElementById(id);
@@ -413,37 +868,120 @@
         const container = document.getElementById('dynamic-options-container');
         if(container) {
             container.innerHTML = '';
-            const groups = {};
-            (currentModel.options || []).forEach(o => {
-                const id = o.attribute_id, name = o.attribute ? o.attribute.name : 'Tùy chọn';
-                if(!groups[id]) groups[id] = {name, items:[]};
-                groups[id].items.push(o);
-            });
             
-            Object.entries(groups).forEach(([id, g]) => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <br>
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <h2><strong>${g.name}.</strong> <span style="font-weight:normal;color:#86868b;">Chọn cấu hình của bạn.</span></h2>
-                        <button type="button" onclick="showInfo('${g.name}')" style="background: none; border: none; padding: 0; cursor: pointer;">
-                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none">
-                                <circle cx="12.5" cy="12.5" r="11.5" stroke="#86868b" stroke-width="1.5"/>
-                                <text x="12.5" y="17.5" font-family="Arial" font-size="14" text-anchor="middle" fill="#86868b">?</text>
-                            </svg>
-                        </button>
-                    </div>
-                `;
-                g.items.forEach(o => {
-                    const card = document.createElement('div');
-                    card.className = 'storage-card' + (o.is_default?' selected':'');
-                    card.style = 'padding:20px; border:1px solid #d2d2d7; border-radius:12px; cursor:pointer; margin-top:10px; display:flex; justify-content:space-between;';
-                    card.innerHTML = `<div><strong>${o.label}</strong></div><div>${formatCurrency(currentModel.price + parseFloat(o.price_offset))}</div>`;
-                    card.onclick = () => { div.querySelectorAll('.storage-card').forEach(x=>x.classList.remove('selected')); card.classList.add('selected'); selectedOptions[id] = {label:o.label, offset:parseFloat(o.price_offset)}; updateSummary(); };
-                    div.appendChild(card);
-                    if(o.is_default) selectedOptions[id] = {label:o.label, offset:parseFloat(o.price_offset)};
+            // Group options by attribute and then by group_name
+            const attributesMap = {};
+            (currentModel.options || []).forEach(o => {
+                const attr = o.attribute || { id: o.attribute_id, name: 'Tùy chọn', group_name: null };
+                if(!attributesMap[attr.id]) {
+                    attributesMap[attr.id] = {
+                        id: attr.id,
+                        name: attr.name,
+                        group_name: attr.group_name,
+                        items: []
+                    };
+                }
+                attributesMap[attr.id].items.push(o);
+            });
+
+            // Further group by group_name
+            const groups = {};
+            Object.values(attributesMap).forEach(attr => {
+                const gName = attr.group_name || `ungrouped_${attr.id}`;
+                if(!groups[gName]) groups[gName] = { name: attr.group_name, attrs: [] };
+                groups[gName].attrs.push(attr);
+            });
+
+            Object.entries(groups).forEach(([gName, g], groupIndex) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'option-section disabled';
+                groupDiv.id = `group-${groupIndex}`;
+                groupDiv.style.marginTop = '40px';
+                
+                if(g.name) {
+                    groupDiv.innerHTML = `<h2><strong>${g.name}.</strong> <span style="font-weight: normal; color: #86868b;">Giữ nguyên hoặc điều chỉnh.</span></h2>`;
+                }
+
+                g.attrs.forEach(attr => {
+                    const attrDiv = document.createElement('div');
+                    attrDiv.className = 'attribute-container mb-4';
+
+                    if(!g.name) {
+                        attrDiv.innerHTML = `
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                                <h2 class="option-group-title">${attr.name}. <span>Chọn cấu hình của bạn.</span></h2>
+                            </div>
+                        `;
+                    }
+
+                    // If it's a grouped attribute (like in "Tùy biến"), show summary card
+                    if(g.name) {
+                        const defaultOpt = attr.items.find(i => i.is_default) || attr.items[0];
+                        selectedOptions[attr.id] = { name: attr.name, label: defaultOpt.label, offset: parseFloat(defaultOpt.price_offset) };
+                        
+                        let icon = 'bi-cpu';
+                        if(attr.name.toLowerCase().includes('dung lượng') || attr.name.toLowerCase().includes('ssd')) icon = 'bi-device-ssd';
+                        if(attr.name.toLowerCase().includes('nguồn')) icon = 'bi-lightning-charge';
+                        if(attr.name.toLowerCase().includes('bàn phím')) icon = 'bi-keyboard';
+                        if(attr.name.toLowerCase().includes('màn hình')) icon = 'bi-display';
+                        if(attr.name.toLowerCase().includes('đế')) icon = 'bi-box-arrow-in-down';
+                        if(attr.name.toLowerCase().includes('ethernet')) icon = 'bi-ethernet';
+                        if(attr.name.toLowerCase().includes('chuột')) icon = 'bi-mouse';
+
+                        const summaryCard = document.createElement('div');
+                        summaryCard.className = 'custom-summary-card';
+                        summaryCard.id = `summary-card-${attr.id}`;
+                        summaryCard.innerHTML = `
+                            <div class="custom-summary-header">
+                                <i class="bi ${icon}"></i>
+                                <div class="custom-summary-title">${attr.name}</div>
+                            </div>
+                            <div class="custom-summary-desc">${attr.items[0].description || ''}</div>
+                            <div class="custom-current-label">Hiện tại</div>
+                            <div class="custom-current-value" id="current-val-${attr.id}">${defaultOpt.label}</div>
+                            
+                            <div class="custom-summary-footer">
+                                <div class="custom-available-text">Có sẵn các tùy chọn từ ${attr.items[0].label} đến ${attr.items[attr.items.length-1].label}</div>
+                                <button type="button" class="btn-custom-edit" id="btn-edit-${attr.id}" onclick="toggleCustomEdit(this)">
+                                    Chỉnh sửa <i class="bi bi-chevron-down"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="custom-options-dropdown" id="custom-options-${attr.id}">
+                                <div class="custom-dropdown-header">
+                                    <div class="custom-dropdown-title">Chọn ${attr.name.toLowerCase()}.</div>
+                                    <button type="button" class="btn-close-dropdown" onclick="toggleCustomEdit(this.closest('.custom-summary-card').querySelector('.btn-custom-edit'))">
+                                        <i class="bi bi-chevron-up"></i>
+                                    </button>
+                                </div>
+                                <div class="nested-options-list"></div>
+                            </div>
+                        `;
+                        attrDiv.appendChild(summaryCard);
+                        
+                        const list = attrDiv.querySelector('.nested-options-list');
+                        attr.items.forEach(o => {
+                            const card = createNestedOptionCard(o, attr.id);
+                            list.appendChild(card);
+                        });
+                    } else {
+                        // Standard layout
+                        attr.items.forEach(o => {
+                            const card = createOptionCard(o, attr.id, false);
+                            attrDiv.appendChild(card);
+                            if(o.is_default) selectedOptions[attr.id] = { name: attr.name, label: o.label, offset: parseFloat(o.price_offset) };
+                        });
+
+                        if(attr.name.toLowerCase().includes('chip')) {
+                            const footer = document.createElement('div');
+                            footer.className = 'installment-info-footer';
+                            footer.innerHTML = `Trà góp theo tháng với phí dịch vụ thực 1.67%, sau khi thanh toán lần đầu 20%. Có thêm tùy chọn thanh toán khi hoàn tất giao dịch.`;
+                            attrDiv.appendChild(footer);
+                        }
+                    }
+                    groupDiv.appendChild(attrDiv);
                 });
-                container.appendChild(div);
+                container.appendChild(groupDiv);
             });
         }
         
@@ -453,21 +991,120 @@
             cc.innerHTML = '';
             (currentModel.colors || []).forEach((c, i) => {
                 const d = document.createElement('div'); d.className = 'color-circle' + (i===0?' selected':'');
-                d.style.backgroundColor = c.trim(); d.onclick = () => { cc.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('selected')); d.classList.add('selected'); currentColor = c.trim(); updateSummary(); };
-                cc.appendChild(d); if(i===0) currentColor = c.trim();
+                d.style.backgroundColor = c.trim(); 
+                d.onclick = () => { 
+                    cc.querySelectorAll('.color-circle').forEach(x=>x.classList.remove('selected')); 
+                    d.classList.add('selected'); 
+                    currentColor = c.trim(); 
+                    // Enable next section (Chip or first dynamic section)
+                    const nextSection = document.querySelector('#dynamic-options-container .option-section');
+                    if (nextSection) {
+                        nextSection.classList.remove('disabled');
+                        // Use the new slow scroll
+                        slowScrollTo(nextSection.offsetTop - 120, 1000);
+                    }
+                    updateSummary(); 
+                };
+                cc.appendChild(d); 
+                if(i===0) currentColor = c.trim();
             });
         }
+
+        // Initially enable Color section when Model is selected
+        const colorSection = document.getElementById('section-color');
+        if (colorSection) colorSection.classList.remove('disabled');
+        
         updateSummary();
     }
+
+    function createOptionCard(o, attrId, isNested) {
+        const card = document.createElement('div');
+        card.className = 'premium-option-card' + (o.is_default ? ' selected' : '');
+        
+        const totalWithOption = currentModel.price + parseFloat(o.price_offset);
+        const monthlyWithOption = Math.round(totalWithOption / 24);
+
+        card.innerHTML = `
+            <div class="option-content">
+                ${o.sub_label ? `<div class="option-sub-label">${o.sub_label}</div>` : ''}
+                <div class="option-label">${o.label}</div>
+                ${o.description ? `<div class="option-description">${o.description}</div>` : ''}
+            </div>
+            <div class="option-price-container">
+                <div>Từ ${formatCurrency(totalWithOption)}</div>
+                <div class="option-price-monthly">hoặc<br>${formatCurrency(monthlyWithOption)}/tháng</div>
+                <div class="option-price-note">trong 24 tháng*</div>
+            </div>
+        `;
+
+        card.onclick = () => {
+            const container = card.parentElement;
+            container.querySelectorAll('.premium-option-card').forEach(x => x.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedOptions[attrId] = { ...selectedOptions[attrId], label: o.label, offset: parseFloat(o.price_offset) };
+            
+            // Update summary text if it's a customization option
+            const summaryVal = document.getElementById(`current-val-${attrId}`);
+            if(summaryVal) {
+                summaryVal.innerHTML = o.label;
+            }
+
+            // Enable next section
+            const currentSection = card.closest('.option-section');
+            let nextSection = currentSection.nextElementSibling;
+            if (!nextSection && currentSection.id === 'section-customization') {
+                // Tùy biến doesn't have a direct next, it might be the peripherals
+                nextSection = document.querySelector('#dynamic-options-container .option-section:not(#section-customization):not(.disabled)');
+            }
+            if (nextSection) {
+                nextSection.classList.remove('disabled');
+                // Use the new slow scroll
+                slowScrollTo(nextSection.offsetTop - 120, 1000);
+            }
+
+            updateSummary();
+        };
+        return card;
+    }
     
+    function createNestedOptionCard(o, attrId) {
+        const card = document.createElement('div');
+        card.className = 'nested-option-card' + (o.is_default ? ' selected' : '');
+        
+        const priceText = parseFloat(o.price_offset) === 0 ? 'Có sẵn' : `+ ${formatCurrency(parseFloat(o.price_offset))}`;
+
+        card.innerHTML = `
+            <div class="nested-option-label">${o.label}</div>
+            <div class="nested-option-price">${priceText}</div>
+        `;
+
+        card.onclick = () => {
+            const container = card.parentElement;
+            container.querySelectorAll('.nested-option-card').forEach(x => x.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedOptions[attrId] = { ...selectedOptions[attrId], label: o.label, offset: parseFloat(o.price_offset) };
+            
+            const summaryVal = document.getElementById(`current-val-${attrId}`);
+            if(summaryVal) summaryVal.innerText = o.label;
+
+            // Enable next section if available
+            const currentSection = card.closest('.option-section');
+            if (currentSection) {
+                const nextSection = currentSection.nextElementSibling;
+                if (nextSection) nextSection.classList.remove('disabled');
+            }
+
+            updateSummary();
+        };
+        return card;
+    }
+
     function updateSummary() {
         if(!currentModel) return;
         
-        // Thuật toán nhận diện tên màu sắc thông minh (Simplified ntc.js)
         const getColorName = (hex) => {
             hex = hex.trim().toLowerCase();
             if(hex.length === 4) hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
-            
             const names = [
                 ["000000", "Đen"], ["ffffff", "Trắng"], ["f5f5f0", "Trắng Ánh Sao"], ["e3e4e5", "Bạc"],
                 ["2c2c2e", "Đen Không Gian"], ["d1d1d1", "Titan Tự Nhiên"], ["e5e5e5", "Titan Trắng"],
@@ -477,10 +1114,8 @@
                 ["808080", "Xám"], ["0000ff", "Xanh Biển"], ["00ff00", "Xanh Lá"], ["ffff00", "Vàng"],
                 ["ffa500", "Cam"], ["ffc0cb", "Hồng"], ["800080", "Tím"], ["a52a2a", "Nâu"], ["00ffff", "Xanh Da Trời"]
             ];
-
             let r = parseInt(hex.substring(1, 3), 16), g = parseInt(hex.substring(3, 5), 16), b = parseInt(hex.substring(5, 7), 16);
             let minDiff = Infinity, bestName = "Màu sắc";
-
             names.forEach(n => {
                 let nr = parseInt(n[0].substring(0, 2), 16), ng = parseInt(n[0].substring(2, 4), 16), nb = parseInt(n[0].substring(4, 6), 16);
                 let diff = Math.pow(r - nr, 2) + Math.pow(g - ng, 2) + Math.pow(b - nb, 2);
@@ -490,33 +1125,60 @@
         };
 
         const colorName = getColorName(currentColor || "#ffffff");
-
-        // Update the color label below the "Màu" heading
         const colorLabel = document.getElementById('color-label');
-        if (colorLabel) {
-            colorLabel.innerText = colorName;
-        }
+        if (colorLabel) colorLabel.innerText = colorName;
 
-        let offset = 0, lbls = [];
-        Object.values(selectedOptions).forEach(o => { offset += o.offset; lbls.push(o.label); });
-        const total = currentModel.price + offset + appleCarePrice;
+        let optionsTotal = 0, lbls = [];
+        Object.values(selectedOptions).forEach(o => { 
+            optionsTotal += o.offset; 
+            lbls.push(o.label);
+        });
+        const total = currentModel.price + optionsTotal + appleCarePrice;
         
-        // Update labels
-        const nameLarge = document.getElementById('summary-product-name-large');
-        if(nameLarge) nameLarge.innerText = currentModel.name;
-        
-        const headline = document.getElementById('summary-product-headline');
-        if(headline) headline.innerText = `${currentModel.name} ${lbls.join(', ')} - ${colorName}`;
-        
-        // Update prices
+        // Update price labels
         const totalPriceEl = document.getElementById('summary-total-price');
         if(totalPriceEl) totalPriceEl.innerText = formatCurrency(total);
         const monthlyPriceEl = document.getElementById('summary-monthly-price');
         if(monthlyPriceEl) monthlyPriceEl.innerText = formatCurrency(Math.round(total/24));
+        document.getElementById('summary-initial-payment').innerText = formatCurrency(Math.round(total * 0.2));
+        document.getElementById('summary-vat-price').innerText = formatCurrency(Math.round(total * 0.1));
+        
         document.getElementById('sticky-total-price').innerText = formatCurrency(total);
         document.getElementById('sticky-monthly-price').innerText = formatCurrency(Math.round(total/24));
-        const stickyProductName = document.getElementById('sticky-product-name');
-        if(stickyProductName) stickyProductName.innerText = currentModel.name;
+
+        // Update Structured Summary Details
+        const summaryDetails = document.getElementById('summary-config-details');
+        if (summaryDetails) {
+            summaryDetails.innerHTML = '';
+            
+            // 1. Model
+            const mItem = document.createElement('div');
+            mItem.className = 'summary-config-item';
+            mItem.innerHTML = `<span class="summary-config-category">Phiên bản:</span> ${currentModel.name}`;
+            summaryDetails.appendChild(mItem);
+
+            // 2. Color
+            const cItem = document.createElement('div');
+            cItem.className = 'summary-config-item';
+            cItem.innerHTML = `<span class="summary-config-category">Màu sắc:</span> ${colorName}`;
+            summaryDetails.appendChild(cItem);
+
+            // 3. Dynamic Options
+            Object.values(selectedOptions).forEach(opt => {
+                const optItem = document.createElement('div');
+                optItem.className = 'summary-config-item';
+                optItem.innerHTML = `<span class="summary-config-category">${opt.name}:</span> ${opt.label}`;
+                summaryDetails.appendChild(optItem);
+            });
+
+            // 4. AppleCare
+            if (appleCarePrice > 0) {
+                const acItem = document.createElement('div');
+                acItem.className = 'summary-config-item';
+                acItem.innerHTML = `<span class="summary-config-category">Bảo vệ:</span> Gói bảo hành AppleCare+`;
+                summaryDetails.appendChild(acItem);
+            }
+        }
 
         // Calculate delivery dates
         const now = new Date();

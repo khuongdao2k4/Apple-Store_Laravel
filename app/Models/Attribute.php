@@ -9,7 +9,7 @@ class Attribute extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'category', 'group_name'];
 
     public function productOptions()
     {

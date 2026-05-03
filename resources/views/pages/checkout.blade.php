@@ -230,7 +230,40 @@
                         <img src="{{ $item->image_url }}" alt="{{ $item->product_name }}">
                         <div class="product-details">
                             <h3 style="font-size: 15px;">{{ $item->product_name }} (x{{ $item->quantity }})</h3>
-                            <p>{{ $item->storage }} | {{ \App\Helpers\ColorHelper::resolve($item->color) }}</p>
+                            @php
+                                $checkoutOptions = explode(',', $item->storage);
+                            @endphp
+                            <div style="font-size: 13px; color: #6e6e73; margin: 4px 0 8px 0; line-height: 1.4;">
+                                @foreach($checkoutOptions as $opt)
+                                    @php
+                                        $optLabel = trim($opt);
+                                    @endphp
+                                    @if($optLabel !== '')
+                                        @php
+                                            $optPriceStr = 'Miễn phí';
+                                            $productModel = \App\Models\Product::where('name', $item->product_name)->first();
+                                            if ($productModel) {
+                                                $optionModel = \App\Models\ProductOption::where('product_id', $productModel->id)
+                                                                ->where('label', $optLabel)
+                                                                ->first();
+                                                if ($optionModel && $optionModel->price_offset > 0) {
+                                                    $optPriceStr = '+ ' . number_format($optionModel->price_offset, 0, ',', '.') . 'đ';
+                                                }
+                                            }
+                                        @endphp
+                                        <div style="margin-bottom: 2px; display: flex; justify-content: space-between;">
+                                            <span>- {{ $optLabel }}</span>
+                                            <span style="color: #86868b;">{{ $optPriceStr }}</span>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                @if($item->color)
+                                    <div style="margin-bottom: 2px; display: flex; justify-content: space-between;">
+                                        <span>- Màu {{ \App\Helpers\ColorHelper::resolve($item->color) }}</span>
+                                        <span style="color: #86868b;">Miễn phí</span>
+                                    </div>
+                                @endif
+                            </div>
                             @if($item->applecare === true || $item->applecare === 1 || $item->applecare === '1' || $item->applecare === 'true')
                                 <p style="font-size: 12px; color: #1e7e34; font-weight: 500; margin-top: 3px;">✓ Có AppleCare+</p>
                             @else

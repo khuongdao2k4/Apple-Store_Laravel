@@ -44,6 +44,25 @@
             <script src="{{ asset('assets/js/' . $potentialJs) }}?v={{ time() }}"></script>
         @endif
     @endif
+    
+    <style>
+        /* Disable text selection and text cursor globally for a native app feel */
+        body {
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: default;
+        }
+        /* Re-enable for form inputs */
+        input, textarea {
+            user-select: auto;
+            -webkit-user-select: auto;
+            cursor: text;
+        }
+        /* Ensure clickable elements have pointer cursor */
+        a, button, select, .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>

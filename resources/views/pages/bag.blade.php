@@ -34,6 +34,8 @@
         cursor: pointer;
         padding: 0;
         transition: color 0.3s ease;
+        user-select: none;
+        -webkit-user-select: none;
     }
     .tab-btn.active {
         color: #1d1d1f;
@@ -100,15 +102,15 @@
         align-items: flex-start;
     }
     .item-image {
-        flex: 0 0 250px;
+        flex: 0 0 300px; /* Increased from 250px */
         text-align: center;
         display: flex;
         justify-content: center;
         align-items: flex-start;
     }
     .item-image img {
-        width: 200px;
-        height: 200px;
+        width: 250px; /* Increased from 200px */
+        height: 250px; /* Increased from 200px */
         object-fit: contain;
     }
     .item-details {

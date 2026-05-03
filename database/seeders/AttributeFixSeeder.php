@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class AttributeFixSeeder extends Seeder
 {
-    public function run()
+     public function run()
     {
         // Define common Mac attributes
         $macAttributes = [

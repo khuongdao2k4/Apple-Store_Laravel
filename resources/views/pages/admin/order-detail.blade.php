@@ -27,75 +27,93 @@
         <div class="adm-card mb-4">
             <div style="padding:18px 24px;border-bottom:1px solid var(--apple-gray-100);display:flex;justify-content:space-between;align-items:center">
                 <span class="adm-card-title">Sản phẩm trong đơn</span>
-                <span class="chip chip-{{ strtolower($order->status) }}">{{ strtoupper($order->status) }}</span>
+                <span class="chip chip-{{ strtolower($order->status) }}">{{ $order->status_label }}</span>
             </div>
-            <div class="table-responsive">
-                <table class="adm-table">
-                    <thead><tr>
-                        <th style="width:80px">Ảnh</th>
-                        <th>Thông tin sản phẩm</th>
-                        <th class="text-center">Số lượng</th>
-                        <th class="text-end">Đơn giá</th>
-                        <th class="text-end">Thành tiền</th>
-                    </tr></thead>
-                    <tbody>
-                        @php $subtotal = 0; @endphp
-                        @if($order->items && is_array($order->items))
-                            @foreach($order->items as $item)
-                            @php 
-                                $itemPrice = intval($item['price'] ?? 0);
-                                $qty = intval($item['quantity'] ?? 1);
-                                $total = $itemPrice * $qty;
-                                $subtotal += $total;
-                            @endphp
-                            <tr>
-                                <td>
-                                    <div style="width:60px;height:60px;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden">
-                                        <img src="{{ !empty($item['image_url']) ? (Str::startsWith($item['image_url'],'http') ? $item['image_url'] : asset($item['image_url'])) : asset('assets/images/placeholder.png') }}" 
-                                             alt="" style="width:50px;height:50px;object-fit:contain">
+            <div style="padding:0">
+                @php $subtotal = 0; @endphp
+                @if($order->items && is_array($order->items))
+                    @foreach($order->items as $item)
+                        @php 
+                            $itemPrice = intval($item['price'] ?? 0);
+                            $qty = intval($item['quantity'] ?? 1);
+                            $total = $itemPrice * $qty;
+                            $subtotal += $total;
+                        @endphp
+                        <div style="padding:32px;border-bottom:1px solid var(--apple-gray-100);display:flex;gap:32px">
+                            <!-- Product Image -->
+                            <div style="width:160px;flex-shrink:0;text-align:center">
+                                <img src="{{ !empty($item['image_url']) ? (Str::startsWith($item['image_url'],'http') ? $item['image_url'] : asset($item['image_url'])) : asset('assets/images/placeholder.png') }}" 
+                                     alt="" style="width:100%;height:auto;max-height:160px;object-fit:contain">
+                            </div>
+
+                            <!-- Product Info -->
+                            <div style="flex:1">
+                                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                                    <h3 style="font-size:21px;font-weight:600;margin:0;color:var(--apple-black)">{{ $item['product_name'] ?? 'Sản phẩm không tên' }}</h3>
+                                    <div style="text-align:right">
+                                        <div style="font-size:19px;font-weight:600">{{ number_format($itemPrice) }}đ</div>
+                                        <div style="font-size:13px;color:var(--apple-gray-500);margin-top:4px">Số lượng: {{ $qty }}</div>
                                     </div>
-                                </td>
-                                <td>
-                                    <div style="font-weight:600;font-size:15px;color:var(--apple-black)">{{ $item['product_name'] ?? 'Sản phẩm không tên' }}</div>
-                                    <div style="font-size:12px;color:var(--apple-gray-500);margin-top:2px">
-                                        {{ $item['storage'] ?? '' }}{{ !empty($item['color']) ? ' · ' . $item['color'] : '' }}
-                                    </div>
-                                    @if(!empty($item['applecare']))
-                                    <div style="margin-top:6px">
-                                        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;background:#e8f1fd;color:#0071e3;border-radius:6px;padding:2px 8px">
-                                            <span class="material-icons-round" style="font-size:13px">verified_user</span>
-                                            {{ is_string($item['applecare']) ? $item['applecare'] : 'AppleCare+' }}
-                                        </span>
-                                    </div>
+                                </div>
+
+                                <div style="font-size:14px;color:var(--apple-black);line-height:1.8">
+                                    @if(!empty($item['storage']))
+                                        @php $opts = explode(',', $item['storage']); @endphp
+                                        @foreach($opts as $opt)
+                                            <div style="display:flex;justify-content:space-between">
+                                                <span style="color:var(--apple-gray-700)">{{ trim($opt) }}</span>
+                                                <span style="color:var(--apple-gray-500)">Miễn phí</span>
+                                            </div>
+                                        @endforeach
                                     @endif
-                                </td>
-                                <td class="text-center" style="font-weight:500">x{{ $qty }}</td>
-                                <td class="text-end" style="font-weight:500">{{ number_format($itemPrice) }}đ</td>
-                                <td class="text-end" style="font-weight:700;color:var(--apple-black)">{{ number_format($total) }}đ</td>
-                            </tr>
-                            @endforeach
-                        @else
-                            <!-- Fallback for legacy single item orders -->
-                            @php $subtotal = floatval(preg_replace('/[^0-9]/', '', $order->price)); @endphp
-                            <tr>
-                                <td>
-                                    <div style="width:60px;height:60px;background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden">
-                                        <img src="{{ asset($order->image_url) }}" alt="" style="width:50px;height:50px;object-fit:contain">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div style="font-weight:600;font-size:15px;color:var(--apple-black)">{{ $order->product }}</div>
-                                    <div style="font-size:12px;color:var(--apple-gray-500);margin-top:2px">
-                                        {{ $order->storage }}{{ $order->color ? ' · ' . $order->color : '' }}
-                                    </div>
-                                </td>
-                                <td class="text-center" style="font-weight:500">x1</td>
-                                <td class="text-end" style="font-weight:500">{{ number_format($subtotal) }}đ</td>
-                                <td class="text-end" style="font-weight:700;color:var(--apple-black)">{{ number_format($subtotal) }}đ</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
+                                    @if(!empty($item['color']))
+                                        <div style="display:flex;justify-content:space-between">
+                                            <span style="color:var(--apple-gray-700)">Màu: {{ $item['color'] }}</span>
+                                            <span style="color:var(--apple-gray-500)">Miễn phí</span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                @if(!empty($item['applecare']))
+                                <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--apple-gray-100);display:flex;align-items:center;gap:10px">
+                                    <img src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/APPLECARE-plus-201508?wid=326&hei=332&fmt=png-alpha" style="height:20px" alt="AppleCare+">
+                                    <span style="font-size:14px;font-weight:500;color:var(--apple-black)">
+                                        <span style="color:#34c759">✓</span> AppleCare+ đã được thêm
+                                    </span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    @php $subtotal = floatval(preg_replace('/[^0-9]/', '', $order->price)); @endphp
+                    <div style="padding:32px;display:flex;gap:32px">
+                        <div style="width:160px;flex-shrink:0;text-align:center">
+                            <img src="{{ asset($order->image_url) }}" alt="" style="width:100%;height:auto;max-height:160px;object-fit:contain">
+                        </div>
+                        <div style="flex:1">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                                <h3 style="font-size:21px;font-weight:600;margin:0;color:var(--apple-black)">{{ $order->product }}</h3>
+                                <div style="text-align:right">
+                                    <div style="font-size:19px;font-weight:600">{{ number_format($subtotal) }}đ</div>
+                                    <div style="font-size:13px;color:var(--apple-gray-500);margin-top:4px">Số lượng: 1</div>
+                                </div>
+                            </div>
+                            <div style="font-size:14px;color:var(--apple-black);line-height:1.8">
+                                <div style="display:flex;justify-content:space-between">
+                                    <span style="color:var(--apple-gray-700)">{{ $order->storage }}</span>
+                                    <span style="color:var(--apple-gray-500)">Miễn phí</span>
+                                </div>
+                                @if($order->color)
+                                <div style="display:flex;justify-content:space-between">
+                                    <span style="color:var(--apple-gray-700)">Màu: {{ $order->color }}</span>
+                                    <span style="color:var(--apple-gray-500)">Miễn phí</span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
             <div style="padding:24px;background:var(--apple-gray-100);display:flex;justify-content:flex-end">
                 <div style="width:300px">
@@ -126,11 +144,11 @@
                     </div>
                     <div class="col-md-6 d-flex justify-content-end gap-2">
                         <select id="detail-status" class="f-input" style="width:200px">
-                            <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Pending</option>
-                            <option value="paid" {{ $order->status=='paid'?'selected':'' }}>Paid</option>
-                            <option value="shipped" {{ $order->status=='shipped'?'selected':'' }}>Shipped</option>
-                            <option value="completed" {{ $order->status=='completed'?'selected':'' }}>Completed</option>
-                            <option value="failed" {{ $order->status=='failed'?'selected':'' }}>Failed</option>
+                            <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Chờ xử lý</option>
+                            <option value="paid" {{ $order->status=='paid'?'selected':'' }}>Đã thanh toán</option>
+                            <option value="shipped" {{ $order->status=='shipped'?'selected':'' }}>Đang giao hàng</option>
+                            <option value="completed" {{ $order->status=='completed'?'selected':'' }}>Hoàn thành</option>
+                            <option value="failed" {{ $order->status=='failed'?'selected':'' }}>Thất bại</option>
                         </select>
                         <button class="btn-apple btn-filled" onclick="updateDetailStatus()">Lưu thay đổi</button>
                     </div>

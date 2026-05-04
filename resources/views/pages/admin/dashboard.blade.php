@@ -138,7 +138,7 @@
                                 <div style="font-size:11px;color:var(--apple-gray-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">{{ $order->product }}</div>
                             </td>
                             <td style="font-weight:600;font-size:13px">{{ number_format(floatval(preg_replace('/[^0-9]/','', $order->price))) }}đ</td>
-                            <td><span class="chip chip-{{ strtolower($order->status) }}">{{ $order->status }}</span></td>
+                            <td><span class="chip chip-{{ strtolower($order->status) }}">{{ $order->status_label }}</span></td>
                             <td class="text-end">
                                 <a href="{{ route('admin.order.detail', ['id' => $order->id_order]) }}" class="btn-apple btn-tonal btn-sm">Chi tiết</a>
                             </td>

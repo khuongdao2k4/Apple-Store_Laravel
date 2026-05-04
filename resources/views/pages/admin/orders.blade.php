@@ -37,11 +37,11 @@
             <label class="f-label">Trạng thái</label>
             <select name="status" class="f-input" style="appearance:none">
                 <option value="">Tất cả</option>
-                <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending</option>
-                <option value="paid" {{ request('status')=='paid'?'selected':'' }}>Paid</option>
-                <option value="shipped" {{ request('status')=='shipped'?'selected':'' }}>Shipped</option>
-                <option value="completed" {{ request('status')=='completed'?'selected':'' }}>Completed</option>
-                <option value="failed" {{ request('status')=='failed'?'selected':'' }}>Failed</option>
+                <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Chờ xử lý</option>
+                <option value="paid" {{ request('status')=='paid'?'selected':'' }}>Đã thanh toán</option>
+                <option value="shipped" {{ request('status')=='shipped'?'selected':'' }}>Đang giao hàng</option>
+                <option value="completed" {{ request('status')=='completed'?'selected':'' }}>Hoàn thành</option>
+                <option value="failed" {{ request('status')=='failed'?'selected':'' }}>Thất bại</option>
             </select>
         </div>
         <div class="col-md-2" style="display:flex;gap:6px">
@@ -144,11 +144,11 @@
                     <td>
                         <select onchange="updateStatus({{ $order->id_order }}, this.value, this)"
                             class="status-select status-{{ strtolower($order->status) }}">
-                            <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Pending</option>
-                            <option value="paid" {{ $order->status=='paid'?'selected':'' }}>Paid</option>
-                            <option value="shipped" {{ $order->status=='shipped'?'selected':'' }}>Shipped</option>
-                            <option value="completed" {{ $order->status=='completed'?'selected':'' }}>Completed</option>
-                            <option value="failed" {{ $order->status=='failed'?'selected':'' }}>Failed</option>
+                            <option value="pending" {{ $order->status=='pending'?'selected':'' }}>Chờ xử lý</option>
+                            <option value="paid" {{ $order->status=='paid'?'selected':'' }}>Đã thanh toán</option>
+                            <option value="shipped" {{ $order->status=='shipped'?'selected':'' }}>Đang giao hàng</option>
+                            <option value="completed" {{ $order->status=='completed'?'selected':'' }}>Hoàn thành</option>
+                            <option value="failed" {{ $order->status=='failed'?'selected':'' }}>Thất bại</option>
                         </select>
                     </td>
                     <td style="color:var(--apple-gray-500);font-size:12px;white-space:nowrap">

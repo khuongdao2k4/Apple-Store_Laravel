@@ -165,7 +165,7 @@
                             </div>
                         @endif
                     </td>
-                    <td><span class="chip chip-{{ strtolower($order->status) }}">{{ $order->status }}</span></td>
+                    <td><span class="chip chip-{{ strtolower($order->status) }}">{{ $order->status_label }}</span></td>
                     <td class="text-end">
                         <a href="{{ route('admin.order.detail', ['id' => $order->id_order]) }}" class="btn-apple btn-tonal btn-sm">Chi tiết</a>
                     </td>

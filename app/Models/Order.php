@@ -34,6 +34,21 @@ class Order extends Model
         'vnp_response_code',
     ];
 
+    protected $appends = ['status_label'];
+
+    public function getStatusLabelAttribute()
+    {
+        $map = [
+            'pending'   => 'Chờ xử lý',
+            'paid'      => 'Đã thanh toán',
+            'shipped'   => 'Đang giao hàng',
+            'completed' => 'Hoàn thành',
+            'failed'    => 'Thất bại',
+        ];
+        return $map[strtolower($this->status)] ?? $this->status;
+    }
+
+
     protected $casts = [
         'items' => 'array',
     ];

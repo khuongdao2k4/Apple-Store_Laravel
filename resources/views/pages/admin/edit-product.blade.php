@@ -1,122 +1,284 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+@section('title', 'Chỉnh sửa Sản phẩm')
 
 @section('content')
-<div class="container" style="padding-top: 100px; max-width: 800px; margin: 0 auto; padding-bottom: 100px;">
-    <div class="mb-5">
-        <a href="{{ route('admin.products') }}" style="text-decoration: none; color: #0071e3; font-size: 14px;">&larr; Quay lại danh sách sản phẩm</a>
-        <h1 style="font-size: 40px; font-weight: 700; margin-top: 10px;">Chỉnh sửa Sản phẩm</h1>
-        <p style="color: #86868b; font-size: 18px;">ID: #{{ $product->id }}</p>
-    </div>
-
-    <div class="card p-5 border-0 shadow-sm" style="border-radius: 20px;">
-        <form action="{{ route('update-product') }}" method="POST" class="needs-validation" novalidate id="editProductForm">
-            @csrf
-            <input type="hidden" name="id" value="{{ $product->id }}">
-            <div class="row g-4">
-                <div class="col-12">
-                    <label class="form-label" style="font-weight: 600;">Tên sản phẩm</label>
-                    <input type="text" name="name" class="form-control" value="{{ $product->name }}" style="border-radius: 10px; padding: 12px;" required>
-                    <div class="invalid-feedback">Vui lòng nhập tên sản phẩm.</div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" style="font-weight: 600;">Series (Mã nhóm)</label>
-                    <input type="text" name="series" id="series_input" list="series_list" class="form-control" value="{{ $product->series }}" style="border-radius: 10px; padding: 12px;" required>
-                    <datalist id="series_list">
-                        @foreach($existingSeries as $s)
-                            <option value="{{ $s->series }}" data-title="{{ $s->series_title }}" data-image="{{ $s->series_image }}">{{ $s->series_title }}</option>
-                        @endforeach
-                    </datalist>
-                    <div class="invalid-feedback">Vui lòng chọn hoặc nhập Series.</div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" style="font-weight: 600;">Series Title (Tên nhóm hiển thị)</label>
-                    <input type="text" name="series_title" id="series_title_input" class="form-control" value="{{ $product->series_title }}" style="border-radius: 10px; padding: 12px;" required>
-                    <div class="invalid-feedback">Vui lòng nhập tên hiển thị nhóm.</div>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label" style="font-weight: 600;">Series Image (Ảnh gộp đại diện)</label>
-                    <input type="text" name="series_image" id="series_image_input" class="form-control" value="{{ $product->series_image }}" style="border-radius: 10px; padding: 12px;" required>
-                    <div class="mt-2 text-center" id="series_image_preview_container" style="display: none;">
-                        <img id="series_image_preview" src="" alt="Series Preview" style="max-height: 150px; border-radius: 10px; border: 1px solid #ddd; padding: 5px;">
-                    </div>
-                    <div class="invalid-feedback">Vui lòng nhập link ảnh đại diện nhóm.</div>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label" style="font-weight: 600;">Giá</label>
-                    <input type="text" name="price" id="price_input" class="form-control" value="{{ $product->price }}" style="border-radius: 10px; padding: 12px;" required>
-                    <div class="invalid-feedback">Vui lòng nhập giá sản phẩm.</div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label" style="font-weight: 600;">Số lượng tồn kho</label>
-                    <input type="number" name="quantity" class="form-control" value="{{ $product->quantity }}" style="border-radius: 10px; padding: 12px;" required min="0">
-                    <div class="invalid-feedback">Vui lòng nhập số lượng hợp lệ (>= 0).</div>
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label" style="font-weight: 600;">Thứ tự</label>
-                    <input type="number" name="sort_order" class="form-control" value="{{ $product->sort_order }}" style="border-radius: 10px; padding: 12px;" required>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label" style="font-weight: 600;">Link hình ảnh sản phẩm</label>
-                    <input type="text" name="image_url" id="image_url_input" class="form-control" value="{{ $product->image_url }}" style="border-radius: 10px; padding: 12px;" required>
-                    <div class="mt-2 text-center" id="image_url_preview_container" style="display: none;">
-                        <img id="image_url_preview" src="" alt="Product Preview" style="max-height: 150px; border-radius: 10px; border: 1px solid #ddd; padding: 5px;">
-                    </div>
-                    <div class="invalid-feedback">Vui lòng nhập link hình ảnh sản phẩm.</div>
-                </div>
-
-                <div class="col-12">
-                    <label class="form-label" style="font-weight: 600;">Các màu sắc</label>
-                    <input type="hidden" name="colors" id="colors_hidden_input" required>
-                    <div id="color-picker-wrapper" class="d-flex flex-wrap gap-3 align-items-center mb-2">
-                        <!-- Color pickers will be appended here -->
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-add-color" style="border-radius: 20px;"><i class="bi bi-plus-circle"></i> Thêm màu</button>
-                    <div class="invalid-feedback d-block" id="color-error" style="display: none !important; color: #dc3545; font-size: .875em; margin-top: .25rem;">Vui lòng chọn ít nhất một màu.</div>
-                </div>
-
-                <!-- Dynamic Options Section -->
-                <div class="col-12 mt-4">
-                    <hr>
-                    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Quản lý Cấu hình & Tùy chọn (RAM, SSD, Chip...)</h3>
-                    <div class="table-responsive">
-                        <table class="table table-borderless align-middle" id="options-table">
-                            <thead>
-                                <tr style="color: #86868b; font-size: 14px;">
-                                    <th style="width: 15%;">Loại cấu hình</th>
-                                    <th style="width: 10%;">Nhãn phụ (Mới, CPU...)</th>
-                                    <th style="width: 20%;">Nhãn hiển thị (Label)</th>
-                                    <th style="width: 25%;">Mô tả chi tiết</th>
-                                    <th style="width: 15%;">Giá cộng thêm (đ)</th>
-                                    <th style="width: 10%; text-align: center;">Mặc định</th>
-                                    <th style="width: 5%;"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="options-tbody">
-                                <!-- Options will be appended here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="btn-add-option" style="border-radius: 20px;">
-                        <i class="bi bi-plus-circle"></i> Thêm tùy chọn mới
-                    </button>
-                </div>
-
-                <div class="col-12 mt-5">
-                    <button type="submit" class="btn btn-primary w-100 p-3" style="border-radius: 15px; font-weight: 700; font-size: 16px;">
-                        Lưu thay đổi
-                    </button>
-                </div>
-            </div>
-        </form>
+<div class="page-hdr d-flex justify-content-between align-items-start">
+    <div>
+        <h1>Chỉnh sửa Sản phẩm</h1>
+        <div class="breadcrumb">
+            <a href="{{ route('admin.dashboard') }}">Dashboard</a><span>›</span> 
+            <a href="{{ route('admin.products') }}">Sản phẩm</a><span>›</span> Chỉnh sửa
+        </div>
     </div>
 </div>
+
+<style>
+    /* OPTIONS TABLE - MODERN CARD LOOK */
+    .opts-table-wrap{border:none; border-radius:0; overflow:visible}
+    .opts-table-wrap table{width:100%; border-collapse: separate; border-spacing: 0 16px; margin-top: -16px}
+    .opts-table-wrap thead th{
+        background: transparent; padding: 0 12px 8px; font-size: 11px; 
+        font-weight: 600; text-transform: uppercase; letter-spacing: .06em; 
+        color: var(--apple-gray-500); border: none
+    }
+    .opts-table-wrap tbody td{
+        padding: 20px 16px; background: #fff; border-top: 1px solid var(--apple-gray-200); 
+        border-bottom: 1px solid var(--apple-gray-200); vertical-align: middle;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .opts-table-wrap tbody td:first-child{border-left: 1px solid var(--apple-gray-200); border-radius: 12px 0 0 12px}
+    .opts-table-wrap tbody td:last-child{border-right: 1px solid var(--apple-gray-200); border-radius: 0 12px 12px 0}
+    
+    .opts-table-wrap .form-control, .opts-table-wrap .form-select{
+        border-radius: 8px; border-color: var(--apple-gray-200); font-size: 13px; background: #fafafa;
+        transition: all 0.2s; height: 38px; padding: 0 12px;
+    }
+    .opts-table-wrap .form-select { padding-right: 32px; width: 100%; } /* Space for arrow */
+    .opts-table-wrap .form-control { width: 100%; }
+    .opts-table-wrap .form-control:focus, .opts-table-wrap .form-select:focus{
+        background: #fff; border-color: var(--apple-blue); box-shadow: 0 0 0 3px rgba(0,113,227,0.1);
+    }
+
+    /* COLOR PICKER - APPLE STYLE */
+    .color-dot-wrapper {
+        position: relative; width: 48px; height: 48px; 
+        padding: 3px; border-radius: 50%; border: 2px solid transparent;
+        transition: all 0.2s; cursor: pointer;
+    }
+    .color-dot-wrapper:hover { border-color: var(--apple-gray-300); }
+    .color-dot-inner {
+        width: 100%; height: 100%; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1);
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .color-dot-remove {
+        position: absolute; top: -2px; right: -2px; width: 20px; height: 20px;
+        background: #fff; color: #ff3b30; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: none;
+        opacity: 0; transform: scale(0.8); transition: all 0.2s;
+    }
+    .color-dot-wrapper:hover .color-dot-remove { opacity: 1; transform: scale(1); }
+    .color-dot-remove:hover { background: #ff3b30; color: #fff; }
+    .color-dot-remove .material-icons-round { font-size: 14px; }
+</style>
+
+<form action="{{ route('update-product', $product->id) }}" method="POST" class="needs-validation" novalidate id="editProductForm">
+    @csrf
+    @method('POST')
+    <input type="hidden" name="id" value="{{ $product->id }}">
+    
+    <div class="row">
+        <!-- LEFT COLUMN: BASIC INFO & MEDIA -->
+        <div class="col-lg-8">
+            <!-- BASIC INFO -->
+            <div class="form-section">
+                <div class="form-section-hdr">
+                    <div class="sec-icon"><span class="material-icons-round">info</span></div>
+                    <div>
+                        <div class="sec-title">Thông tin cơ bản</div>
+                        <div class="sec-desc">Cập nhật tên sản phẩm và phân loại nhóm</div>
+                    </div>
+                </div>
+                <div class="form-section-body">
+                    <div class="mb-4">
+                        <label class="f-label">Tên sản phẩm <span class="req">*</span></label>
+                        <input type="text" name="name" class="f-input" value="{{ $product->name }}" placeholder="Ví dụ: iPhone 16 Pro" required>
+                        <div class="f-error">Vui lòng nhập tên sản phẩm.</div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="f-label">Mã nhóm (Series) <span class="req">*</span></label>
+                            <input type="text" name="series" id="series_input" list="series_list" class="f-input" value="{{ $product->series }}" required>
+                            <datalist id="series_list">
+                                @foreach($existingSeries as $s)
+                                    <option value="{{ $s->series }}" data-title="{{ $s->series_title }}" data-image="{{ $s->series_image }}">{{ $s->series_title }}</option>
+                                @endforeach
+                            </datalist>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="f-label">Tên hiển thị nhóm <span class="req">*</span></label>
+                            <input type="text" name="series_title" id="series_title_input" class="f-input" value="{{ $product->series_title }}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRICING & INVENTORY -->
+            <div class="form-section">
+                <div class="form-section-hdr">
+                    <div class="sec-icon"><span class="material-icons-round">payments</span></div>
+                    <div>
+                        <div class="sec-title">Giá & Tồn kho</div>
+                        <div class="sec-desc">Thiết lập giá cơ bản và quản lý số lượng</div>
+                    </div>
+                </div>
+                <div class="form-section-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="f-label">Giá cơ bản <span class="req">*</span></label>
+                            <div style="position:relative">
+                                <input type="text" name="price" id="price_input" class="f-input" style="padding-right:45px" value="{{ number_format(floatval($product->price), 0, ',', '.') }}" required>
+                                <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--apple-gray-500)">VNĐ</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="f-label">Số lượng <span class="req">*</span></label>
+                            <input type="number" name="quantity" class="f-input" value="{{ $product->quantity }}" required min="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="f-label">Thứ tự <span class="req">*</span></label>
+                            <input type="number" name="sort_order" class="f-input" value="{{ $product->sort_order ?? 0 }}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT OPTIONS -->
+            <div class="form-section">
+                <div class="form-section-hdr">
+                    <div class="sec-icon"><span class="material-icons-round">tune</span></div>
+                    <div style="flex:1">
+                        <div class="sec-title">Cấu hình chi tiết (Options)</div>
+                        <div class="sec-desc">Các lựa chọn về Dung lượng, RAM, Chip...</div>
+                    </div>
+                    <button type="button" class="btn-apple btn-tonal btn-sm" id="btn-add-option">
+                        <span class="material-icons-round" style="font-size:16px">add</span> Thêm tùy chọn
+                    </button>
+                </div>
+                <div class="form-section-body" style="padding:0 20px">
+                    <div class="opts-table-wrap">
+                        <table id="options-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:200px">Loại thuộc tính</th>
+                                    <th>Chi tiết tùy chọn</th>
+                                    <th style="width:140px">Giá chênh lệch</th>
+                                    <th style="width:50px">Mặc định</th>
+                                    <th style="width:50px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($product->options as $index => $option)
+                                <tr>
+                                    <td>
+                                        <select name="options[{{ $index }}][attribute_id]" class="form-select form-select-sm" required onchange="handleAttrChange(this, {{ $index }})">
+                                            @foreach($attributes as $attr)
+                                                <option value="{{ $attr->id }}" {{ $option->attribute_id == $attr->id ? 'selected' : '' }}>{{ $attr->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div id="label-container-{{ $index }}">
+                                            @if($option->attribute && $option->attribute->name == 'Bàn phím')
+                                                <select name="options[{{ $index }}][label]" class="form-select form-select-sm mb-1" required>
+                                                    <option value="Tiếng Anh (Mỹ)" {{ $option->label == 'Tiếng Anh (Mỹ)' ? 'selected' : '' }}>Tiếng Anh (Mỹ)</option>
+                                                    <option value="Tiếng Việt" {{ $option->label == 'Tiếng Việt' ? 'selected' : '' }}>Tiếng Việt</option>
+                                                    <option value="Tiếng Trung" {{ $option->label == 'Tiếng Trung' ? 'selected' : '' }}>Tiếng Trung</option>
+                                                    <option value="Tiếng Nhật" {{ $option->label == 'Tiếng Nhật' ? 'selected' : '' }}>Tiếng Nhật</option>
+                                                    <option value="Tiếng Hàn" {{ $option->label == 'Tiếng Hàn' ? 'selected' : '' }}>Tiếng Hàn</option>
+                                                </select>
+                                            @else
+                                                <input type="text" name="options[{{ $index }}][label]" class="form-control form-control-sm mb-1" value="{{ $option->label }}" placeholder="Nhãn chính (ví dụ: Chip M5)" required style="font-weight: 600">
+                                            @endif
+                                        </div>
+                                        <div class="rich-info-box" style="background: #f9f9fb; border-radius: 6px; padding: 6px; border: 1px solid #eee">
+                                            <div class="mb-1">
+                                                <label style="font-size: 9px; text-transform: uppercase; color: #86868b; display: block; margin-bottom: 2px">Nhãn phụ (Dòng trên)</label>
+                                                <input type="text" name="options[{{ $index }}][sub_label]" class="form-control form-control-sm" value="{{ $option->sub_label }}" placeholder="Ví dụ: CPU 10 lõi, GPU 8 lõi..." style="font-size: 11px">
+                                            </div>
+                                            <div>
+                                                <label style="font-size: 9px; text-transform: uppercase; color: #86868b; display: block; margin-bottom: 2px">Mô tả (Dòng dưới)</label>
+                                                <textarea name="options[{{ $index }}][description]" class="form-control form-control-sm" rows="1" placeholder="Ví dụ: Mang tốc độ và tính linh hoạt..." style="font-size: 11px">{{ $option->description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="position:relative">
+                                            <input type="text" name="options[{{ $index }}][price_offset]" class="form-control form-control-sm offset-input" style="padding-right:32px" value="{{ number_format($option->price_offset, 0, ',', '.') }}">
+                                            <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:#86868b">đ</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="radio" name="default_option" value="{{ $index }}" {{ $option->is_default ? 'checked' : '' }} onchange="updateDefaultFlag({{ $index }})">
+                                        <input type="hidden" name="options[{{ $index }}][is_default]" value="{{ $option->is_default ? '1' : '0' }}">
+                                    </td>
+                                    <td class="text-end">
+                                        <button type="button" class="btn btn-link btn-sm text-danger p-0" onclick="this.closest('tr').remove(); checkEmptyOptions();"><span class="material-icons-round" style="font-size:18px">delete</span></button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div id="no-options-message" class="text-center py-5 text-muted" style="font-size: 13px; display: {{ $product->options->count() > 0 ? 'none' : 'block' }}">
+                            <span class="material-icons-round d-block mb-2" style="font-size: 32px; opacity: 0.3">settings_suggest</span>
+                            Chưa có tùy chọn nào. Bấm "Thêm tùy chọn" để tạo mới.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: IMAGES & COLORS -->
+        <div class="col-lg-4">
+            <!-- MEDIA PREVIEW -->
+            <div class="form-section">
+                <div class="form-section-hdr">
+                    <div class="sec-icon"><span class="material-icons-round">image</span></div>
+                    <div class="sec-title">Hình ảnh</div>
+                </div>
+                <div class="form-section-body">
+                    <div class="mb-4">
+                        <label class="f-label">Link ảnh sản phẩm <span class="req">*</span></label>
+                        <input type="text" name="image_url" id="image_url_input" class="f-input" value="{{ $product->image_url }}" required>
+                        <div id="image_url_preview_container" class="mt-3 text-center" style="display:none; background:#ffffff; border-radius:12px; padding:24px; border:1.5px dashed var(--apple-gray-200)">
+                            <img id="image_url_preview" src="" alt="" style="max-height:200px; width:100%; object-fit:contain">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="f-label">Link ảnh gộp (Series) <span class="req">*</span></label>
+                        <input type="text" name="series_image" id="series_image_input" class="f-input" value="{{ $product->series_image }}" required>
+                        <div id="series_image_preview_container" class="mt-3 text-center" style="display:none; background:#ffffff; border-radius:12px; padding:24px; border:1.5px dashed var(--apple-gray-200)">
+                            <img id="series_image_preview" src="" alt="" style="max-height:200px; width:100%; object-fit:contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLORS -->
+            <div class="form-section">
+                <div class="form-section-hdr">
+                    <div class="sec-icon"><span class="material-icons-round">palette</span></div>
+                    <div style="flex:1">
+                        <div class="sec-title">Màu sắc</div>
+                        <div class="sec-desc">Các phiên bản màu hỗ trợ</div>
+                    </div>
+                    <button type="button" class="btn-apple btn-ghost btn-sm" id="btn-add-color" style="padding:0 8px">
+                        <span class="material-icons-round" style="font-size:18px">add_circle</span>
+                    </button>
+                </div>
+                <div class="form-section-body">
+                    <input type="hidden" name="colors" id="colors_hidden_input" value="{{ $product->colors }}" required>
+                    <div id="color-picker-wrapper" style="display:flex; flex-wrap:wrap; gap:12px">
+                        <!-- Color dots will be added here -->
+                    </div>
+                    <div id="color-error" class="f-error" style="display:none">Vui lòng chọn ít nhất một màu.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STICKY ACTION BAR -->
+    <div class="adm-action-bar" style="margin:24px -32px -48px; padding:16px 32px; border-top:1px solid var(--apple-gray-200); background:rgba(245,245,247,0.8); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px)">
+        <div style="flex:1; display:flex; align-items:center; gap:12px; color:var(--apple-gray-500); font-size:13px">
+            <span class="material-icons-round" style="font-size:18px">info</span>
+            Đang chỉnh sửa: <strong style="color: var(--apple-black)">#{{ $product->id }} — {{ $product->name }}</strong>
+        </div>
+        <a href="{{ route('admin.products') }}" class="btn-apple btn-ghost">Hủy bỏ</a>
+        <button type="submit" class="btn-apple btn-filled">
+            <span class="material-icons-round">save</span> Lưu thay đổi
+        </button>
+    </div>
+</form>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -129,12 +291,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedValue = this.value;
         const datalist = document.getElementById('series_list');
         const options = datalist.querySelectorAll('option');
-        
         for (let option of options) {
             if (option.value === selectedValue) {
                 seriesTitleInput.value = option.getAttribute('data-title');
                 seriesImageInput.value = option.getAttribute('data-image');
-                seriesImageInput.dispatchEvent(new Event('input')); // Trigger preview
+                seriesImageInput.dispatchEvent(new Event('input'));
                 break;
             }
         }
@@ -145,215 +306,181 @@ document.addEventListener('DOMContentLoaded', function() {
         const input = document.getElementById(inputId);
         const container = document.getElementById(previewContainerId);
         const img = document.getElementById(previewImgId);
-
         input.addEventListener('input', function() {
             let url = this.value.trim();
             if (url) {
-                // Thêm '/' ở đầu nếu là đường dẫn nội bộ
-                if (!url.startsWith('http') && !url.startsWith('/')) {
-                    url = '/' + url;
-                }
+                if (!url.startsWith('http') && !url.startsWith('/')) url = '/' + url;
                 img.src = url;
                 container.style.display = 'block';
+                img.onerror = () => container.style.display = 'none';
             } else {
                 container.style.display = 'none';
             }
         });
-        
-        // Hide image if it fails to load
-        img.addEventListener('error', function() {
-            container.style.display = 'none';
-        });
-
-        // Trigger on load if there's an old value
-        if(input.value) input.dispatchEvent(new Event('input'));
+        if (input.value) input.dispatchEvent(new Event('input'));
     }
-
-    setupImagePreview('series_image_input', 'series_image_preview_container', 'series_image_preview');
     setupImagePreview('image_url_input', 'image_url_preview_container', 'image_url_preview');
+    setupImagePreview('series_image_input', 'series_image_preview_container', 'series_image_preview');
 
-    // 3. Price Formatting
+    // 3. Pricing Formatter
     const priceInput = document.getElementById('price_input');
     priceInput.addEventListener('input', function(e) {
-        let val = this.value;
-        
-        // Lấy các chữ số
-        let numericVal = val.replace(/\D/g, '');
-        
-        if (!numericVal) {
-            this.value = '';
-            return;
-        }
-
-        // Định dạng số với dấu chấm
-        let formattedStr = parseInt(numericVal, 10).toLocaleString('vi-VN').replace(/,/g, '.');
-        
-        // Thêm hậu tố VNĐ
-        this.value = formattedStr + ' VNĐ';
+        let value = this.value.replace(/[^0-9]/g, '');
+        if (value) this.value = new Intl.NumberFormat('vi-VN').format(parseInt(value));
     });
 
     // 4. Color Picker Logic
     const colorWrapper = document.getElementById('color-picker-wrapper');
-    const btnAddColor = document.getElementById('btn-add-color');
+    const addColorBtn = document.getElementById('btn-add-color');
     const hiddenColorsInput = document.getElementById('colors_hidden_input');
     const colorError = document.getElementById('color-error');
 
-    function updateColorsHiddenInput() {
-        const pickers = colorWrapper.querySelectorAll('input[type="color"]');
-        const hexValues = Array.from(pickers).map(p => p.value);
-        hiddenColorsInput.value = hexValues.join(',');
-        if (hexValues.length > 0) {
-            colorError.style.setProperty('display', 'none', 'important');
-        }
+    function updateHiddenColors() {
+        const colors = Array.from(colorWrapper.querySelectorAll('input[type="color"]')).map(input => input.value);
+        hiddenColorsInput.value = colors.join(',');
+        if (colors.length > 0) colorError.style.display = 'none';
     }
 
-    function addColorPicker(initialColor = '#000000') {
-        const container = document.createElement('div');
-        container.className = 'd-flex align-items-center gap-1';
+    function createColorPicker(value = '#000000') {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'color-dot-wrapper';
         
-        const picker = document.createElement('input');
-        picker.type = 'color';
-        picker.value = initialColor;
-        picker.className = 'form-control form-control-color p-0 border-0';
-        picker.style.width = '35px';
-        picker.style.height = '35px';
-        picker.style.borderRadius = '50%';
-        picker.style.cursor = 'pointer';
-        picker.style.overflow = 'hidden';
+        const inner = document.createElement('div');
+        inner.className = 'color-dot-inner';
+        inner.style.backgroundColor = value;
         
-        picker.addEventListener('input', updateColorsHiddenInput);
+        const input = document.createElement('input');
+        input.type = 'color';
+        input.value = value;
+        input.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer';
+        input.addEventListener('input', (e) => {
+            inner.style.backgroundColor = e.target.value;
+            updateHiddenColors();
+        });
 
-        const btnRemove = document.createElement('button');
-        btnRemove.type = 'button';
-        btnRemove.className = 'btn btn-sm text-danger p-0 ms-1';
-        btnRemove.innerHTML = '<i class="bi bi-x-circle-fill fs-5"></i>';
-        btnRemove.style.border = 'none';
-        btnRemove.style.background = 'none';
-        btnRemove.onclick = function() {
-            container.remove();
-            updateColorsHiddenInput();
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'color-dot-remove';
+        removeBtn.innerHTML = '<span class="material-icons-round">close</span>';
+        removeBtn.onclick = (e) => { 
+            e.stopPropagation();
+            wrapper.remove(); 
+            updateHiddenColors(); 
         };
 
-        container.appendChild(picker);
-        container.appendChild(btnRemove);
-        colorWrapper.appendChild(container);
-        updateColorsHiddenInput();
+        wrapper.appendChild(inner);
+        wrapper.appendChild(input);
+        wrapper.appendChild(removeBtn);
+        colorWrapper.appendChild(wrapper);
+        updateHiddenColors();
     }
 
-    btnAddColor.addEventListener('click', () => addColorPicker());
+    // Initialize existing colors
+    const existingColors = "{{ $product->colors }}".split(',').filter(c => c.trim() !== '');
+    existingColors.forEach(c => createColorPicker(c));
+    if (existingColors.length === 0) createColorPicker('#ffffff');
 
-    // Initialize with existing colors
-    const existingColors = '{{ $product->colors }}';
-    if (existingColors) {
-        const colorsArr = existingColors.split(',').map(c => c.trim()).filter(c => c);
-        if(colorsArr.length > 0) {
-            colorsArr.forEach(c => addColorPicker(c));
-        } else {
-            addColorPicker('#000000');
-        }
-    } else {
-        addColorPicker('#000000');
-    }
+    addColorBtn.onclick = () => createColorPicker();
 
-    // 5. Form Validation
-    const form = document.getElementById('editProductForm');
-    form.addEventListener('submit', function (event) {
-        let isValid = true;
-        
-        if (!form.checkValidity()) {
-            isValid = false;
-        }
-
-        if (hiddenColorsInput.value.trim() === '') {
-            colorError.style.setProperty('display', 'block', 'important');
-            isValid = false;
-        }
-
-        if (!isValid) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        form.classList.add('was-validated');
-    }, false);
-
-    // 6. Dynamic Options Logic
-    const optionsTbody = document.getElementById('options-tbody');
-    const btnAddOption = document.getElementById('btn-add-option');
+    // 5. Dynamic Options Table
+    const optionsTableBody = document.querySelector('#options-table tbody');
+    const addOptionBtn = document.getElementById('btn-add-option');
+    const noOptionsMessage = document.getElementById('no-options-message');
     const attributes = @json($attributes);
+    let optionCount = {{ $product->options->count() }};
 
-    function addOptionRow(data = null) {
+    addOptionBtn.onclick = () => {
+        noOptionsMessage.style.display = 'none';
         const tr = document.createElement('tr');
-        const index = optionsTbody.children.length;
-        
-        let attrOptions = attributes.map(a => `<option value="${a.id}" ${data && data.attribute_id == a.id ? 'selected' : ''}>${a.name}</option>`).join('');
-
         tr.innerHTML = `
             <td>
-                <select name="options[${index}][attribute_id]" class="form-select" style="border-radius: 10px; font-size: 13px;">
-                    ${attrOptions}
+                <select name="options[${optionCount}][attribute_id]" class="form-select form-select-sm" required onchange="handleAttrChange(this, ${optionCount})">
+                    <option value="">Chọn...</option>
+                    ${attributes.map(a => `<option value="${a.id}">${a.name}</option>`).join('')}
                 </select>
             </td>
             <td>
-                <input type="text" name="options[${index}][sub_label]" class="form-control" value="${data ? (data.sub_label || '') : ''}" placeholder="Vd: Mới" style="border-radius: 10px; font-size: 13px;">
+                <div id="label-container-${optionCount}">
+                    <input type="text" name="options[${optionCount}][label]" class="form-control form-control-sm mb-1" placeholder="Nhãn chính (ví dụ: Chip M5)" required style="font-weight: 600">
+                </div>
+                <div class="rich-info-box" style="background: #f9f9fb; border-radius: 6px; padding: 6px; border: 1px solid #eee">
+                    <div class="mb-1">
+                        <label style="font-size: 9px; text-transform: uppercase; color: #86868b; display: block; margin-bottom: 2px">Nhãn phụ (Dòng trên)</label>
+                        <input type="text" name="options[${optionCount}][sub_label]" class="form-control form-control-sm" placeholder="Ví dụ: CPU 10 lõi, GPU 8 lõi..." style="font-size: 11px">
+                    </div>
+                    <div>
+                        <label style="font-size: 9px; text-transform: uppercase; color: #86868b; display: block; margin-bottom: 2px">Mô tả (Dòng dưới)</label>
+                        <textarea name="options[${optionCount}][description]" class="form-control form-control-sm" rows="1" placeholder="Ví dụ: Mang tốc độ và tính linh hoạt..." style="font-size: 11px"></textarea>
+                    </div>
+                </div>
             </td>
             <td>
-                <input type="text" name="options[${index}][label]" class="form-control" value="${data ? data.label : ''}" placeholder="Vd: 256GB SSD" style="border-radius: 10px; font-size: 13px;" required>
+                <div style="position:relative">
+                    <input type="text" name="options[${optionCount}][price_offset]" class="form-control form-control-sm offset-input" style="padding-right:32px" placeholder="0">
+                    <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:#86868b">đ</span>
+                </div>
             </td>
-            <td>
-                <textarea name="options[${index}][description]" class="form-control" placeholder="Mô tả chi tiết..." style="border-radius: 10px; font-size: 13px; height: 38px;">${data ? (data.description || '') : ''}</textarea>
+            <td class="text-center">
+                <input type="radio" name="default_option" value="${optionCount}" onchange="updateDefaultFlag(${optionCount})">
+                <input type="hidden" name="options[${optionCount}][is_default]" value="0">
             </td>
-            <td>
-                <input type="number" name="options[${index}][price_offset]" class="form-control" value="${data ? parseInt(data.price_offset) : 0}" style="border-radius: 10px; font-size: 13px;" required>
-            </td>
-            <td style="text-align: center;">
-                <input type="radio" name="options_default_${index}" class="form-check-input option-default-radio" ${data && data.is_default ? 'checked' : ''} onchange="handleDefaultChange(this, ${index})">
-                <input type="hidden" name="options[${index}][is_default]" value="${data && data.is_default ? '1' : '0'}">
-            </td>
-            <td>
-                <button type="button" class="btn btn-link text-danger p-0" onclick="this.closest('tr').remove();"><i class="bi bi-trash"></i></button>
+            <td class="text-end">
+                <button type="button" class="btn btn-link btn-sm text-danger p-0" onclick="this.closest('tr').remove(); checkEmptyOptions();"><span class="material-icons-round" style="font-size:18px">delete</span></button>
             </td>
         `;
-        optionsTbody.appendChild(tr);
-    }
-
-    window.handleDefaultChange = function(radio, idx) {
-        // Find the attribute ID of this row
-        const row = radio.closest('tr');
-        const attrSelect = row.querySelector('select');
-        const attrId = attrSelect.value;
-
-        // Reset all defaults for the same attribute group? 
-        // For simplicity, let's just make it per attribute ID
-        optionsTbody.querySelectorAll('tr').forEach(r => {
-            const s = r.querySelector('select');
-            if(s && s.value === attrId) {
-                const h = r.querySelector('input[type="hidden"][name*="[is_default]"]');
-                const rad = r.querySelector('.option-default-radio');
-                if(h) h.value = '0';
-                if(rad && rad !== radio) rad.checked = false;
-            }
+        optionsTableBody.appendChild(tr);
+        tr.querySelector('.offset-input').addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9-]/g, '');
+            if (v) this.value = new Intl.NumberFormat('vi-VN').format(parseInt(v));
         });
-
-        const hiddenInput = radio.closest('td').querySelector('input[type="hidden"]');
-        hiddenInput.value = '1';
+        optionCount++;
     };
 
-    btnAddOption.addEventListener('click', () => addOptionRow());
+    window.handleAttrChange = function(select, idx) {
+        const attrId = select.value;
+        const attr = attributes.find(a => a.id == attrId);
+        const container = document.getElementById(`label-container-${idx}`);
+        if (attr && attr.name === 'Bàn phím') {
+            container.innerHTML = `
+                <select name="options[${idx}][label]" class="form-select form-select-sm mb-1" required>
+                    <option value="Tiếng Anh (Mỹ)">Tiếng Anh (Mỹ)</option>
+                    <option value="Tiếng Việt">Tiếng Việt</option>
+                    <option value="Tiếng Trung">Tiếng Trung</option>
+                    <option value="Tiếng Nhật">Tiếng Nhật</option>
+                    <option value="Tiếng Hàn">Tiếng Hàn</option>
+                </select>
+            `;
+        } else {
+            container.innerHTML = `<input type="text" name="options[${idx}][label]" class="form-control form-control-sm mb-1" placeholder="Nhãn chính (ví dụ: Chip M5)" required style="font-weight: 600">`;
+        }
+    };
 
-    // Initialize with existing options
-    @if(isset($product->options) && $product->options->count() > 0)
-        @foreach($product->options as $opt)
-            addOptionRow({
-                attribute_id: '{{ $opt->attribute_id }}',
-                label: '{{ $opt->label }}',
-                sub_label: '{{ $opt->sub_label }}',
-                description: `{!! addslashes($opt->description) !!}`,
-                price_offset: '{{ $opt->price_offset }}',
-                is_default: {{ $opt->is_default ? 'true' : 'false' }}
-            });
-        @endforeach
-    @endif
+    window.updateDefaultFlag = (idx) => {
+        document.querySelectorAll('input[name^="options"][name$="[is_default]"]').forEach(input => input.value = "0");
+        document.querySelector(`input[name="options[${idx}][is_default]"]`).value = "1";
+    };
+
+    window.checkEmptyOptions = () => {
+        if (optionsTableBody.children.length === 0) noOptionsMessage.style.display = 'block';
+    };
+
+    // Format existing offsets
+    document.querySelectorAll('.offset-input').forEach(input => {
+        input.addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9-]/g, '');
+            if (v) this.value = new Intl.NumberFormat('vi-VN').format(parseInt(v));
+        });
+    });
+
+    // Form Validation
+    const form = document.getElementById('editProductForm');
+    form.addEventListener('submit', function(e) {
+        let valid = true;
+        if (!form.checkValidity()) valid = false;
+        if (hiddenColorsInput.value.trim() === '') { colorError.style.display = 'block'; valid = false; }
+        if (!valid) { e.preventDefault(); e.stopPropagation(); const first = form.querySelector(':invalid'); if (first) first.scrollIntoView({behavior:'smooth', block:'center'}); }
+        form.classList.add('was-validated');
+    });
 });
 </script>
 @endsection

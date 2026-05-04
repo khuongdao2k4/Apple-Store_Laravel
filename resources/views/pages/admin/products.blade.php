@@ -1,178 +1,128 @@
-@extends('layouts.app')
-
+@extends('layouts.admin')
+@section('title', 'Quản lý Sản phẩm')
 @section('content')
-<div class="container-fluid" style="padding-top: 100px; max-width: 1400px; margin: 0 auto; padding-bottom: 100px;">
-    <div class="d-flex justify-content-between align-items-end mb-5">
-        <div>
-            <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: #0071e3; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 5px;">
-                <i class="fa-solid fa-chevron-left" style="font-size: 10px;"></i> Dashboard
-            </a>
-            <h1 style="font-size: 48px; font-weight: 700; color: #1d1d1f; letter-spacing: -0.5px; margin-top: 10px;">Quản lý sản phẩm</h1>
-        </div>
-        <div>
-            <a href="{{ route('add-product') }}" class="btn btn-primary" style="border-radius: 980px; padding: 12px 24px; font-weight: 600; font-size: 15px; background-color: #0071e3; border: none; transition: all 0.2s;">
-                <i class="fa-solid fa-plus me-2"></i> Thêm sản phẩm
-            </a>
+
+<div class="page-hdr d-flex justify-content-between align-items-start">
+    <div>
+        <h1>Sản phẩm</h1>
+        <div class="breadcrumb">
+            <a href="{{ route('admin.dashboard') }}">Dashboard</a><span>›</span> Quản lý Sản phẩm
         </div>
     </div>
+    <a href="{{ route('add-product') }}" class="btn-apple btn-filled">
+        <span class="material-icons-round">add</span> Thêm sản phẩm
+    </a>
+</div>
+ 
+ <!-- SEARCH & FILTER BAR -->
+ <form method="GET" action="{{ route('admin.products') }}">
+ <div class="adm-card mb-3" style="padding:14px 18px">
+     <div class="row g-2 align-items-end">
+         <div class="col-md-7">
+             <label class="f-label">Tìm kiếm</label>
+             <div style="position:relative">
+                 <span class="material-icons-round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--apple-gray-500);font-size:18px;pointer-events:none">search</span>
+                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Tên sản phẩm, ID, nhóm sản phẩm (series)..." class="f-input" style="padding-left:36px">
+             </div>
+         </div>
+         <div class="col-md-5" style="display:flex;gap:6px">
+             <button type="submit" class="btn-apple btn-filled" style="flex:1;justify-content:center">
+                 <span class="material-icons-round">filter_list</span> Tìm kiếm
+             </button>
+             @if(request()->filled('search'))
+             <a href="{{ route('admin.products') }}" class="btn-apple btn-ghost" style="padding:0 10px" title="Xóa bộ lọc">
+                 <span class="material-icons-round">close</span>
+             </a>
+             @endif
+         </div>
+     </div>
+ </div>
+ </form>
 
-    <!-- Products Table -->
-    <div class="card border-0 shadow-sm" style="border-radius: 24px; overflow: hidden; background: #ffffff;">
-        <div class="table-responsive">
-            <table class="table align-middle mb-0" style="border-collapse: separate; border-spacing: 0;">
-                <thead>
-                    <tr style="background: #f5f5f7; border-bottom: 1px solid #d2d2d7;">
-                        <th class="ps-4 py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; width: 100px;">Ảnh</th>
-                        <th class="py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sản phẩm</th>
-                        <th class="py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Giá bán</th>
-                        <th class="py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Kho hàng</th>
-                        <th class="py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Màu sắc</th>
-                        <th class="text-end pe-4 py-3" style="color: #86868b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($products as $product)
-                    <tr style="border-bottom: 1px solid #f5f5f7; transition: background-color 0.2s;">
-                        <td class="ps-4 py-3">
-                            <div style="width: 64px; height: 64px; background: #fbfbfb; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #f2f2f2;">
-                                <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}" style="width: 48px; height: 48px; object-fit: contain;">
-                            </div>
-                        </td>
-                        <td class="py-3">
-                            <div style="font-size: 16px; font-weight: 600; color: #1d1d1f; margin-bottom: 2px;">{{ $product->name }}</div>
-                            <div style="font-size: 13px; color: #86868b; font-weight: 400;">Series: {{ $product->series }}</div>
-                        </td>
-                        <td class="py-3">
-                            <div style="font-size: 15px; font-weight: 600; color: #1d1d1f;">{{ $product->price }}</div>
-                        </td>
-                        <td class="py-3">
-                            <span class="badge" style="background: #f5f5f7; color: #1d1d1f; border-radius: 6px; padding: 6px 10px; font-weight: 500; font-size: 13px;">
-                                {{ $product->quantity }} chiếc
-                            </span>
-                        </td>
-                        <td class="py-3">
-                            <div class="d-flex gap-2">
-                                @foreach(explode(',', $product->colors) as $color)
-                                    <div style="width: 18px; height: 18px; background: {{ trim($color) }}; border-radius: 50%; border: 1px solid #d2d2d7; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);" title="{{ trim($color) }}"></div>
-                                @endforeach
-                            </div>
-                        </td>
-                        <td class="text-end pe-4 py-3">
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route('edit-product', ['id' => $product->id]) }}" class="btn btn-sm btn-light" style="border-radius: 8px; padding: 6px 14px; font-weight: 600; color: #0071e3; background: #f5f5f7; border: none; transition: all 0.2s;">
-                                    Sửa
-                                </a>
-                                <button onclick="deleteProduct({{ $product->id }})" class="btn btn-sm btn-light" style="border-radius: 8px; padding: 6px 14px; font-weight: 600; color: #d33; background: #f5f5f7; border: none; transition: all 0.2s;">
-                                    Xoá
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+<div class="adm-card">
+    <div style="padding:14px 20px;border-bottom:1px solid var(--apple-gray-100);display:flex;align-items:center;gap:8px">
+        <span class="adm-card-title">Danh sách</span>
+        <span style="font-size:13px;color:var(--apple-gray-500);font-weight:400">· {{ $products->total() }} sản phẩm</span>
     </div>
-
-    <!-- Pagination -->
+    <div class="table-responsive">
+        <table class="adm-table">
+            <thead><tr>
+                <th style="width:64px">Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá bán</th>
+                <th>Tồn kho</th>
+                <th>Màu sắc</th>
+                <th class="text-end">Thao tác</th>
+            </tr></thead>
+            <tbody>
+                @forelse($products as $p)
+                <tr>
+                    <td>
+                        <div style="width:48px;height:48px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:hidden">
+                            <img src="{{ asset($p->image_url) }}" alt="" style="width:40px;height:40px;object-fit:contain">
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight:600;font-size:14px">{{ $p->name }}</div>
+                        <div style="font-size:12px;color:var(--apple-gray-500);margin-top:2px">ID: {{ $p->id }} · {{ $p->series }}</div>
+                    </td>
+                    <td style="font-weight:500">{{ $p->price }}</td>
+                    <td>
+                        <span class="chip" style="background:var(--apple-gray-100);color:var(--apple-gray-700)">{{ $p->quantity }} chiếc</span>
+                    </td>
+                    <td>
+                        <div style="display:flex;gap:5px;flex-wrap:wrap">
+                            @foreach(explode(',', $p->colors) as $c)
+                            <div style="width:18px;height:18px;background:{{ trim($c) }};border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--apple-gray-200)" title="{{ trim($c) }}"></div>
+                            @endforeach
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display:flex;justify-content:flex-end;gap:6px">
+                            <a href="{{ route('edit-product', ['id'=>$p->id]) }}" class="btn-apple btn-tonal btn-sm">
+                                <span class="material-icons-round" style="font-size:15px">edit</span> Sửa
+                            </a>
+                            <button onclick="deleteProduct({{ $p->id }})" class="btn-apple btn-danger-light btn-sm">
+                                <span class="material-icons-round" style="font-size:15px">delete</span> Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr><td colspan="6">
+                    <div class="empty-state">
+                        <span class="material-icons-round">inventory_2</span>
+                        <p>Chưa có sản phẩm nào.</p>
+                    </div>
+                </td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
     @if($products->hasPages())
-    <div class="mt-5 d-flex justify-content-center">
-        <div class="apple-pagination">
-            {{ $products->links() }}
-        </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--apple-gray-100);display:flex;justify-content:center">
+        {{ $products->links() }}
     </div>
     @endif
 </div>
 
-<style>
-    .apple-pagination .pagination {
-        gap: 8px;
-    }
-    .apple-pagination .page-item .page-link {
-        border-radius: 10px !important;
-        border: none;
-        color: #1d1d1f;
-        background: #f5f5f7;
-        padding: 8px 16px;
-        font-weight: 500;
-        transition: all 0.2s;
-    }
-    .apple-pagination .page-item.active .page-link {
-        background-color: #0071e3;
-        color: white;
-    }
-    .apple-pagination .page-item .page-link:hover {
-        background-color: #e8e8ed;
-    }
-    
-    tr:hover {
-        background-color: #fafafa !important;
-    }
-    
-    .btn-light:hover {
-        background-color: #e8e8ed !important;
-        transform: scale(1.02);
-    }
-</style>
-
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function deleteProduct(id) {
-        Swal.fire({
-            title: 'Xoá sản phẩm?',
-            text: "Dữ liệu này sẽ biến mất vĩnh viễn khỏi hệ thống của bạn.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#86868b',
-            confirmButtonText: 'Đồng ý xoá',
-            cancelButtonText: 'Huỷ bỏ',
-            border_radius: '20px',
-            customClass: {
-                popup: 'apple-alert-popup',
-                confirmButton: 'apple-alert-confirm',
-                cancelButton: 'apple-alert-cancel'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '{{ route('delete-product') }}';
-                
-                const csrf = document.createElement('input');
-                csrf.type = 'hidden';
-                csrf.name = '_token';
-                csrf.value = '{{ csrf_token() }}';
-                
-                const idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.name = 'id';
-                idInput.value = id;
-                
-                form.appendChild(csrf);
-                form.appendChild(idInput);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        });
-    }
+function deleteProduct(id) {
+    Swal.fire({
+        title: 'Xóa sản phẩm?', text: 'Dữ liệu sẽ bị xóa vĩnh viễn.',
+        icon: 'warning', showCancelButton: true,
+        confirmButtonColor: '#ff3b30', cancelButtonColor: '#86868b',
+        confirmButtonText: 'Xóa', cancelButtonText: 'Hủy'
+    }).then(r => {
+        if (r.isConfirmed) {
+            const f = document.createElement('form'); f.method='POST'; f.action='{{ route('delete-product') }}';
+            const c = document.createElement('input'); c.type='hidden'; c.name='_token'; c.value='{{ csrf_token() }}';
+            const i = document.createElement('input'); i.type='hidden'; i.name='id'; i.value=id;
+            f.appendChild(c); f.appendChild(i); document.body.appendChild(f); f.submit();
+        }
+    });
+}
 </script>
-<style>
-    .apple-alert-popup {
-        border-radius: 20px !important;
-        padding: 20px !important;
-    }
-    .apple-alert-confirm {
-        border-radius: 12px !important;
-        padding: 10px 24px !important;
-        font-weight: 600 !important;
-    }
-    .apple-alert-cancel {
-        border-radius: 12px !important;
-        padding: 10px 24px !important;
-        font-weight: 600 !important;
-    }
-</style>
 @endpush
 @endsection

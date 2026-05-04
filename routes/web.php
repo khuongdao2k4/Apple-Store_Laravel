@@ -44,6 +44,7 @@ Route::get('/delete-order', [OrderController::class, 'deleteOrder'])->name('dele
 Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/orders', [\App\Http\Controllers\AdminController::class, 'orders'])->name('admin.orders');
+    Route::get('/order/{id}', [\App\Http\Controllers\AdminController::class, 'viewOrder'])->name('admin.order.detail');
     Route::post('/order/update-status', [\App\Http\Controllers\AdminController::class, 'updateOrderStatus'])->name('admin.order.update-status');
     Route::get('/products', [\App\Http\Controllers\AdminController::class, 'products'])->name('admin.products');
     
@@ -51,8 +52,9 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::get('/add-product', [\App\Http\Controllers\AdminController::class, 'addProduct'])->name('add-product');
     Route::post('/store-product', [\App\Http\Controllers\AdminController::class, 'storeProduct'])->name('store-product');
     Route::get('/edit-product/{id}', [\App\Http\Controllers\AdminController::class, 'editProduct'])->name('edit-product');
-    Route::post('/update-product', [\App\Http\Controllers\AdminController::class, 'updateProduct'])->name('update-product');
+    Route::post('/update-product/{id}', [\App\Http\Controllers\AdminController::class, 'updateProduct'])->name('update-product');
     Route::post('/delete-product', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('delete-product');
     
     Route::get('/statistics', [\App\Http\Controllers\AdminController::class, 'statistics'])->name('statistics');
+    Route::get('/applecare', [\App\Http\Controllers\AdminController::class, 'applecare'])->name('admin.applecare');
 });

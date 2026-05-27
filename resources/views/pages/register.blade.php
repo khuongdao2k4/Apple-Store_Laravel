@@ -35,13 +35,23 @@
             <div class="row g-3 mb-4">
                 <div class="col-6">
                     <div class="apple-input-group">
-                        <input type="text" class="apple-input" name="lastname" placeholder="Họ" required>
+                        <input type="text" class="apple-input" name="lastname" value="{{ old('lastname') }}" placeholder="Họ" required>
                     </div>
+                    @error('lastname')
+                        <div class="error-text google-error-msg text-start" data-for="lastname">
+                            <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                        </div>
+                    @enderror
                 </div>
                 <div class="col-6">
                     <div class="apple-input-group">
-                        <input type="text" class="apple-input" name="firstname" placeholder="Tên" required>
+                        <input type="text" class="apple-input" name="firstname" value="{{ old('firstname') }}" placeholder="Tên" required>
                     </div>
+                    @error('firstname')
+                        <div class="error-text google-error-msg text-start" data-for="firstname">
+                            <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                        </div>
+                    @enderror
                 </div>
             </div>
 
@@ -102,17 +112,33 @@
             <hr class="my-4 text-muted" style="opacity: 0.15;">
             <p class="fw-bold mb-2 text-start" style="font-size: 15px;">Địa chỉ Email</p>
             <div class="apple-input-group mb-3">
-                <input type="email" class="apple-input" name="email" placeholder="name@example.com" required>
+                <input type="email" class="apple-input" name="email" value="{{ old('email') }}" placeholder="name@example.com" required>
             </div>
+            @error('email')
+                <div class="error-text google-error-msg text-start" data-for="email">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
+            
             <p class="fw-bold mb-2 text-start mt-4" style="font-size: 15px;">Mật khẩu</p>
             <div class="apple-input-group mb-1">
                 <input type="password" class="apple-input" name="password" placeholder="Mật Khẩu" required>
             </div>
+            @error('password')
+                <div class="error-text google-error-msg text-start" data-for="password">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
+            
             <p class="text-start text-muted mb-3" style="font-size: 13px;"><i class="fa-solid fa-shield-halved text-success me-1"></i> Mật khẩu của bạn phải có ít nhất 8 ký tự, bao gồm chữ số, chữ in hoa và chữ thường.</p>
             <div class="apple-input-group mb-4">
-                <input type="password" class="apple-input" name="confirm_password" placeholder="Xác nhận Mật khẩu"
-                    required>
+                <input type="password" class="apple-input" name="confirm_password" placeholder="Xác nhận Mật khẩu" required>
             </div>
+            @error('confirm_password')
+                <div class="error-text google-error-msg text-start" data-for="confirm_password">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
 
             <hr class="my-4 text-muted" style="opacity: 0.15;">
 

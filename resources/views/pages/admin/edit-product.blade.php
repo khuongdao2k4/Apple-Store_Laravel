@@ -82,13 +82,20 @@
                 <div class="form-section-body">
                     <div class="mb-4">
                         <label class="f-label">Tên sản phẩm <span class="req">*</span></label>
-                        <input type="text" name="name" class="f-input" value="{{ $product->name }}" placeholder="Ví dụ: iPhone 16 Pro" required>
-                        <div class="f-error">Vui lòng nhập tên sản phẩm.</div>
+                        <input type="text" name="name" class="f-input @error('name') is-invalid @enderror" value="{{ old('name', $product->name) }}" placeholder="Ví dụ: iPhone 16 Pro" required>
+                        @error('name')
+                            <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                        @else
+                            <div class="f-error">Vui lòng nhập tên sản phẩm.</div>
+                        @enderror
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="f-label">Mã nhóm (Series) <span class="req">*</span></label>
-                            <input type="text" name="series" id="series_input" list="series_list" class="f-input" value="{{ $product->series }}" required>
+                            <input type="text" name="series" id="series_input" list="series_list" class="f-input @error('series') is-invalid @enderror" value="{{ old('series', $product->series) }}" required>
+                            @error('series')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                             <datalist id="series_list">
                                 @foreach($existingSeries as $s)
                                     <option value="{{ $s->series }}" data-title="{{ $s->series_title }}" data-image="{{ $s->series_image }}">{{ $s->series_title }}</option>
@@ -97,7 +104,10 @@
                         </div>
                         <div class="col-md-6">
                             <label class="f-label">Tên hiển thị nhóm <span class="req">*</span></label>
-                            <input type="text" name="series_title" id="series_title_input" class="f-input" value="{{ $product->series_title }}" required>
+                            <input type="text" name="series_title" id="series_title_input" class="f-input @error('series_title') is-invalid @enderror" value="{{ old('series_title', $product->series_title) }}" required>
+                            @error('series_title')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -117,17 +127,33 @@
                         <div class="col-md-6">
                             <label class="f-label">Giá cơ bản <span class="req">*</span></label>
                             <div style="position:relative">
-                                <input type="text" name="price" id="price_input" class="f-input" style="padding-right:45px" value="{{ number_format(floatval($product->price), 0, ',', '.') }}" required>
+                                @php
+                                    $priceValue = old('price');
+                                    if (is_null($priceValue)) {
+                                        $rawPrice = floatval(str_replace(['$', ','], '', $product->price));
+                                        $priceValue = number_format($rawPrice, 0, ',', '.');
+                                    }
+                                @endphp
+                                <input type="text" name="price" id="price_input" class="f-input @error('price') is-invalid @enderror" style="padding-right:45px" value="{{ $priceValue }}" required>
                                 <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:600;color:var(--apple-gray-500)">VNĐ</span>
                             </div>
+                            @error('price')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-3">
                             <label class="f-label">Số lượng <span class="req">*</span></label>
-                            <input type="number" name="quantity" class="f-input" value="{{ $product->quantity }}" required min="0">
+                            <input type="number" name="quantity" class="f-input @error('quantity') is-invalid @enderror" value="{{ old('quantity', $product->quantity) }}" required min="0">
+                            @error('quantity')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="col-md-3">
                             <label class="f-label">Thứ tự <span class="req">*</span></label>
-                            <input type="number" name="sort_order" class="f-input" value="{{ $product->sort_order ?? 0 }}" required>
+                            <input type="number" name="sort_order" class="f-input @error('sort_order') is-invalid @enderror" value="{{ old('sort_order', $product->sort_order ?? 0) }}" required>
+                            @error('sort_order')
+                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -229,7 +255,10 @@
                 <div class="form-section-body">
                     <div class="mb-4">
                         <label class="f-label">Link ảnh sản phẩm <span class="req">*</span></label>
-                        <input type="text" name="image_url" id="image_url_input" class="f-input" value="{{ $product->image_url }}" required>
+                        <input type="text" name="image_url" id="image_url_input" class="f-input @error('image_url') is-invalid @enderror" value="{{ old('image_url', $product->image_url) }}" required>
+                        @error('image_url')
+                            <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                        @enderror
                         <div id="image_url_preview_container" class="mt-3 text-center" style="display:none; background:#ffffff; border-radius:12px; padding:24px; border:1.5px dashed var(--apple-gray-200)">
                             <img id="image_url_preview" src="" alt="" style="max-height:200px; width:100%; object-fit:contain">
                         </div>

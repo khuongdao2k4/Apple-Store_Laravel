@@ -326,7 +326,29 @@
             Swal.fire({
                 icon: 'warning',
                 title: 'Thiếu thông tin',
-                text: 'Vui lòng nhập đầy đủ thông tin giao hàng.'
+                text: 'Vui lòng nhập đầy đủ thông tin giao hàng.',
+                confirmButtonColor: '#0071e3'
+            });
+            return;
+        }
+
+        const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+        if (!phoneRegex.test(phone.trim())) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Số điện thoại không hợp lệ',
+                text: 'Số điện thoại phải là số điện thoại Việt Nam bắt đầu bằng 03, 05, 07, 08, 09 và gồm 10 chữ số.',
+                confirmButtonColor: '#0071e3'
+            });
+            return;
+        }
+
+        if (address.trim().length < 10) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Địa chỉ quá ngắn',
+                text: 'Vui lòng nhập địa chỉ nhận hàng chi tiết hơn (tối thiểu 10 ký tự).',
+                confirmButtonColor: '#0071e3'
             });
             return;
         }
@@ -340,9 +362,26 @@
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
                 }
             });
+
+            if (!response.ok) {
+                if (response.status === 422) {
+                    const result = await response.json();
+                    let errMsg = '';
+                    if (result.errors) {
+                        errMsg = Object.values(result.errors).flat().join('\n');
+                    } else {
+                        errMsg = result.message || 'Dữ liệu không hợp lệ.';
+                    }
+                    throw new Error(errMsg);
+                } else {
+                    const result = await response.json().catch(() => ({}));
+                    throw new Error(result.message || 'Có lỗi xảy ra trong quá trình xử lý đơn hàng.');
+                }
+            }
 
             const result = await response.json();
 
@@ -372,7 +411,8 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Thất bại',
-                text: error.message
+                text: error.message,
+                confirmButtonColor: '#0071e3'
             });
             submitBtn.disabled = false;
             submitBtn.innerText = 'Xác nhận đặt hàng';

@@ -190,10 +190,19 @@ class AdminController extends Controller
     public function storeProduct(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|min:3',
             'price' => 'required',
-            'image_url' => 'required',
-            'quantity' => 'required|integer'
+            'image_url' => 'required|url',
+            'quantity' => 'required|integer|min:0'
+        ], [
+            'name.required' => 'Tên sản phẩm không được bỏ trống.',
+            'name.min' => 'Tên sản phẩm phải có tối thiểu 3 ký tự.',
+            'price.required' => 'Giá bán không được bỏ trống.',
+            'image_url.required' => 'Đường dẫn ảnh sản phẩm không được bỏ trống.',
+            'image_url.url' => 'Đường dẫn ảnh sản phẩm phải là một URL hợp lệ.',
+            'quantity.required' => 'Số lượng kho không được bỏ trống.',
+            'quantity.integer' => 'Số lượng kho phải là số nguyên.',
+            'quantity.min' => 'Số lượng kho không được nhỏ hơn 0.'
         ]);
 
         $product = Product::create($request->all());
@@ -256,6 +265,22 @@ class AdminController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|min:3',
+            'price' => 'required',
+            'image_url' => 'required|url',
+            'quantity' => 'required|integer|min:0'
+        ], [
+            'name.required' => 'Tên sản phẩm không được bỏ trống.',
+            'name.min' => 'Tên sản phẩm phải có tối thiểu 3 ký tự.',
+            'price.required' => 'Giá bán không được bỏ trống.',
+            'image_url.required' => 'Đường dẫn ảnh sản phẩm không được bỏ trống.',
+            'image_url.url' => 'Đường dẫn ảnh sản phẩm phải là một URL hợp lệ.',
+            'quantity.required' => 'Số lượng kho không được bỏ trống.',
+            'quantity.integer' => 'Số lượng kho phải là số nguyên.',
+            'quantity.min' => 'Số lượng kho không được nhỏ hơn 0.'
+        ]);
+
         $product = Product::findOrFail($id);
         
         // Use only fillable fields for product update

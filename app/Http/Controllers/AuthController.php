@@ -16,6 +16,10 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
+        ], [
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Địa chỉ email không đúng định dạng.',
+            'password.required' => 'Vui lòng nhập mật khẩu.'
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -46,6 +50,14 @@ class AuthController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+        ], [
+            'firstname.required' => 'Tên không được bỏ trống.',
+            'lastname.required' => 'Họ không được bỏ trống.',
+            'email.required' => 'Email không được bỏ trống.',
+            'email.email' => 'Địa chỉ email không đúng định dạng.',
+            'email.unique' => 'Email này đã được đăng ký sử dụng.',
+            'password.required' => 'Mật khẩu không được bỏ trống.',
+            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
         ]);
 
         $user = User::create([
@@ -64,6 +76,33 @@ class AuthController extends Controller
         session(['role' => 'user']);
 
         return redirect()->route('home')->with('success', 'Đăng ký thành công!');
+    }
+    
+    public function resetPassword(Request $request) {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/',
+            'confirm_password' => 'required|same:password',
+        ], [
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Địa chỉ email không đúng định dạng.',
+            'email.exists' => 'Email không tồn tại trên hệ thống.',
+            'password.required' => 'Vui lòng nhập mật khẩu mới.',
+            'password.min' => 'Mật khẩu mới phải có ít nhất 8 ký tự.',
+            'password.regex' => 'Mật khẩu mới chưa đủ mạnh. Phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và chữ số.',
+            'confirm_password.required' => 'Vui lòng xác nhận mật khẩu.',
+            'confirm_password.same' => 'Xác nhận mật khẩu không khớp.',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+            return redirect()->route('login')->with('success', 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập.');
+        }
+
+        return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại.');
     }
     
     public function logout() {

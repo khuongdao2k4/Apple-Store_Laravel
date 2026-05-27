@@ -1,46 +1,6 @@
 @extends('layouts.app', ['pageTitle' => 'reset-password.php'])
 
 @section('content')
-<?php
-
- // Đảm bảo đường dẫn đúng
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = trim($_POST['email']);
-    $new_password = trim($_POST['new_password']);
-    $confirm_password = trim($_POST['confirm_password']);
-
-    // Kiểm tra xem email có tồn tại không
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows === 0) {
-        $message = "Email không tồn tại. Vui lòng kiểm tra lại!";
-    } elseif ($new_password !== $confirm_password) {
-        $message = "Password xác nhận không khớp!";
-    } else {
-        // Mã hóa mật khẩu trước khi lưu
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-        // Cập nhật mật khẩu mới vào database
-        $stmt_update = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
-        $stmt_update->bind_param("ss", $hashed_password, $email);
-
-        if ($stmt_update->execute()) {
-            $message = "Đặt lại mật khẩu thành công!";
-            $success = true;
-        } else {
-            $message = "Có lỗi xảy ra, vui lòng thử lại!";
-        }
-
-        $stmt_update->close();
-    }
-    $stmt->close();
-    $conn->close();
-}
-?>
 
 
 
@@ -63,25 +23,48 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <h2 class="text-center fw-bold mb-3" style="font-size: 28px; letter-spacing: -0.02em;">Khôi phục Mật khẩu</h2>
         <p class="text-center text-muted mb-4" style="font-size: 15px;">Vui lòng nhập Email và mật khẩu mới để thiết lập lại.</p>
 
-        <?php if (isset($message)): ?>
-            <div class="alert <?= isset($success) ? 'alert-success' : 'alert-danger' ?> text-start">
-                <?= $message; ?>
+        @if (session('error'))
+            <div class="alert alert-danger text-start">
+                {{ session('error') }}
             </div>
-            <?php if (isset($success)): ?>
-                <div class="text-center mb-4">
-                    <a href="login" class="btn btn-outline-primary btn-sm rounded-pill px-4">Đăng nhập ngay</a>
-                </div>
-            <?php endif; ?>
-        <?php endif; ?>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success text-start">
+                {{ session('success') }}
+            </div>
+            <div class="text-center mb-4">
+                <a href="login" class="btn btn-outline-primary btn-sm rounded-pill px-4">Đăng nhập ngay</a>
+            </div>
+        @endif
 
-        <form action="" method="POST">
-            <div class="apple-input-group mb-4">
-                <input type="email" class="apple-input" name="email" placeholder="Email đăng nhập" required>
-                <div class="apple-input-divider"></div>
-                <input type="password" class="apple-input" name="new_password" placeholder="Mật khẩu mới" required>
-                <div class="apple-input-divider"></div>
+        <form action="{{ route('reset-password.post') }}" method="POST" id="resetPasswordForm">
+            @csrf
+            <div class="apple-input-group mb-3">
+                <input type="email" class="apple-input" name="email" value="{{ old('email') }}" placeholder="Email đăng nhập" required>
+            </div>
+            @error('email')
+                <div class="error-text google-error-msg text-start" data-for="email">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
+            
+            <div class="apple-input-group mb-3 mt-3">
+                <input type="password" class="apple-input" name="password" placeholder="Mật khẩu mới" required>
+            </div>
+            @error('password')
+                <div class="error-text google-error-msg text-start" data-for="password">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
+            
+            <div class="apple-input-group mb-4 mt-3">
                 <input type="password" class="apple-input" name="confirm_password" placeholder="Xác nhận Mật khẩu" required>
             </div>
+            @error('confirm_password')
+                <div class="error-text google-error-msg text-start" data-for="confirm_password">
+                    <i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>{{ $message }}</span>
+                </div>
+            @enderror
             
             <div class="d-grid mb-4">
                 <button type="submit" class="btn btn-primary btn-apple-login">Cài đặt lại Mật khẩu <i class="fa fa-arrow-right ms-2" style="font-size: 14px;"></i></button>
@@ -104,5 +87,159 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 
+<style>
+/* Hiệu ứng mượt mà khi báo lỗi */
+@keyframes slideDownFade {
+    0% { opacity: 0; transform: translateY(-3px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.google-error-msg {
+    color: #c80000 !important;
+    background-color: #fdf2f2;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(200, 0, 0, 0.05);
+    animation: slideDownFade 0.2s ease-out forwards;
+}
+.google-error-icon {
+    font-size: 15px;
+    margin-top: 2px;
+    color: #d93025;
+}
+.google-invalid-input {
+    border: 2px solid #e30000 !important;
+    border-radius: 12px;
+}
+.google-invalid-input:focus-within {
+    box-shadow: 0 0 0 4px rgba(227, 0, 0, 0.15) !important;
+    border-color: #e30000 !important;
+}
+.google-valid-input {
+    border: 2px solid #34c759 !important;
+    border-radius: 12px;
+}
+.google-valid-input:focus-within {
+    box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.15) !important;
+    border-color: #34c759 !important;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rules = {
+        email: { 
+            required: true, 
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+            message: "Vui lòng nhập một địa chỉ email hợp lệ." 
+        },
+        password: { 
+            required: true, 
+            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,}$/,
+            message: "Mật khẩu mới chưa đủ mạnh. Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và chữ số." 
+        },
+        confirm_password: {
+            required: true,
+            match: 'password',
+            message: "Mật khẩu xác nhận không khớp."
+        }
+    };
+
+    function validateField(input) {
+        const name = input.name;
+        if (!rules[name]) return true;
+        
+        let isValid = true;
+        let errorMessage = rules[name].message;
+        const val = input.value.trim();
+
+        if (rules[name].required && val === "") {
+            isValid = false;
+        } else if (rules[name].pattern && !rules[name].pattern.test(val)) {
+            isValid = false;
+        } else if (rules[name].match) {
+            const matchInput = document.querySelector(`input[name="${rules[name].match}"]`);
+            if (val !== matchInput.value) {
+                isValid = false;
+            }
+        }
+
+        const group = input.closest('.apple-input-group') || input;
+        let errorEl = group.parentNode.querySelector('.error-text[data-for="'+name+'"]');
+        if (!errorEl) {
+            errorEl = document.createElement('div');
+            errorEl.className = 'error-text google-error-msg text-start';
+            errorEl.setAttribute('data-for', name);
+            group.parentNode.insertBefore(errorEl, group.nextSibling);
+        }
+
+        if (!isValid) {
+            group.classList.add('google-invalid-input');
+            group.classList.remove('google-valid-input');
+            errorEl.innerHTML = `<i class="fa-solid fa-circle-exclamation google-error-icon"></i> <span>${errorMessage}</span>`;
+            errorEl.style.display = 'flex';
+        } else {
+            group.classList.remove('google-invalid-input');
+            if(val !== "") {
+                group.classList.add('google-valid-input');
+            } else {
+                group.classList.remove('google-valid-input');
+            }
+            errorEl.style.display = 'none';
+        }
+        return isValid;
+    }
+
+    const form = document.getElementById('resetPasswordForm');
+    if(form) {
+        const inputs = form.querySelectorAll('input[name="email"], input[name="password"], input[name="confirm_password"]');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                const name = input.name;
+                if (!rules[name]) return;
+                
+                const group = input.closest('.apple-input-group') || input;
+                group.classList.remove('google-valid-input');
+                
+                let errorEl = group.parentNode.querySelector('.error-text[data-for="'+name+'"]');
+                if (errorEl && errorEl.style.display !== 'none') {
+                    if (name === 'confirm_password') {
+                        validateField(input);
+                    } else {
+                        group.classList.remove('google-invalid-input');
+                        errorEl.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        form.addEventListener('submit', function(e) {
+            let isFormValid = true;
+            inputs.forEach(input => {
+                if (rules[input.name]) {
+                    if (!validateField(input)) {
+                        isFormValid = false;
+                    }
+                }
+            });
+            if (!isFormValid) {
+                e.preventDefault();
+            }
+        });
+    }
+});
+</script>
 @endsection
 

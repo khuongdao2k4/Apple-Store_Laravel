@@ -44,8 +44,8 @@ class CartController extends Controller
 
         $applecare = $request->input('applecare') == '1' ? true : false;
 
-        // Check if item already exists in cart for this user
-        $item = CartItem::where('email', $email)
+        // Check sản phẩm có cấu hình tương tự đã tồn tại trong giỏ hàng chưa
+        $item = CartItem::where('email', $email) 
             ->where('product_name', $productName)
             ->where('storage', $storage)
             ->where('color', $color)
@@ -71,12 +71,12 @@ class CartController extends Controller
     }
 
     public function updateQuantity(Request $request) {
-        $item = CartItem::find($request->input('id'));
-        if ($item && $item->email === session('email')) {
-            $item->update(['quantity' => $request->input('quantity')]);
-            return response()->json(['success' => true]);
+        $item = CartItem::find($request->input('id'));// Tìm sản phẩm trong db giỏ hàng
+        if ($item && $item->email === session('email')) {// Check quyền sở hữu giỏ hàng
+            $item->update(['quantity' => $request->input('quantity')]);// Cập nhật số lượng
+            return response()->json(['success' => true]);// Trả về success true
         }
-        return response()->json(['success' => false], 404);
+        return response()->json(['success' => false], 404);// Trả về success false và status 404 nếu không tìm thấy sản phẩm
     }
 
     public function remove(Request $request) {

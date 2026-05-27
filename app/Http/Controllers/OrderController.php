@@ -10,83 +10,107 @@ use App\Helpers\ColorHelper;
 
 class OrderController extends Controller
 {
-    public function order(Request $request) {
+    public function order(Request $request) { // 
         $series = $request->query('series');
         $id = $request->query('id');
         
         if ($series) {
+            // Lấy tất cả sản phẩm và options thuộc dòng sản phẩm được chọn
             $products = Product::with('options.attribute')->where('series', $series)->orderBy('sort_order', 'asc')->get();
+            
             if ($products->isEmpty()) {
                 return redirect()->route('home')->with('error', 'Không tìm thấy dòng sản phẩm này.');
             }
             
-            $firstProduct = $products->first();
-            $seriesTitle = $firstProduct->series_title ?? $firstProduct->series;
-            $category = (str_contains(strtolower($series), 'iphone')) ? 'iphone' : 'mac';
+            $firstProduct = $products->first(); // Lấy sản phẩm đầu tiên để lấy tên dòng sản phẩm
+            $seriesTitle = $firstProduct->series_title ?? $firstProduct->series;// Lấy tiêu đề hiển thị của dòng máy, nếu không có thì lấy tên series gốc.
+            $category = (str_contains(strtolower($series), 'iphone')) ? 'iphone' : 'mac'; // Lấy danh mục sản phẩm dựa vào tên dòng sản phẩm
             
-            return view('pages.order', compact('products', 'seriesTitle', 'category'));
-        } elseif ($id) {
-            $product = Product::with('options.attribute')->find($id);
+            return view('pages.order', compact('products', 'seriesTitle', 'category'));// Trả về view order với danh sách sản phẩm, tiêu đề dòng máy và danh mục
+        
+        } elseif ($id) { // ngược lại, nếu người dùng truyền tham số ID sản phẩm cụ thể 
+            $product = Product::with('options.attribute')->find($id);// Lấy sản phẩm được chọn từ id
+            
             if (!$product) {
                 return redirect()->route('home')->with('error', 'Sản phẩm không tồn tại.');
             }
-            // Load all products in the same series
-            $products = Product::with('options.attribute')
-                ->where('series', $product->series)
-                ->orderBy('sort_order', 'asc')
+
+            // Lấy tất cả sản phẩm cùng dòng sản phẩm
+            $products = Product::with('options.attribute')// Tải trước các thuộc tính của sản phẩm
+                ->where('series', $product->series)// Lọc ra các sản phẩm cùng dòng sản phẩm với sản phẩm được chọn
+                ->orderBy('sort_order', 'asc')// Sắp xếp các sản phẩm theo thứ tự hiển thị
                 ->get();
                 
-            $seriesTitle = $product->series_title ?? $product->series;
-            $category = (str_contains(strtolower($product->series), 'iphone')) ? 'iphone' : 'mac';
+            $seriesTitle = $product->series_title ?? $product->series; // Lấy tiêu đề hiển thị của dòng máy, nếu không có thì lấy tên series gốc.
+            $category = (str_contains(strtolower($product->series), 'iphone')) ? 'iphone' : 'mac';// Lấy danh mục sản phẩm dựa vào tên dòng sản phẩm
             
-            return view('pages.order', compact('products', 'seriesTitle', 'category'));
+            return view('pages.order', compact('products', 'seriesTitle', 'category'));// Trả về view order với danh sách sản phẩm, tiêu đề dòng máy và danh mục
         }
-
-        $products = Product::with('options.attribute')->all();
-        $seriesTitle = 'Sản phẩm';
-        $category = 'general';
-        return view('pages.order', compact('products', 'seriesTitle', 'category'));
+        
+        // Nếu không có tham số series hoặc id, hiển thị tất cả sản phẩm
+        $products = Product::with('options.attribute')->all();// Tải trước các thuộc tính của tất cả sản phẩm
+        $seriesTitle = 'Sản phẩm';// Tiêu đề dòng sản phẩm
+        $category = 'general';// Danh mục sản phẩm
+        return view('pages.order', compact('products', 'seriesTitle', 'category'));// Trả về view order với danh sách sản phẩm, tiêu đề dòng máy và danh mục
     }
 
-    public function checkout(Request $request) {
+    public function checkout(Request $request) {// Xử lý thanh toán
         if (!session()->has('user_name')) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán.');
         }
 
         $email = session('email');
-        $cartItems = CartItem::where('email', $email)->get();
+        $cartItems = CartItem::where('email', $email)->get(); // Lấy giỏ hàng từ db
 
-        $isDirectBuy = false;
-        // If specific product in query, handle as single item (legacy support / Buy Now)
-        if ($request->query('product')) {
-            $isDirectBuy = true;
+        $isDirectBuy = false; // Kiểm tra xem có phải mua ngay không
+        
+        if ($request->query('product')) { // Kiểm tra xem có tham số product không
+            $isDirectBuy = true; 
             $item = [
-                'product_name' => $request->query('product'),
-                'price' => $request->query('price'),
-                'storage' => $request->query('storage'),
-                'color' => $request->query('color'),
+                'product_name' => $request->query('product'),// Lấy tên sản phẩm
+                'price' => $request->query('price'),// Lấy giá sản phẩm
+                'storage' => $request->query('storage'),// Lấy dung lượng sản phẩm
+                'color' => $request->query('color'),// Lấy màu sắc sản phẩm
                 'image_url' => $request->query('image_url'),
                 'quantity' => 1,
                 'applecare' => $request->query('applecare') == '1'
             ];
-            $cartItems = collect([ (object)$item ]);
+            $cartItems = collect([ (object)$item ]); // Chuyển đổi item thành object và thêm vào cartItems
         }
 
-        $totalPrice = 0;
-        foreach ($cartItems as $item) {
-            $item->color = ColorHelper::resolve($item->color);
-            $priceVal = floatval(str_replace(['$', ','], '', $item->price));
-            $totalPrice += $priceVal * $item->quantity;
+        $totalPrice = 0; // Khởi tạo tổng giá
+        foreach ($cartItems as $item) { // Lặp qua giỏ hàng
+            $item->color = ColorHelper::resolve($item->color); // Giải mã màu sắc chuyển thành tên màu
+
+            // Lấy giá sản phẩm chỉ lấy số, loại bỏ ký tự đặc biệt
+            $priceStr = preg_replace('/[^0-9]/', '', $item->price); 
+            $priceVal = intval($priceStr); // chuyển chuỗi số trên thành integer
+            
+            $item->price_numeric = $priceVal;
+            $totalPrice += $priceVal * $item->quantity;// Cộng dồn tổng = giá sp * soluong
         }
 
         return view('pages.checkout', compact('cartItems', 'totalPrice', 'isDirectBuy'));
     }
 
-    public function processOrder(Request $request) {
+    public function processOrder(Request $request) { // Xử lý khi người dùng ấn nút Đặt hàng
         try {
             if (!session()->has('user_name')) {
                 return response()->json(['success' => false, 'message' => 'Vui lòng đăng nhập.'], 401);
             }
+
+            $request->validate([ // Xử lý validation khi người dùng nhập thông tin
+                'phone' => ['required', 'regex:/^(0[3|5|7|8|9])+([0-9]{8})$/'], // Yêu cầu số điện thoại bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số
+                'address' => 'required|min:10',// Yêu cầu địa chỉ có ít nhất 10 ký tự
+                'payment_method' => 'required|in:COD,VNPAY'
+            ], [
+                'phone.required' => 'Số điện thoại không được bỏ trống.',
+                'phone.regex' => 'Số điện thoại không hợp lệ (phải là số điện thoại Việt Nam gồm 10 chữ số).',
+                'address.required' => 'Địa chỉ nhận hàng không được bỏ trống.',
+                'address.min' => 'Địa chỉ nhận hàng quá ngắn (tối thiểu 10 ký tự).',
+                'payment_method.required' => 'Vui lòng chọn phương thức thanh toán.',
+                'payment_method.in' => 'Phương thức thanh toán không hợp lệ.'
+            ]);
 
             $email = session('email');
             $cartItems = CartItem::where('email', $email)->get();
@@ -96,13 +120,13 @@ class OrderController extends Controller
             
             $isDirectBuy = $request->input('is_direct_buy') == '1';
 
-            if ($isDirectBuy && $request->has('product')) {
-                // Handle Direct Buy Flow (Buy Now)
+            if ($isDirectBuy && $request->has('product')) {// xử lý thanh toán khi mua ngay
+
                 $priceStr = $request->input('price');
                 $priceVal = intval(preg_replace('/[^0-9]/', '', $priceStr));
                 $totalPriceNumeric = $priceVal;
 
-                $itemData = [
+                $itemData = [// Tạo 1 mảng chứa thông tin sản phẩm để lưu vào cột Json items
                     [
                         'product_name' => $request->input('product'),
                         'image_url' => $request->input('image_url'),
@@ -114,7 +138,7 @@ class OrderController extends Controller
                     ]
                 ];
 
-                $order = Order::create([
+                $order = Order::create([// Gọi model Order để tạo đơn hàng mới
                     'username' => session('user_name'),
                     'email' => $email,
                     'product' => $request->input('product'),
@@ -128,24 +152,27 @@ class OrderController extends Controller
                     'payment_method' => $request->input('payment_method', 'COD'),
                     'status' => 'pending',
                 ]);
-                $orderIds[] = $order->id_order;
-            } elseif (!$cartItems->isEmpty()) {
-                // Handle Normal Bag Checkout - Combine into 1 order
-                $productNames = [];
+                $orderIds[] = $order->id_order; // Lưu ID đơn hàng vào mảng
+
+
+            } elseif (!$cartItems->isEmpty()) {// Xử lý thanh toán khi mua từ giỏ hàng
+
+                $productNames = [];// mảng chứa tên các sản phẩm
                 $firstImageUrl = $cartItems->first()->image_url;
                 $storages = [];
                 $colors = [];
                 $itemData = [];
                 
-                foreach ($cartItems as $item) {
+                foreach ($cartItems as $item) {//VÒng lặp gộp dữ liệu các sản phẩm giỏ hàng
                     $itemPriceVal = intval(preg_replace('/[^0-9]/', '', $item->price));
                     $totalPriceNumeric += $itemPriceVal * $item->quantity;
-                    $productNames[] = $item->product_name . " (x" . $item->quantity . ")";
+                    $productNames[] = $item->product_name . " (x" . $item->quantity . ")";// thêm tên sp kèm số lượng vào danh sách sp
                     
+                    // gộp dung lượng và màu  duy nhất vào mảng(!in_array tránh trùng lặp)
                     if (!in_array($item->storage, $storages)) $storages[] = $item->storage;
                     if (!in_array($item->color, $colors)) $colors[] = ColorHelper::resolve($item->color);
 
-                    $itemData[] = [
+                    $itemData[] = [ //  tạo mảng gộp các cấu hình của từng sản phẩm
                         'product_name' => $item->product_name,
                         'image_url' => $item->image_url,
                         'storage' => $item->storage,
@@ -162,6 +189,7 @@ class OrderController extends Controller
                     'product' => \Illuminate\Support\Str::limit(implode(', ', $productNames), 250),
                     'items' => $itemData,
                     'image_url' => $firstImageUrl,
+                    //Str::limit và implode để nối các tên sản phẩm, màu sắc, cấu hình thành chuỗi ngăn cách bởi dấu phẩy 
                     'storage' => \Illuminate\Support\Str::limit(implode(', ', $storages), 250),
                     'color' => \Illuminate\Support\Str::limit(implode(', ', $colors), 250),
                     'price' => $totalPriceNumeric,
@@ -170,27 +198,28 @@ class OrderController extends Controller
                     'payment_method' => $request->input('payment_method', 'COD'),
                     'status' => 'pending',
                 ]);
-                $orderIds[] = $order->id_order;
+                $orderIds[] = $order->id_order; // Lưu ID đơn hàng mới tạo vào mảng
             } else {
                 return response()->json(['success' => false, 'message' => 'Giỏ hàng trống hoặc thiếu thông tin sản phẩm.'], 400);
             }
 
+            // Thanh toán qua VNpay
             if ($request->input('payment_method') === 'VNPAY') {
-                $vnp_Url = env('VNP_URL');
+                $vnp_Url = env('VNP_URL');//lấy cấu hình cổng thanh toán từ .env
                 $vnp_HashSecret = env('VNP_HASHSECRET');
                 $vnp_TmnCode = env('VNP_TMNCODE');
 
-                $vnp_TxnRef = $orderIds[0];
-                $vnp_OrderInfo = "Thanh toán đơn hàng Apple Store";
-                $vnp_Amount = $totalPriceNumeric * 25000 * 100;
+                $vnp_TxnRef = $orderIds[0];// gán mã tham chiếu giao dịch là mã id_order vừa tạo
+                $vnp_OrderInfo = "Thanh toán đơn hàng Apple Store"; // gán nội dung thanh toán
+                $vnp_Amount = $totalPriceNumeric * 25000 * 100; // nếuu số tiền > 100000 thì quy đổi ra USD sau đó nhân với 25000 
                 if ($totalPriceNumeric > 100000) {
                      $vnp_Amount = $totalPriceNumeric * 100;
                 }
-                $vnp_Locale = 'vn';
-                $vnp_IpAddr = $request->ip();
+                $vnp_Locale = 'vn';//ngôn ngũ hiển thị Tiếng việt
+                $vnp_IpAddr = $request->ip();//Lấy địa chỉ IP mạng của người mua hàng để lưu vết giao dịch
 
-                $vnp_OrderType = 'billpayment';
-                $inputData = array(
+                $vnp_OrderType = 'billpayment';//Phân loại thanh toán là hóa đơn thanh toán hàng hóa
+                $inputData = array( // Tạo mảng thông tin giao dịch
                     "vnp_Version" => "2.1.0",
                     "vnp_TmnCode" => $vnp_TmnCode,
                     "vnp_Amount" => $vnp_Amount,
@@ -205,26 +234,29 @@ class OrderController extends Controller
                     "vnp_TxnRef" => $vnp_TxnRef,
                 );
 
+                // sắp xếp các khóa trong mảng theo thứ tự bảng chữ cái để đảm bảo đồng bộ thuật toán tạo chữ ký bảo mật
                 ksort($inputData);
-                $query = "";
+                $query = ""; // khởi tạo chuỗi tham số để tạo url truy cập cổng thanh toán của VNpay
                 $i = 0;
-                $hashdata = "";
+                $hashdata = ""; // khởi tạo chuỗi dữ liệu để tạo chữ ký bảo mật
+
+                // Vòng lặp duyệt qua mảng dữ liệu đã sắp xếp để nối chúng thành chuỗi truy vấn (HTTP Query) được mã hóa URL (urlencode)
                 foreach ($inputData as $key => $value) {
-                    if ($i == 1) {
-                        $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-                    } else {
-                        $hashdata .= urlencode($key) . "=" . urlencode($value);
+                    if ($i == 1) {// nếu là phần tử thứ 2 trở đi thì thêm dấu & vào trước
+                        $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);// 
+                    } else {// nếu là phần tử đầu tiên thì không thêm dấu &
+                        $hashdata .= urlencode($key) . "=" . urlencode($value);// gán giá trị cho key
                         $i = 1;
                     }
                     $query .= urlencode($key) . "=" . urlencode($value) . '&';
                 }
-
-                $vnp_Url = $vnp_Url . "?" . $query;
-                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-                $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+ 
+                $vnp_Url = $vnp_Url . "?" . $query; // tạo url truy cập cổng thanh toán của VNpay
+                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret); // tạo chữ ký bảo mật bằng thuật toán hash_hmac
+                $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash; // thêm chữ ký bảo mật vào url
 
                 // Only empty the bag if we checked out from the bag (NOT is_direct_buy)
-                if (!$isDirectBuy && !$cartItems->isEmpty()) {
+                if (!$isDirectBuy && !$cartItems->isEmpty() && !empty($email)) {
                     CartItem::where('email', $email)->delete();
                 }
 
@@ -236,7 +268,7 @@ class OrderController extends Controller
             }
 
             // Only empty the bag if we checked out from the bag (NOT is_direct_buy)
-            if (!$isDirectBuy && !$cartItems->isEmpty()) {
+            if (!$isDirectBuy && !$cartItems->isEmpty() && !empty($email)) {
                 CartItem::where('email', $email)->delete();
             }
 
@@ -246,6 +278,11 @@ class OrderController extends Controller
                 'order_id' => $orderIds[0]
             ]);
         } catch (\Exception $e) {
+            \Log::error('Order Error: ' . $e->getMessage(), [
+                'stack' => $e->getTraceAsString(),
+                'request' => $request->all(),
+                'user' => session('user_name')
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi hệ thống: ' . $e->getMessage()
